@@ -1,0 +1,7 @@
+name: bulk-scan-ccd-event-handler-sample-app
+home: https://github.com/hmcts/bulk-scan-orchestrator
+version: 0.0.1
+description: HMCTS Bulk Scan CCD event handler application
+maintainers:
+  - name: HMCTS BSP Team
+    email: bspteam@hmcts.net
