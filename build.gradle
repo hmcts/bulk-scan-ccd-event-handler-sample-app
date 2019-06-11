@@ -83,7 +83,7 @@ jacocoTestReport {
   reports {
     xml.enabled = true
     csv.enabled = false
-    xml.destination file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+    xml.destination = file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
   }
 }
 
@@ -109,9 +109,7 @@ dependencyCheck {
 }
 
 repositories {
-  mavenLocal()
   jcenter()
-  mavenCentral()
 }
 
 // it is important to specify logback classic and core packages explicitly as libraries like spring boot
@@ -128,13 +126,11 @@ dependencies {
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-json'
-  compile group: 'uk.gov.hmcts.reform', name: 'health-spring-boot-starter', version: '0.0.3'
 
   compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
 
   compile group: 'uk.gov.hmcts.reform', name: 'java-logging', version: versions.reformLogging
-  compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.1.0.RELEASE'
-
+  
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
   testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
