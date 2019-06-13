@@ -20,5 +20,6 @@ withPipeline(type, product, component) {
   }
 
   enableDockerBuild()
+  installCharts()
   enableSlackNotifications(channel)
 }
