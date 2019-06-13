@@ -8,7 +8,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@TestPropertySource("classpath:application.yaml")
+@TestPropertySource("classpath:application.conf")
 public class ExampleTest {
 
     private static final String TEST_URL = ConfigFactory.load().getString("test-url");
