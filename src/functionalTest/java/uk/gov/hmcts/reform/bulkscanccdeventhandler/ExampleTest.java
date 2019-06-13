@@ -4,9 +4,11 @@ import com.typesafe.config.ConfigFactory;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@TestPropertySource("classpath:application.yaml")
 public class ExampleTest {
 
     private static final String TEST_URL = ConfigFactory.load().getString("test-url");
