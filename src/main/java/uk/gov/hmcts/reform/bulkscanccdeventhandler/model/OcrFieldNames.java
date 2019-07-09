@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.model;
 
-public abstract class OcrFieldNames {
+public final class OcrFieldNames {
 
     public static final String LEGACY_ID = "legacy_id";
     public static final String FIRST_NAME = "first_name";
