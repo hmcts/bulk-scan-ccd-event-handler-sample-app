@@ -21,7 +21,7 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors.r
 @Service
 public class OcrDataParser {
 
-    private final static Logger log = LoggerFactory.getLogger(OcrDataParser.class);
+    private static final Logger log = LoggerFactory.getLogger(OcrDataParser.class);
 
     private final CcdCollectionParser ccdCollectionParser;
 
