@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
@@ -31,7 +30,6 @@ public class ScannedDocument {
     @JsonProperty
     public final String exceptionRecordReference;
 
-    @JsonCreator
     public ScannedDocument(
         @JsonProperty("type") String type,
         @JsonProperty("subtype") String subtype,
