@@ -18,7 +18,6 @@ import java.util.Map;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -65,7 +64,7 @@ public class ScannedDocumentsParserTest {
             scannedDocumentsParser.parseScannedDocuments(exceptionRecordData);
 
         // then
-        assertTrue(result.isSuccessful());
+        assertThat(result.isSuccessful()).isTrue();
         assertThat(result.get()).isSameAs(expectedResult);
 
         verify(ccdCollectionParser).parseCcdCollection(rawData, ScannedDocument.class);
