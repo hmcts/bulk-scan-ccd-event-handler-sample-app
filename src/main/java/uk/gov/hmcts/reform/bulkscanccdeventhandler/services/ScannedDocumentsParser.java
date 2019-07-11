@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.CcdCollectionElement;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ScannedDocument;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CallbackProcessingException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CcdDataParseException;
 
 import java.util.List;
@@ -13,7 +14,6 @@ import java.util.Map;
 
 import static java.util.Collections.emptyList;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ExceptionRecordFieldNames.SCANNED_DOCUMENTS;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors.errors;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors.result;
 
 /**
@@ -45,8 +45,10 @@ public class ScannedDocumentsParser {
 
                 return result(scannedDocuments);
             } catch (CcdDataParseException e) {
-                log.warn("Failed to retrieve scanned documents from exception record", e);
-                return errors("Scanned documents collection has invalid format");
+                throw new CallbackProcessingException(
+                    "Failed to parse scanned documents from exception record",
+                    e
+                );
             }
         }
     }

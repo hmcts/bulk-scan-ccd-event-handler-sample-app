@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.CcdCollectionElement;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ScannedDocument;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CallbackProcessingException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CcdDataParseException;
 
 import java.util.Arrays;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -71,20 +73,18 @@ public class ScannedDocumentsParserTest {
     }
 
     @Test
-    public void should_return_error_when_format_is_invalid() {
+    public void should_throw_exception_when_format_is_invalid() {
         // given
         CcdDataParseException exceptionToThrow = new CcdDataParseException("Test exception", null);
         willThrow(exceptionToThrow).given(ccdCollectionParser).parseCcdCollection(any(), any());
 
         Map<String, Object> exceptionRecordData = ImmutableMap.of("scannedDocuments", new Object());
 
-        // when
-        ResultOrErrors<List<CcdCollectionElement<ScannedDocument>>> result =
-            scannedDocumentsParser.parseScannedDocuments(exceptionRecordData);
-
-        // then
-        assertThat(result.isSuccessful()).isFalse();
-        assertThat(result.errors).isEqualTo(Arrays.asList("Scanned documents collection has invalid format"));
+        assertThatThrownBy(() ->
+            scannedDocumentsParser.parseScannedDocuments(exceptionRecordData)
+        )
+            .isInstanceOf(CallbackProcessingException.class)
+            .hasMessage("Failed to parse scanned documents from exception record");
     }
 
     @Test
