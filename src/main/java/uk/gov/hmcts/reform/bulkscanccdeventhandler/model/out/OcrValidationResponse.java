@@ -18,9 +18,9 @@ public class OcrValidationResponse {
 
     @JsonCreator
     public OcrValidationResponse(
-        @JsonProperty("warnings") List<String> warnings,
-        @JsonProperty("errors") List<String> errors,
-        @JsonProperty("status") String status
+        List<String> warnings,
+        List<String> errors,
+        String status
     ) {
         this.warnings = warnings;
         this.errors = errors;
