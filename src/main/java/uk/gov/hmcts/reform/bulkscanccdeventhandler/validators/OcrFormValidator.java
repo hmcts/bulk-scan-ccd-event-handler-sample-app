@@ -16,8 +16,8 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.ValidationSt
 public abstract class OcrFormValidator {
 
     public OcrValidationResult validate(List<OcrDataField> ocrData) {
-        List<String> errors = validateFields(getMandatoryFields(), ocrData);
-        List<String> warnings = validateFields(getWarningFields(), ocrData);
+        List<String> errors = findBlankFields(getMandatoryFields(), ocrData);
+        List<String> warnings = findBlankFields(getWarningFields(), ocrData);
 
         errors.addAll(doAdditionalValidations(ocrData));
 
@@ -30,7 +30,7 @@ public abstract class OcrFormValidator {
 
     protected abstract List<String> doAdditionalValidations(List<OcrDataField> ocrData);
 
-    private List<String> validateFields(List<String> fieldNames, List<OcrDataField> ocrData) {
+    private List<String> findBlankFields(List<String> fieldNames, List<OcrDataField> ocrData) {
         return fieldNames
             .stream()
             .filter(field -> isBlank(OcrFormValidationHelper.findOcrFormFieldValue(field, ocrData)))
