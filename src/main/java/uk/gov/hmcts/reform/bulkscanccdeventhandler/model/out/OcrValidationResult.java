@@ -6,13 +6,13 @@ public class OcrValidationResult {
 
     public final List<String> warnings;
     public final List<String> errors;
-    public final String status;
+    public final ValidationResponseStatus status;
 
     // region constructor
     public OcrValidationResult(
         List<String> warnings,
         List<String> errors,
-        String status
+        ValidationResponseStatus status
     ) {
         this.warnings = warnings;
         this.errors = errors;

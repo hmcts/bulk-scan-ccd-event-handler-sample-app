@@ -49,6 +49,18 @@ public class OcrValidationControllerTest {
     }
 
     @Test
+    void should_return_bad_request_when_form_type_is_invalid() throws Exception {
+        mockMvc
+            .perform(
+                post("/validate-ocr-data")
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .header("ServiceAuthorization", "testServiceAuthHeader")
+                    .content(readResource("ocr-data/ocr-data-invalid-form-type.json"))
+            )
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void should_return_bad_request_with_ocr_fields_are_missing() throws Exception {
         mockMvc
             .perform(
@@ -69,6 +81,21 @@ public class OcrValidationControllerTest {
             )
             .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void should_return_invalid_fields_in_response_when_form_field_value_is_invalid() throws Exception {
+        mockMvc
+            .perform(
+                post("/validate-ocr-data")
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .header("ServiceAuthorization", "testServiceAuthHeader")
+                    .content(readResource("ocr-data/ocr-data-invalid-email.json"))
+            )
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().json(readResource("ocr-data/invalid-ocr-fields-response.json")));
+    }
+
 
     private String readResource(final String fileName) throws IOException {
         return Resources.toString(Resources.getResource(fileName), Charsets.UTF_8);
