@@ -9,33 +9,27 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.validators.PersonalFormValida
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.FormType.CONTACT;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.FormType.PERSONAL;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.ValidationResponseStatus.SUCCESS;
+
 public final class OcrDataValidator {
 
-    private static OcrFormValidator CONTACT_FORM_VALIDATOR = new ContactFormValidator();
-    private static OcrFormValidator PERSONAL_FORM_VALIDATOR = new PersonalFormValidator();
+    private static OcrFormValidator contactFormValidator = new ContactFormValidator();
+    private static OcrFormValidator personalFormValidator = new PersonalFormValidator();
 
     // prevent instantiation
     private OcrDataValidator() {
     }
 
     public static OcrValidationResult validate(FormType formType, List<OcrDataField> ocrDataFields) {
-        OcrFormValidator formValidator = getFormValidator(formType);
-        return formValidator.validate(ocrDataFields);
-    }
-
-    @SuppressWarnings("checkstyle:MissingSwitchDefault")
-    private static OcrFormValidator getFormValidator(FormType formType) {
-        OcrFormValidator validator = null;
-        switch (formType) {
-            case CONTACT:
-                validator = CONTACT_FORM_VALIDATOR;
-                break;
-            case PERSONAL:
-                validator = PERSONAL_FORM_VALIDATOR;
-                break;
+        if (formType.equals(CONTACT)) {
+            return contactFormValidator.validate(ocrDataFields);
+        } else if (formType.equals(PERSONAL)) {
+            return personalFormValidator.validate(ocrDataFields);
         }
-        // 'default' is unreachable as the form type is validated in the controller.
-        return validator;
+        // this is unreachable as the form type is validated in the controller
+        return new OcrValidationResult(emptyList(), emptyList(), SUCCESS);
     }
-
 }
