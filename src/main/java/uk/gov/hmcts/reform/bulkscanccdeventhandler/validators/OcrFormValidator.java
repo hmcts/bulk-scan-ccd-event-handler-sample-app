@@ -17,8 +17,9 @@ public abstract class OcrFormValidator {
 
     public OcrValidationResult validate(List<OcrDataField> ocrData) {
         List<String> errors = validateFields(getMandatoryFields(), ocrData);
-
         List<String> warnings = validateFields(getWarningFields(), ocrData);
+
+        errors.addAll(doAdditionalValidations(ocrData));
 
         return new OcrValidationResult(warnings, errors, getStatus(!errors.isEmpty(), !warnings.isEmpty()));
     }
@@ -26,6 +27,8 @@ public abstract class OcrFormValidator {
     protected abstract List<String> getMandatoryFields();
 
     protected abstract List<String> getWarningFields();
+
+    protected abstract List<String> doAdditionalValidations(List<OcrDataField> ocrData);
 
     private List<String> validateFields(List<String> fieldNames, List<OcrDataField> ocrData) {
         return fieldNames
