@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.model;
 import java.time.LocalDate;
 import java.util.List;
 
-public class CcdCase {
+public class BulkScanCase {
 
     public final String legacyId;
     public final String firstName;
@@ -14,7 +14,7 @@ public class CcdCase {
     public final Address address;
     public final List<CcdCollectionElement<ScannedDocument>> scannedDocuments;
 
-    public CcdCase(
+    public BulkScanCase(
         String legacyId,
         String firstName,
         String lastName,
