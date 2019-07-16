@@ -5,6 +5,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
 
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang.StringUtils.isBlank;
@@ -15,11 +16,24 @@ public final class OcrFormValidationHelper {
         // util class
     }
 
+    public static List<String> getOcrFieldNames(List<OcrDataField> ocrData) {
+        return ocrData
+            .stream()
+            .map(field -> field.key)
+            .collect(toList());
+    }
+
     public static List<String> findBlankFields(List<String> fieldNames, List<OcrDataField> ocrData) {
         return fieldNames
             .stream()
             .filter(field -> isBlank(OcrFormValidationHelper.findOcrFormFieldValue(field, ocrData)))
             .collect(toList());
+    }
+
+    public static List<String> findMissingFields(List<String> optionalFields, List<String> ocrInputFields) {
+        return optionalFields.stream()
+            .filter(item -> !ocrInputFields.contains(item))
+            .collect(Collectors.toList());
     }
 
     public static String findOcrFormFieldValue(String fieldName, List<OcrDataField> ocrData) {
@@ -39,10 +53,10 @@ public final class OcrFormValidationHelper {
         return Pattern.compile("\\d{10}").matcher(phone).matches();
     }
 
-    public static List<String> getOcrFieldNames(List<OcrDataField> ocrData) {
-        return ocrData
+    public static List<String> getErrorMessagesForMissingFields(List<String> missingFields) {
+        return missingFields
             .stream()
-            .map(field -> field.key)
-            .collect(toList());
+            .map(field -> String.format("%s is missing", field))
+            .collect(Collectors.toList());
     }
 }

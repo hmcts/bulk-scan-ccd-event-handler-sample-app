@@ -42,8 +42,8 @@ class OcrDataValidatorTest {
         assertThat(result)
             .extracting("errors", "warnings", "status")
             .containsExactly(
-                singletonList(String.format("%s is empty", LAST_NAME)),
-                singletonList(String.format("%s is empty", DATE_OF_BIRTH)),
+                singletonList(String.format("%s is missing", LAST_NAME)),
+                singletonList(String.format("%s is missing", DATE_OF_BIRTH)),
                 ValidationStatus.ERRORS
             );
     }
@@ -65,7 +65,7 @@ class OcrDataValidatorTest {
         assertThat(result)
             .extracting("errors", "warnings", "status")
             .containsExactly(
-                singletonList(String.format("%s is empty", LAST_NAME)),
+                singletonList(String.format("%s is missing", LAST_NAME)),
                 emptyList(),
                 ValidationStatus.ERRORS
             );
@@ -88,7 +88,7 @@ class OcrDataValidatorTest {
             .extracting("errors", "warnings", "status")
             .containsExactly(
                 emptyList(),
-                singletonList(String.format("%s is empty", DATE_OF_BIRTH)),
+                singletonList(String.format("%s is missing", DATE_OF_BIRTH)),
                 ValidationStatus.WARNINGS
             );
     }

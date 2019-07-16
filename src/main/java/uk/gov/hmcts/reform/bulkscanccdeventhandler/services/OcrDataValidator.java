@@ -10,7 +10,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.util.OcrFormValidationHelper;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -39,7 +38,7 @@ public class OcrDataValidator {
     private List<String> validateMandatoryFields(FormType formType, List<OcrDataField> ocrData) {
         List<String> mandatoryFields = getMandatoryFieldsForForm(formType);
         List<String> missingFields = OcrFormValidationHelper.findBlankFields(mandatoryFields, ocrData);
-        List<String> errors = getErrorMessagesForFields(missingFields);
+        List<String> errors = OcrFormValidationHelper.getErrorMessagesForMissingFields(missingFields);
 
         if (formType.equals(CONTACT)) {
             String email = OcrFormValidationHelper.findOcrFormFieldValue(EMAIL, ocrData);
@@ -60,21 +59,8 @@ public class OcrDataValidator {
         List<String> optionalFields = getOptionalFieldsForForm(formType);
         List<String> ocrInputFields = getOcrFieldNames(ocrData);
 
-        List<String> missingFields = findMissingFields(optionalFields, ocrInputFields);
-        return getErrorMessagesForFields(missingFields);
-    }
-
-    private List<String> getErrorMessagesForFields(List<String> missingFields) {
-        return missingFields
-            .stream()
-            .map(field -> String.format("%s is empty", field))
-            .collect(Collectors.toList());
-    }
-
-    private List<String> findMissingFields(List<String> optionalFields, List<String> ocrInputFields) {
-        return optionalFields.stream()
-            .filter(item -> !ocrInputFields.contains(item))
-            .collect(Collectors.toList());
+        List<String> missingFields = OcrFormValidationHelper.findMissingFields(optionalFields, ocrInputFields);
+        return OcrFormValidationHelper.getErrorMessagesForMissingFields(missingFields);
     }
 
     private List<String> getMandatoryFieldsForForm(FormType formType) {
