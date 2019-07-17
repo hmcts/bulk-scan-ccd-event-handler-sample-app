@@ -66,9 +66,7 @@ class OcrDataValidatorTest {
         assertThat(result.status).isEqualTo(ERRORS);
         assertThat(result.warnings).isEmpty();
         assertThat(result.errors)
-            .isNotEmpty()
-            .hasSize(1)
-            .contains(String.format("Invalid OCR data. Duplicate keys exist: %s", LAST_NAME));
+            .containsExactly(String.format("Invalid OCR data. Duplicate keys exist: %s", LAST_NAME));
     }
 
     @Test

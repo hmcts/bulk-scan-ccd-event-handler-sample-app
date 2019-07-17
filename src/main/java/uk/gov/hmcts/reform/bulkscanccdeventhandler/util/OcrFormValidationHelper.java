@@ -4,13 +4,13 @@ import org.apache.commons.validator.routines.EmailValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 public final class OcrFormValidationHelper {
@@ -57,12 +57,15 @@ public final class OcrFormValidationHelper {
         return Pattern.compile("\\d{10}").matcher(phone).matches();
     }
 
-    public static Set<String> findDuplicateOcrKeys(List<OcrDataField> ocrData) {
-        List<String> ocrKeys = getOcrFieldNames(ocrData);
-        Set<String> distinctKeys = new HashSet<>();
-        return ocrKeys.stream()
-            .filter(key -> !distinctKeys.add(key))
-            .collect(toSet());
+    public static List<String> findDuplicateOcrKeys(List<OcrDataField> ocrKeys) {
+        return ocrKeys
+            .stream()
+            .collect(groupingBy(it -> it.key, counting()))
+            .entrySet()
+            .stream()
+            .filter(entry -> entry.getValue() > 1)
+            .map(Entry::getKey)
+            .collect(toList());
     }
 
     public static List<String> getErrorMessagesForMissingFields(Collection<String> missingFields) {

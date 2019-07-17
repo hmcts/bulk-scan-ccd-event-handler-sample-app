@@ -10,7 +10,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.util.OcrFormValidationHelper;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -30,7 +29,7 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.util.OcrFormValidation
 public class OcrDataValidator {
 
     public OcrValidationResult validate(FormType formType, List<OcrDataField> ocrData) {
-        Set<String> duplicateOcrKeys = OcrFormValidationHelper.findDuplicateOcrKeys(ocrData);
+        List<String> duplicateOcrKeys = OcrFormValidationHelper.findDuplicateOcrKeys(ocrData);
 
         if (duplicateOcrKeys.isEmpty()) {
             List<String> errors = validateMandatoryFields(formType, ocrData);
