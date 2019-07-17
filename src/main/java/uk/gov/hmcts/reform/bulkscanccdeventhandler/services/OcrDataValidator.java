@@ -43,11 +43,10 @@ public class OcrDataValidator {
                 warnings, errors, getValidationStatus(!errors.isEmpty(), !warnings.isEmpty())
             );
         } else {
-            log.error("Found duplicate keys in OCR data. {}", String.join(",", duplicateOcrKeys));
+            String duplicateKeys = String.join(",", duplicateOcrKeys);
+            log.info("Found duplicate keys in OCR data. {}", duplicateKeys);
 
-            String errorMessage = String.format(
-                "Invalid OCR data. Duplicate keys exist: %s", String.join(",", duplicateOcrKeys)
-            );
+            String errorMessage = String.format("Invalid OCR data. Duplicate keys exist: %s", duplicateKeys);
             return new OcrValidationResult(emptyList(), singletonList(errorMessage), ERRORS);
         }
     }
