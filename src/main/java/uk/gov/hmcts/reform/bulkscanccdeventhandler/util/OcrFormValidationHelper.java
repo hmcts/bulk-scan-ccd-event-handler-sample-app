@@ -3,11 +3,14 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.util;
 import org.apache.commons.validator.routines.EmailValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 public final class OcrFormValidationHelper {
@@ -30,10 +33,11 @@ public final class OcrFormValidationHelper {
             .collect(toList());
     }
 
-    public static List<String> findMissingFields(List<String> optionalFields, List<String> ocrInputFields) {
-        return optionalFields.stream()
-            .filter(item -> !ocrInputFields.contains(item))
-            .collect(Collectors.toList());
+    /* returns missing expected fields in the input collection */
+    public static List<String> findMissingFields(List<String> expectedFields, List<String> inputFields) {
+        return expectedFields.stream()
+            .filter(item -> !inputFields.contains(item))
+            .collect(toList());
     }
 
     public static String findOcrFormFieldValue(String fieldName, List<OcrDataField> ocrData) {
@@ -53,10 +57,18 @@ public final class OcrFormValidationHelper {
         return Pattern.compile("\\d{10}").matcher(phone).matches();
     }
 
-    public static List<String> getErrorMessagesForMissingFields(List<String> missingFields) {
+    public static Set<String> findDuplicateOcrKeys(List<OcrDataField> ocrData) {
+        List<String> ocrKeys = getOcrFieldNames(ocrData);
+        Set<String> distinctKeys = new HashSet<>();
+        return ocrKeys.stream()
+            .filter(key -> !distinctKeys.add(key))
+            .collect(toSet());
+    }
+
+    public static List<String> getErrorMessagesForMissingFields(Collection<String> missingFields) {
         return missingFields
             .stream()
             .map(field -> String.format("%s is missing", field))
-            .collect(Collectors.toList());
+            .collect(toList());
     }
 }

@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.util.OcrFormValidationHelper;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -29,10 +30,23 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.util.OcrFormValidation
 public class OcrDataValidator {
 
     public OcrValidationResult validate(FormType formType, List<OcrDataField> ocrData) {
-        List<String> errors = validateMandatoryFields(formType, ocrData);
-        List<String> warnings = validateOptionalFields(formType, ocrData);
+        Set<String> duplicateOcrKeys = OcrFormValidationHelper.findDuplicateOcrKeys(ocrData);
 
-        return new OcrValidationResult(warnings, errors, getValidationStatus(!errors.isEmpty(), !warnings.isEmpty()));
+        if (duplicateOcrKeys.isEmpty()) {
+            List<String> errors = validateMandatoryFields(formType, ocrData);
+            List<String> warnings = validateOptionalFields(formType, ocrData);
+
+            return new OcrValidationResult(
+                warnings, errors, getValidationStatus(!errors.isEmpty(), !warnings.isEmpty())
+            );
+        } else {
+            String errorMessage = String.format(
+                "Invalid OCR data. Duplicate keys exist: %s",
+                String.join(",", duplicateOcrKeys)
+            );
+
+            return new OcrValidationResult(emptyList(), singletonList(errorMessage), ERRORS);
+        }
     }
 
     private List<String> validateMandatoryFields(FormType formType, List<OcrDataField> ocrData) {
@@ -79,6 +93,7 @@ public class OcrDataValidator {
                 OcrFieldNames.LAST_NAME
             );
         }
+        //TODO: throw exception for invalid form type
         return emptyList();
     }
 

@@ -49,6 +49,49 @@ class OcrDataValidatorTest {
     }
 
     @Test
+    void should_return_errors_when_duplicate_keys_exist() {
+        // given
+        List<OcrDataField> ocrDataFields = asList(
+            new OcrDataField(FIRST_NAME, "name"),
+            new OcrDataField(LAST_NAME, "xyz"), //duplicate key
+            new OcrDataField(LAST_NAME, "abc"), //duplicate key
+            new OcrDataField(DATE_OF_BIRTH, "01-01-1990")
+        );
+
+        // when
+        OcrValidationResult result = validator.validate(PERSONAL, ocrDataFields);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.status).isEqualTo(ERRORS);
+        assertThat(result.warnings).isEmpty();
+        assertThat(result.errors)
+            .isNotEmpty()
+            .hasSize(1)
+            .contains(String.format("Invalid OCR data. Duplicate keys exist: %s", LAST_NAME));
+    }
+
+    @Test
+    void should_ignore_unrecognised_form_fields_and_return_success() {
+        // given
+        List<OcrDataField> ocrDataFields = asList(
+            new OcrDataField(FIRST_NAME, "test"),
+            new OcrDataField(LAST_NAME, "name"),
+            new OcrDataField(DATE_OF_BIRTH, "01-01-1990"),
+            new OcrDataField("unrecognised_field", "xyz")
+        );
+
+        // when
+        OcrValidationResult result = validator.validate(PERSONAL, ocrDataFields);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result)
+            .extracting("errors", "warnings", "status")
+            .containsExactly(emptyList(), emptyList(), SUCCESS);
+    }
+
+    @Test
     void should_return_errors_when_mandatory_fields_are_empty() {
         // given
         List<OcrDataField> ocrDataFields = asList(

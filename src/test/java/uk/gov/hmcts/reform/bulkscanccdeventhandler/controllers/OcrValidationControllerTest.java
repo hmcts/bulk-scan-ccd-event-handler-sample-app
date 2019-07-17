@@ -99,25 +99,6 @@ class OcrValidationControllerTest {
             .andExpect(status().isBadRequest());
     }
 
-    @Test
-    void should_ignore_unrecognised_fields_and_return_success_message() throws Exception {
-        String requestBody = readResource("ocr-data/valid/valid-ocr-data-with-additional-fields.json");
-
-        given(ocrDataValidator.validate(eq(FormType.PERSONAL), any()))
-            .willReturn(new OcrValidationResult(emptyList(), emptyList(), SUCCESS));
-
-        mockMvc
-            .perform(
-                post("/validate-ocr-data")
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .header("ServiceAuthorization", "testServiceAuthHeader")
-                    .content(requestBody)
-            )
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(content().json(readResource("ocr-data/response/valid-ocr-response.json")));
-    }
-
     private String readResource(final String fileName) throws IOException {
         return Resources.toString(Resources.getResource(fileName), Charsets.UTF_8);
     }
