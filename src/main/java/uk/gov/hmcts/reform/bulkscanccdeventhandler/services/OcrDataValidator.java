@@ -93,7 +93,8 @@ public class OcrDataValidator {
                 OcrFieldNames.LAST_NAME
             );
         }
-        //TODO: throw exception for invalid form type
+        //TODO: Change ocr validation controller to have formType as a path parameter
+        // or throw exception for invalid form type
         return emptyList();
     }
 
