@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.services;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.FormType;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames;
@@ -25,7 +25,7 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.util.OcrFormValidation
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.util.OcrFormValidationHelper.isValidEmailAddress;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.util.OcrFormValidationHelper.isValidPhoneNumber;
 
-@Component
+@Service
 public class OcrDataValidator {
 
     public OcrValidationResult validate(FormType formType, List<OcrDataField> ocrData) {
