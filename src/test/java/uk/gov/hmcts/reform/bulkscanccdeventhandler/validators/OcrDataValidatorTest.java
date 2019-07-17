@@ -42,8 +42,8 @@ class OcrDataValidatorTest {
         assertThat(result)
             .extracting("errors", "warnings", "status")
             .containsExactly(
-                singletonList(String.format("%s is missing", LAST_NAME)),
-                singletonList(String.format("%s is missing", DATE_OF_BIRTH)),
+                singletonList("last_name is missing"),
+                singletonList("date_of_birth is missing"),
                 ValidationStatus.ERRORS
             );
     }
@@ -63,10 +63,13 @@ class OcrDataValidatorTest {
 
         // then
         assertThat(result).isNotNull();
-        assertThat(result.status).isEqualTo(ERRORS);
-        assertThat(result.warnings).isEmpty();
-        assertThat(result.errors)
-            .containsExactly(String.format("Invalid OCR data. Duplicate keys exist: %s", LAST_NAME));
+        assertThat(result)
+            .extracting("errors", "warnings", "status")
+            .containsExactly(
+                singletonList("Invalid OCR data. Duplicate keys exist: last_name"),
+                emptyList(),
+                ValidationStatus.ERRORS
+            );
     }
 
     @Test
@@ -106,7 +109,7 @@ class OcrDataValidatorTest {
         assertThat(result)
             .extracting("errors", "warnings", "status")
             .containsExactly(
-                singletonList(String.format("%s is missing", LAST_NAME)),
+                singletonList("last_name is missing"),
                 emptyList(),
                 ValidationStatus.ERRORS
             );
@@ -129,7 +132,7 @@ class OcrDataValidatorTest {
             .extracting("errors", "warnings", "status")
             .containsExactly(
                 emptyList(),
-                singletonList(String.format("%s is missing", DATE_OF_BIRTH)),
+                singletonList("date_of_birth is missing"),
                 ValidationStatus.WARNINGS
             );
     }

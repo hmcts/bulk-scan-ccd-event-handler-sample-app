@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.FormType;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
@@ -28,6 +30,8 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.util.OcrFormValidation
 @Service
 public class OcrDataValidator {
 
+    private static final Logger log = LoggerFactory.getLogger(OcrDataValidator.class);
+
     public OcrValidationResult validate(FormType formType, List<OcrDataField> ocrData) {
         List<String> duplicateOcrKeys = OcrFormValidationHelper.findDuplicateOcrKeys(ocrData);
 
@@ -39,11 +43,11 @@ public class OcrDataValidator {
                 warnings, errors, getValidationStatus(!errors.isEmpty(), !warnings.isEmpty())
             );
         } else {
-            String errorMessage = String.format(
-                "Invalid OCR data. Duplicate keys exist: %s",
-                String.join(",", duplicateOcrKeys)
-            );
+            log.error("Found duplicate keys in OCR data. {}", String.join(",", duplicateOcrKeys));
 
+            String errorMessage = String.format(
+                "Invalid OCR data. Duplicate keys exist: %s", String.join(",", duplicateOcrKeys)
+            );
             return new OcrValidationResult(emptyList(), singletonList(errorMessage), ERRORS);
         }
     }
@@ -94,6 +98,8 @@ public class OcrDataValidator {
         }
         //TODO: Change ocr validation controller to have formType as a path parameter
         // or throw exception for invalid form type
+
+        log.info("Invalid Form type {}", formType);
         return emptyList();
     }
 
