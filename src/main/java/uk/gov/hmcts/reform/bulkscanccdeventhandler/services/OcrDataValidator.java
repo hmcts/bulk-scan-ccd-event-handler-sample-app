@@ -18,8 +18,13 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.FormType.CONTACT;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.FormType.PERSONAL;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.ADDRESS_LINE_1;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.CONTACT_NUMBER;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.COUNTRY;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.EMAIL;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.FIRST_NAME;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.LAST_NAME;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.POST_CODE;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.ValidationStatus.ERRORS;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.ValidationStatus.SUCCESS;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.ValidationStatus.WARNINGS;
@@ -82,17 +87,17 @@ public class OcrDataValidator {
     private List<String> getMandatoryFieldsForForm(FormType formType) {
         if (formType.equals(CONTACT)) {
             return asList(
-                OcrFieldNames.ADDRESS_LINE_1,
+                ADDRESS_LINE_1,
                 EMAIL,
-                OcrFieldNames.POST_CODE,
-                OcrFieldNames.COUNTRY,
+                POST_CODE,
+                COUNTRY,
                 CONTACT_NUMBER
             );
 
         } else if (formType.equals(PERSONAL)) {
             return Arrays.asList(
-                OcrFieldNames.FIRST_NAME,
-                OcrFieldNames.LAST_NAME
+                FIRST_NAME,
+                LAST_NAME
             );
         }
         //TODO: Change ocr validation controller to have formType as a path parameter
@@ -106,10 +111,10 @@ public class OcrDataValidator {
         if (formType.equals(CONTACT)) {
             return asList(
                 OcrFieldNames.ADDRESS_LINE_1,
-                EMAIL,
+                OcrFieldNames.EMAIL,
                 OcrFieldNames.POST_CODE,
                 OcrFieldNames.COUNTRY,
-                CONTACT_NUMBER
+                OcrFieldNames.CONTACT_NUMBER
             );
         } else if (formType.equals(PERSONAL)) {
             return singletonList(OcrFieldNames.DATE_OF_BIRTH);
