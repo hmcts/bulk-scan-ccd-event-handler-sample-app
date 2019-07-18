@@ -85,7 +85,7 @@ public class CaseCreationCallbackHandlerTest {
         // then
         assertThat(actualResult).isSameAs(expectedResult);
 
-        verifyEventHandlerHasBeenCalled(exceptionRecordDetails, eventId, idamToken, idamUserId);
+        verifyEventHandlerHasBeenCalledWithCorrectData(exceptionRecordDetails, eventId, idamToken, idamUserId);
     }
 
     @Test
@@ -103,7 +103,7 @@ public class CaseCreationCallbackHandlerTest {
         ).isSameAs(exceptionToThrow);
     }
 
-    private void verifyEventHandlerHasBeenCalled(
+    private void verifyEventHandlerHasBeenCalledWithCorrectData(
         CaseDetails exceptionRecordDetails,
         String eventId,
         String idamToken,
