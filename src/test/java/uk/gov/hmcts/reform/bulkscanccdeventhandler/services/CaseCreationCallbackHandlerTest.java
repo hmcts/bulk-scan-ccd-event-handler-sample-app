@@ -11,7 +11,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.handler.ExceptionRecordEventH
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.handler.model.CaseCreationRequest;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.handler.model.CaseCreationResult;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.handler.model.ExceptionRecord;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CallbackProcessingException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.BadCallbackRequestException;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 
 import static java.util.Collections.emptyList;
@@ -22,6 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 public class CaseCreationCallbackHandlerTest {
@@ -37,7 +38,29 @@ public class CaseCreationCallbackHandlerTest {
     }
 
     @Test
-    public void should_return_result_from_exception_record_event_handler() {
+    public void should_throw_exception_when_id_is_missing() {
+        CaseDetails exceptionRecordDetails = CaseDetails
+            .builder()
+            .id(null)
+            .jurisdiction("jurisdiction1")
+            .build();
+
+        assertThatThrownBy(() ->
+            callbackHandler.handleCaseCreationCallback(
+                exceptionRecordDetails,
+                "eventId1",
+                "token1",
+                "user1",
+                true
+            )
+        ).isInstanceOf(BadCallbackRequestException.class)
+            .hasMessage("Exception record ID is missing");
+
+        verifyNoMoreInteractions(exceptionRecordEventHandler);
+    }
+
+    @Test
+    public void should_return_result_from_exception_record_event_handler_when_data_is_positively_verified() {
         // given
         CaseCreationResult expectedResult =
             new CaseCreationResult("case-id-123", emptyList(), singletonList("warning 1"));
@@ -67,9 +90,8 @@ public class CaseCreationCallbackHandlerTest {
 
     @Test
     public void should_throw_exception_when_exception_record_event_handler_fails() {
-        Exception exceptionToThrow = new CallbackProcessingException("test exception", null);
+        Exception exceptionToThrow = new BadCallbackRequestException("test exception");
         willThrow(exceptionToThrow).given(exceptionRecordEventHandler).handle(any());
-
         assertThatThrownBy(
             () -> callbackHandler.handleCaseCreationCallback(
                 sampleValidExceptionRecordDetails(),

@@ -7,14 +7,13 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.handler.ExceptionRecordEventH
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.handler.model.CaseCreationRequest;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.handler.model.CaseCreationResult;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.handler.model.ExceptionRecord;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.BadCallbackRequestException;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 
 @Service
 public class CaseCreationCallbackHandler {
 
     private static final Logger log = LoggerFactory.getLogger(CaseCreationCallbackHandler.class);
-
-    private static final String JURISDICTION = "BULKSCAN";
 
     private final ExceptionRecordEventHandler exceptionRecordEventHandler;
 
@@ -29,12 +28,10 @@ public class CaseCreationCallbackHandler {
         String idamUserId,
         boolean ignoreWarnings
     ) {
-        String exceptionRecordId = exceptionRecordDetails.getId() != null
-            ? exceptionRecordDetails.getId().toString()
-            : null;
+        verifyIdIsPresent(exceptionRecordDetails);
 
         ExceptionRecord exceptionRecord = new ExceptionRecord(
-            exceptionRecordId,
+            exceptionRecordDetails.getId().toString(),
             exceptionRecordDetails.getJurisdiction(),
             exceptionRecordDetails.getState(),
             exceptionRecordDetails.getCaseTypeId(),
@@ -54,6 +51,12 @@ public class CaseCreationCallbackHandler {
         logCallbackHandlingResult(result, exceptionRecord, ignoreWarnings);
 
         return result;
+    }
+
+    private void verifyIdIsPresent(CaseDetails exceptionRecordDetails) {
+        if (exceptionRecordDetails.getId() == null) {
+            throw new BadCallbackRequestException("Exception record ID is missing");
+        }
     }
 
     private void logCallbackHandlingResult(
