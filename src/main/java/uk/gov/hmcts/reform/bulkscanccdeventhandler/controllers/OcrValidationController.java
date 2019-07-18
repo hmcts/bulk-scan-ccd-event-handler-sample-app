@@ -46,7 +46,8 @@ public class OcrValidationController {
         @ApiResponse(
             code = 200, response = OcrValidationResponse.class, message = "Validation run successfully"
         ),
-        @ApiResponse(code = 401, message = "Provided S2S token is missing or invalid")
+        @ApiResponse(code = 401, message = "Provided S2S token is missing or invalid"),
+        @ApiResponse(code = 403, message = "S2S token is not authorized to use the service")
     })
     public ResponseEntity<OcrValidationResponse> validateOcrData(
         @RequestHeader(name = "ServiceAuthorization", required = false) String serviceAuthHeader,

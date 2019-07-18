@@ -40,7 +40,7 @@ class OcrValidationControllerTest {
     private AuthService authService;
 
     @Test
-    void should_throw_unauthenticated_exception_when_auth_header_is_missing() throws Exception {
+    void should_return_401_status_when_auth_service_throws_unauthenticated_exception() throws Exception {
         String requestBody = readResource("ocr-data/valid/valid-ocr-data.json");
         given(authService.authenticate("")).willThrow(UnauthenticatedException.class);
 
@@ -55,7 +55,7 @@ class OcrValidationControllerTest {
     }
 
     @Test
-    void should_throw_unauthenticated_exception_when_auth_header_is_invalid() throws Exception {
+    void should_return_401_status_when_auth_service_throws_invalid_token_exception() throws Exception {
         String requestBody = readResource("ocr-data/valid/valid-ocr-data.json");
         given(authService.authenticate("test-token")).willThrow(InvalidTokenException.class);
 
@@ -70,7 +70,7 @@ class OcrValidationControllerTest {
     }
 
     @Test
-    void should_throw_forbidden_exception_when_service_is_not_configured() throws Exception {
+    void should_return_403_status_when_auth_service_throws_forbidden_exception() throws Exception {
         String requestBody = readResource("ocr-data/valid/valid-ocr-data.json");
         given(authService.authenticate(any())).willThrow(ForbiddenException.class);
 
@@ -81,7 +81,8 @@ class OcrValidationControllerTest {
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(requestBody)
             )
-            .andExpect(status().isForbidden());
+            .andExpect(status().isForbidden())
+            .andExpect(content().string("S2S token is not authorized to use the service"));
     }
 
     @Test
