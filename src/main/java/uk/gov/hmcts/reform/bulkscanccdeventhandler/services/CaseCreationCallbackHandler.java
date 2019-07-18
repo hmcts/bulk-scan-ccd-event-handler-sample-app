@@ -73,6 +73,7 @@ public class CaseCreationCallbackHandler {
         } else {
             log.warn(
                 "Rejected callback request for exception record {}.\nErrors: {}\nWarnings: {}\nIgnore warnings: {}",
+                exceptionRecord.id,
                 result.errors,
                 result.warnings,
                 ignoreWarnings
