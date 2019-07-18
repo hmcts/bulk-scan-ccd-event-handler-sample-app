@@ -12,3 +12,10 @@ management:
 spring:
   application:
     name: Bulk Scan CCD Event Handler Sample Application
+
+idam:
+  s2s-auth:
+    url: ${S2S_URL:http://localhost:4552}
+    secret: ${S2S_SECRET:AAAAAAAAAAAAAAAA}
+
+allowed-services-for-callback : bulk_scan_processor,bulk_scan_processor_test  # comma separated list of service names

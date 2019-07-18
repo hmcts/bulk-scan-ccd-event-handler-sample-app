@@ -171,6 +171,7 @@ dependencies {
 
   compile group: 'uk.gov.hmcts.reform', name: 'java-logging', version: versions.reformLogging
   compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
+  compile group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.0.0'
   compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.1.2.RELEASE'
   compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
 
