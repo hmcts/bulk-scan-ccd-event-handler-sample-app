@@ -18,4 +18,6 @@ idam:
     url: ${S2S_URL:http://localhost:4552}
     secret: ${S2S_SECRET:AAAAAAAAAAAAAAAA}
 
-allowed-services: bulk_scan_processor,bulk_scan_processor_test  # comma separated list of service names
+allowed-services:
+  - bulk_scan_processor
+  - bulk_scan_processor_test
