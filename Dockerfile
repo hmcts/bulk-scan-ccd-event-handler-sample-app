@@ -1,4 +1,4 @@
-FROM hmctspublic/cnp-java-base:openjdk-8u191-jre-alpine3.9-2.0.1
+FROM hmctspublic.azurecr.io/base/java:openjdk-8-distroless-1.0
 
 COPY build/libs/bulk-scan-ccd-event-handler-sample-app.jar /opt/app/
 
