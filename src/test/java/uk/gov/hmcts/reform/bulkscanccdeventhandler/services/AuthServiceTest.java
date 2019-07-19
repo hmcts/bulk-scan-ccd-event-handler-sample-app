@@ -24,7 +24,6 @@ import static org.mockito.Mockito.verify;
 class AuthServiceTest {
 
     private static final String SERVICE_HEADER = "some-header";
-    private static final String ALLOWED_SERVICES = "allowed_service1,allowed_service2";
 
     @Mock
     private AuthTokenValidator validator;
@@ -33,7 +32,8 @@ class AuthServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new AuthService(validator, ALLOWED_SERVICES);
+        String[] allowedServices = {"allowed_service1", "allowed_service2"};
+        service = new AuthService(validator, allowedServices);
     }
 
     @AfterEach

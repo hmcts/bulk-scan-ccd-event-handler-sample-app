@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.services;
 
-import com.google.common.base.Splitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -8,22 +7,21 @@ import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.ForbiddenException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.UnauthenticatedException;
 
-import java.util.List;
-
+import static java.util.Arrays.asList;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 @Component
 public class AuthService {
 
     private final AuthTokenValidator authTokenValidator;
-    private final List<String> allowedServices;
+    private final String[] allowedServices;
 
     @Autowired
     public AuthService(
         AuthTokenValidator authTokenValidator,
-        @Value("${allowed-services}") String allowedServices) {
+        @Value("${allowed-services}") String[] allowedServices) {
         this.authTokenValidator = authTokenValidator;
-        this.allowedServices = Splitter.on(",").splitToList(allowedServices);
+        this.allowedServices = allowedServices;
     }
 
     public String authenticate(String authHeader) {
@@ -35,7 +33,7 @@ public class AuthService {
     }
 
     public void assertIsAllowedService(String serviceName) {
-        if (!allowedServices.contains(serviceName)) {
+        if (!asList(allowedServices).contains(serviceName)) {
             throw new ForbiddenException("S2S token is not authorized to use the service");
         }
     }
