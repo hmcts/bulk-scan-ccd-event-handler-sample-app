@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
@@ -16,10 +15,10 @@ public class AuthService {
     private final AuthTokenValidator authTokenValidator;
     private final String[] allowedServices;
 
-    @Autowired
     public AuthService(
         AuthTokenValidator authTokenValidator,
-        @Value("${allowed-services}") String[] allowedServices) {
+        @Value("${allowed-services}") String[] allowedServices
+    ) {
         this.authTokenValidator = authTokenValidator;
         this.allowedServices = allowedServices;
     }
