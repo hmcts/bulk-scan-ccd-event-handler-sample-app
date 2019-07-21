@@ -15,8 +15,7 @@ public class ExceptionRecordHandlerConfig {
     public ExceptionRecordEventHandler exceptionRecordEventHandler(
         CaseTransformer caseTransformer,
         AuthTokenGenerator authTokenGenerator,
-        @Value("${ccd.url}") String ccdUrl
-
+        @Value("${core_case_data.api.url}") String ccdUrl
     ) {
         return
             ExceptionRecordEventHandlerFactory.getHandler(
