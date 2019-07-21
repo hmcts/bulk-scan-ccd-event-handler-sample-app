@@ -12,8 +12,8 @@ public class AuthConfig {
 
     @Bean
     public AuthTokenGenerator authTokenGenerator(
-        @Value("${s2s.secret}") String secret,
-        @Value("${s2s.name}") String name,
+        @Value("${idam.s2s-auth.secret}") String secret,
+        @Value("${idam.s2s-auth.name}") String name,
         ServiceAuthorisationApi serviceAuthorisationApi
     ) {
         return AuthTokenGeneratorFactory.createDefaultGenerator(secret, name, serviceAuthorisationApi);
