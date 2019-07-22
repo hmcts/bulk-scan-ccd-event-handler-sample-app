@@ -1,23 +1,24 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.services;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.ForbiddenException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.UnauthenticatedException;
 
-import static java.util.Arrays.asList;
+import java.util.List;
+
 import static org.apache.commons.lang.StringUtils.isBlank;
 
-@Component
+@Service
 public class AuthService {
 
     private final AuthTokenValidator authTokenValidator;
-    private final String[] allowedServices;
+    private final List<String> allowedServices;
 
     public AuthService(
         AuthTokenValidator authTokenValidator,
-        @Value("${allowed-services}") String[] allowedServices
+        @Value("${allowed-services}") List<String> allowedServices
     ) {
         this.authTokenValidator = authTokenValidator;
         this.allowedServices = allowedServices;
@@ -32,7 +33,7 @@ public class AuthService {
     }
 
     public void assertIsAllowedService(String serviceName) {
-        if (!asList(allowedServices).contains(serviceName)) {
+        if (!allowedServices.contains(serviceName)) {
             throw new ForbiddenException("S2S token is not authorized to use the service");
         }
     }

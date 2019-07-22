@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.ForbiddenException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.UnauthenticatedException;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -32,8 +33,7 @@ class AuthServiceTest {
 
     @BeforeEach
     void setUp() {
-        String[] allowedServices = {"allowed_service1", "allowed_service2"};
-        service = new AuthService(validator, allowedServices);
+        service = new AuthService(validator, asList("allowed_service1", "allowed_service2"));
     }
 
     @AfterEach
