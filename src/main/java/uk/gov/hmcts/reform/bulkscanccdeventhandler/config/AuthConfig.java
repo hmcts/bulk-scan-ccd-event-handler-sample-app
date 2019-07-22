@@ -16,6 +16,7 @@ import java.util.List;
 @Configuration
 public class AuthConfig {
     @Bean
+    @ConditionalOnProperty(name = "idam.s2s-auth.url")
     public AuthTokenGenerator authTokenGenerator(
         @Value("${idam.s2s-auth.secret}") String secret,
         @Value("${idam.s2s-auth.name}") String name,
@@ -25,17 +26,17 @@ public class AuthConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "idam.s2s-auth.url")
-    public AuthTokenValidator tokenValidator(ServiceAuthorisationApi s2sApi) {
-        return new ServiceAuthTokenValidator(s2sApi);
-    }
-
-    @Bean
     @ConditionalOnProperty(name = "idam.s2s-auth.url", havingValue = "false")
     public AuthTokenGenerator authTokenGeneratorStub() {
         return () -> {
             throw new NotImplementedException();
         };
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "idam.s2s-auth.url")
+    public AuthTokenValidator tokenValidator(ServiceAuthorisationApi s2sApi) {
+        return new ServiceAuthTokenValidator(s2sApi);
     }
 
     @Bean
