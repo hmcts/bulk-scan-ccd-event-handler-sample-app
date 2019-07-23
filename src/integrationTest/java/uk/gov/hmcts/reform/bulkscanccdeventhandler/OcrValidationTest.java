@@ -77,7 +77,7 @@ class OcrValidationTest {
     }
 
     @Test
-    void should_return_warnings_when_ocr_form_data_has_missing_fields() throws Throwable {
+    void should_return_warnings_when_ocr_form_data_has_missing_optional_fields() throws Throwable {
         String content = readResource("ocr-data/invalid/missing-optional-fields.json");
 
         mvc.perform(
