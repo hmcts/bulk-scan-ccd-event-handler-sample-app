@@ -146,7 +146,7 @@ class OcrValidationControllerTest {
             .andExpect(status().isNotFound())
             .andReturn();
 
-        assertThat(mvcResult.getResolvedException().getMessage()).contains("Form type not found invalid-form-type");
+        assertThat(mvcResult.getResolvedException().getMessage()).contains("Form type 'invalid-form-type' not found");
     }
 
     private String readResource(final String fileName) throws IOException {

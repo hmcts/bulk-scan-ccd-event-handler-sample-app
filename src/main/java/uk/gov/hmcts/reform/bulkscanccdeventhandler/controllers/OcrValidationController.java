@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.controllers;
 
-import com.google.common.base.Enums;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -19,6 +18,8 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.OcrValidationResult
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.AuthService;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.OcrDataValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.FormNotFoundException;
+
+import java.util.Arrays;
 
 import javax.validation.Valid;
 
@@ -58,16 +59,18 @@ public class OcrValidationController {
         @PathVariable(name = "form-type", required = false) String formType,
         @Valid @RequestBody OcrDataValidationRequest request
     ) {
-        if (!Enums.getIfPresent(FormType.class, formType).isPresent()) {
-            throw new FormNotFoundException("Form type not found " + formType);
-        }
+        // get the form type from the FormType enum
+        FormType ocrForm = Arrays.stream(FormType.values())
+            .filter(type -> type.name().equals(formType))
+            .findFirst()
+            .orElseThrow(() -> new FormNotFoundException("Form type '" + formType + "' not found"));
 
         String serviceName = authService.authenticate(serviceAuthHeader);
         logger.info("Request received to validate ocr data from service {}", serviceName);
 
         authService.assertIsAllowedService(serviceName);
 
-        OcrValidationResult result = ocrDataValidator.validate(FormType.valueOf(formType), request.getOcrDataFields());
+        OcrValidationResult result = ocrDataValidator.validate(ocrForm, request.getOcrDataFields());
 
         return ok().body(new OcrValidationResponse(result.warnings, result.errors, result.status));
     }
