@@ -67,7 +67,7 @@ public class OcrValidationController {
 
         authService.assertIsAllowedService(serviceName);
 
-        OcrValidationResult result = ocrDataValidator.validate(FormType.PERSONAL, request.getOcrDataFields());
+        OcrValidationResult result = ocrDataValidator.validate(FormType.valueOf(formType), request.getOcrDataFields());
 
         return ok().body(new OcrValidationResponse(result.warnings, result.errors, result.status));
     }
