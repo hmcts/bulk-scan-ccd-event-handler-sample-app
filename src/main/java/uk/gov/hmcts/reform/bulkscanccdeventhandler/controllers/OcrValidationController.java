@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.controllers;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.commons.lang3.EnumUtils;
 import org.slf4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.OcrValidationResult
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.AuthService;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.OcrDataValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.FormNotFoundException;
-
-import java.util.Arrays;
 
 import javax.validation.Valid;
 
@@ -59,18 +58,16 @@ public class OcrValidationController {
         @PathVariable(name = "form-type", required = false) String formType,
         @Valid @RequestBody OcrDataValidationRequest request
     ) {
-        // get the form type from the FormType enum
-        FormType ocrForm = Arrays.stream(FormType.values())
-            .filter(type -> type.name().equals(formType))
-            .findFirst()
-            .orElseThrow(() -> new FormNotFoundException("Form type '" + formType + "' not found"));
+        if (!EnumUtils.isValidEnumIgnoreCase(FormType.class, formType)) {
+            throw new FormNotFoundException("Form type '" + formType + "' not found");
+        }
 
         String serviceName = authService.authenticate(serviceAuthHeader);
         logger.info("Request received to validate ocr data from service {}", serviceName);
 
         authService.assertIsAllowedService(serviceName);
 
-        OcrValidationResult result = ocrDataValidator.validate(ocrForm, request.getOcrDataFields());
+        OcrValidationResult result = ocrDataValidator.validate(FormType.valueOf(formType), request.getOcrDataFields());
 
         return ok().body(new OcrValidationResponse(result.warnings, result.errors, result.status));
     }
