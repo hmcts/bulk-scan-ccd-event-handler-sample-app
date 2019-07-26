@@ -8,7 +8,7 @@ locals {
   s2s_url             = "http://${local.s2s_rg}.service.core-compute-${local.local_env}.internal"
   ccd_api_url         = "http://ccd-data-store-api-${local.local_env}.service.core-compute-${local.local_env}.internal"
 
-  vaultName           = "${var.product}-${var.env}"
+  vaultName           = "bulk-scan-${var.env}"
 }
 
 module "bulk-scan-ccd-event-handler-sample-app" {
