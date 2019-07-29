@@ -5,7 +5,7 @@ import com.typesafe.config.ConfigFactory;
 import io.restassured.RestAssured;
 import io.restassured.mapper.ObjectMapperType;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.http.MediaType;
@@ -33,7 +33,7 @@ class OcrFormValidationTest {
 
     private TestHelper testHelper = new TestHelper();
 
-    @BeforeAll
+    @BeforeEach
     public void setUp() {
         this.config = ConfigFactory.load();
         this.testUrl = config.getString("test-url");
