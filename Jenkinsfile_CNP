@@ -11,7 +11,7 @@ def channel = '#bsp-build-notices'
 GradleBuilder builder = new GradleBuilder(this, product)
 
 List<LinkedHashMap<String, Object>> secrets = [
-  secret('test-s2s-secret', 'TEST_S2S_SECRET')
+  secret('test-sample-app-s2s-secret', 'TEST_S2S_SECRET')
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
