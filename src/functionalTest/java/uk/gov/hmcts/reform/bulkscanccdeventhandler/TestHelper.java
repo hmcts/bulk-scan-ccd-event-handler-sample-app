@@ -14,8 +14,12 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 class TestHelper {
-
     String s2sSignIn(String s2sName, String s2sSecret, String s2sUrl) {
+
+        System.out.println(
+            String.format("s2sSignin:: s2sName:: %s \t s2sSecret:: %s \t s2sUrl:: %s", s2sName, s2sSecret, s2sUrl)
+        );
+
         Map<String, Object> params = ImmutableMap.of(
             "microservice", s2sName,
             "oneTimePassword", new GoogleAuthenticator().getTotpPassword(s2sSecret)
