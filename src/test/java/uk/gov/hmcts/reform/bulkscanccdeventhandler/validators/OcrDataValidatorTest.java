@@ -219,6 +219,36 @@ class OcrDataValidatorTest {
     }
 
     @Test
+    void should_return_warnings_when_contact_form_optional_fields_are_missing() {
+        // given
+        List<OcrDataField> ocrDataFields = asList(
+            new OcrDataField(ADDRESS_LINE_1, "1 Street"),
+            new OcrDataField(POST_CODE, "SW1 1ER"),
+            new OcrDataField(COUNTY, "county"),
+            new OcrDataField(COUNTRY, "UK"),
+            new OcrDataField(EMAIL, "test@test.com"),
+            new OcrDataField(CONTACT_NUMBER, "0123456789")
+        );
+
+        // when
+        OcrValidationResult result = validator.validate(CONTACT, ocrDataFields);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result)
+            .extracting("errors", "warnings", "status")
+            .containsExactly(
+                emptyList(),
+                asList(
+                    "address_line_2 is missing",
+                    "address_line_3 is missing",
+                    "post_town is missing"
+                ),
+                ValidationStatus.WARNINGS
+            );
+    }
+
+    @Test
     void should_return_success_when_contact_form_fields_format_is_valid() {
         // given
         List<OcrDataField> ocrDataFields = asList(
