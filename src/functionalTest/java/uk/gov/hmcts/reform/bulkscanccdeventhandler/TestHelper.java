@@ -5,6 +5,7 @@ import com.google.common.io.Resources;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -20,9 +21,16 @@ class TestHelper {
             String.format("s2sSignin:: s2sName:: %s \t s2sSecret:: %s \t s2sUrl:: %s", s2sName, s2sSecret, s2sUrl)
         );
 
+        int s2sOtp = 0;
+        if (StringUtils.isNotBlank(s2sSecret)) {
+            s2sOtp = new GoogleAuthenticator().getTotpPassword(s2sSecret);
+            System.out.println("S2s OTP:::" + s2sOtp);
+        } else {
+            System.out.println("S2s secret is Blank");
+        }
         Map<String, Object> params = ImmutableMap.of(
             "microservice", s2sName,
-            "oneTimePassword", new GoogleAuthenticator().getTotpPassword(s2sSecret)
+            "oneTimePassword", s2sOtp
         );
 
         Response response = RestAssured

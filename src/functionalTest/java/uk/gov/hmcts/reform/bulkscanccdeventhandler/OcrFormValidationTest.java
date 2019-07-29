@@ -43,7 +43,9 @@ class OcrFormValidationTest {
     }
 
     @Test
-    void should_validate_ocr_data_and_return_success() throws Exception {
+    void should_validate_ocr_data_and_return_success() {
+        System.out.println("S2s Secret:::" + this.s2sSecret);
+
         Response response = RestAssured
             .given()
             .relaxedHTTPSValidation()
