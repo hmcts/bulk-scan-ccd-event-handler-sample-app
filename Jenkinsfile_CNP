@@ -48,14 +48,7 @@ withPipeline(type, product, component) {
   enableDockerBuild()
   installCharts()
   enableSlackNotifications(channel)
-
-  onPR() {
-    loadVaultSecrets(secrets)
-  }
-
-  onNonPR() {
-    loadVaultSecrets(secrets)
-  }
+  loadVaultSecrets(secrets)
 
   setVaultName('bulk-scan')
 }
