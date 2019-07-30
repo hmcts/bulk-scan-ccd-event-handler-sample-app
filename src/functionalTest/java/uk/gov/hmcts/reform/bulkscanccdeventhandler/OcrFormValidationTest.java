@@ -14,9 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.OcrValidationResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.ValidationStatus;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
@@ -54,11 +51,9 @@ class OcrFormValidationTest {
         OcrValidationResponse validationResponse = response.getBody()
             .as(OcrValidationResponse.class, ObjectMapperType.JACKSON_2);
 
-        OcrValidationResponse expectedResponse = new OcrValidationResponse(
-            emptyList(), emptyList(), ValidationStatus.SUCCESS
-        );
-
-        assertThat(validationResponse).isEqualToComparingFieldByFieldRecursively(expectedResponse);
+        assertThat(validationResponse.status).isEqualTo(ValidationStatus.SUCCESS);
+        assertThat(validationResponse.errors).isEmpty();
+        assertThat(validationResponse.warnings).isEmpty();
     }
 
     @Test
@@ -70,17 +65,13 @@ class OcrFormValidationTest {
         OcrValidationResponse validationResponse = response.getBody()
             .as(OcrValidationResponse.class, ObjectMapperType.JACKSON_2);
 
-        OcrValidationResponse expectedResponse = new OcrValidationResponse(
-            emptyList(),
-            singletonList("first_name is missing"),
-            ValidationStatus.ERRORS
-        );
-
-        assertThat(validationResponse).isEqualToComparingFieldByFieldRecursively(expectedResponse);
+        assertThat(validationResponse.status).isEqualTo(ValidationStatus.ERRORS);
+        assertThat(validationResponse.errors).containsExactly("first_name is missing");
+        assertThat(validationResponse.warnings).isEmpty();
     }
 
     @Test
-    void should_return_errors_when_optional_fields_are_missing() {
+    void should_return_warnings_when_optional_fields_are_missing() {
         Response response = sendOcrFormValidationRequest("CONTACT", "missing-optional-fields.json");
 
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -88,13 +79,9 @@ class OcrFormValidationTest {
         OcrValidationResponse validationResponse = response.getBody()
             .as(OcrValidationResponse.class, ObjectMapperType.JACKSON_2);
 
-        OcrValidationResponse expectedResponse = new OcrValidationResponse(
-            asList("post_tows is missing", "county is missing"),
-            emptyList(),
-            ValidationStatus.WARNINGS
-        );
-
-        assertThat(validationResponse).isEqualToComparingFieldByFieldRecursively(expectedResponse);
+        assertThat(validationResponse.status).isEqualTo(ValidationStatus.WARNINGS);
+        assertThat(validationResponse.errors).containsExactly("post_town is missing", "county is missing");
+        assertThat(validationResponse.warnings).isEmpty();
     }
 
     @Test
@@ -106,13 +93,9 @@ class OcrFormValidationTest {
         OcrValidationResponse validationResponse = response.getBody()
             .as(OcrValidationResponse.class, ObjectMapperType.JACKSON_2);
 
-        OcrValidationResponse expectedResponse = new OcrValidationResponse(
-            emptyList(),
-            asList("Invalid email address", "Invalid phone number"),
-            ValidationStatus.ERRORS
-        );
-
-        assertThat(validationResponse).isEqualToComparingFieldByFieldRecursively(expectedResponse);
+        assertThat(validationResponse.status).isEqualTo(ValidationStatus.ERRORS);
+        assertThat(validationResponse.errors).containsExactly("Invalid email address", "Invalid phone number");
+        assertThat(validationResponse.warnings).isEmpty();
     }
 
     private Response sendOcrFormValidationRequest(String formType, String fileName) {
