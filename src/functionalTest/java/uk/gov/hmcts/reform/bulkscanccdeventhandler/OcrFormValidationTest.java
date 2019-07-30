@@ -19,7 +19,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 @ExtendWith(SpringExtension.class)
 @TestPropertySource("classpath:application.conf")
-class OcrFormValidationTest {
+public class OcrFormValidationTest {
 
     private String testUrl;
 
@@ -29,13 +29,11 @@ class OcrFormValidationTest {
 
     private String s2sSecret;
 
-    private Config config;
-
     private TestHelper testHelper = new TestHelper();
 
     @BeforeEach
     public void setUp() {
-        this.config = ConfigFactory.load();
+        Config config = ConfigFactory.load();
         this.testUrl = config.getString("test-url");
         this.s2sUrl = config.getString("test-s2s-url");
         this.s2sName = config.getString("test-s2s-name");
@@ -80,8 +78,8 @@ class OcrFormValidationTest {
             .as(OcrValidationResponse.class, ObjectMapperType.JACKSON_2);
 
         assertThat(validationResponse.status).isEqualTo(ValidationStatus.WARNINGS);
-        assertThat(validationResponse.errors).containsExactly("post_town is missing", "county is missing");
-        assertThat(validationResponse.warnings).isEmpty();
+        assertThat(validationResponse.warnings).containsExactly("post_town is missing", "county is missing");
+        assertThat(validationResponse.errors).isEmpty();
     }
 
     @Test

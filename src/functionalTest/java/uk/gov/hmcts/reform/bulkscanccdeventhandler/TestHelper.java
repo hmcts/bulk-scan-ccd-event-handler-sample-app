@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-class TestHelper {
+public class TestHelper {
     String s2sSignIn(String s2sName, String s2sSecret, String s2sUrl) {
 
         Map<String, Object> params = ImmutableMap.of(
@@ -42,7 +42,7 @@ class TestHelper {
         try {
             return Resources.toByteArray(Resources.getResource(file));
         } catch (IOException e) {
-            throw new RuntimeException("Could not load file" + file, e);
+            throw new RuntimeException("Could not load file " + file, e);
         }
     }
 
