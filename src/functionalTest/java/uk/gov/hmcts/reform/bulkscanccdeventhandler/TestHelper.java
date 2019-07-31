@@ -14,7 +14,8 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public class TestHelper {
-    String s2sSignIn(String s2sName, String s2sSecret, String s2sUrl) {
+
+    protected String s2sSignIn(String s2sName, String s2sSecret, String s2sUrl) {
 
         Map<String, Object> params = ImmutableMap.of(
             "microservice", s2sName,
@@ -38,7 +39,7 @@ public class TestHelper {
             .print();
     }
 
-    byte[] fileContentAsBytes(String file) {
+    protected byte[] fileContentAsBytes(String file) {
         try {
             return Resources.toByteArray(Resources.getResource(file));
         } catch (IOException e) {

@@ -29,7 +29,7 @@ public class OcrFormValidationTest {
 
     private String s2sSecret;
 
-    private TestHelper testHelper = new TestHelper();
+    private final TestHelper testHelper = new TestHelper();
 
     @BeforeEach
     public void setUp() {
@@ -41,7 +41,7 @@ public class OcrFormValidationTest {
     }
 
     @Test
-    void should_validate_ocr_data_and_return_success() {
+    public void should_validate_ocr_data_and_return_success() {
         Response response = sendOcrFormValidationRequest("PERSONAL", "valid-ocr-form-data.json");
 
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -55,7 +55,7 @@ public class OcrFormValidationTest {
     }
 
     @Test
-    void should_return_errors_when_mandatory_fields_are_missing() {
+    public void should_return_errors_when_mandatory_fields_are_missing() {
         Response response = sendOcrFormValidationRequest("PERSONAL", "missing-mandatory-fields.json");
 
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -69,7 +69,7 @@ public class OcrFormValidationTest {
     }
 
     @Test
-    void should_return_warnings_when_optional_fields_are_missing() {
+    public void should_return_warnings_when_optional_fields_are_missing() {
         Response response = sendOcrFormValidationRequest("CONTACT", "missing-optional-fields.json");
 
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -83,7 +83,7 @@ public class OcrFormValidationTest {
     }
 
     @Test
-    void should_return_errors_when_additional_validations_are_failing() {
+    public void should_return_errors_when_additional_validations_are_failing() {
         Response response = sendOcrFormValidationRequest("CONTACT", "invalid-form-data.json");
 
         assertThat(response.getStatusCode()).isEqualTo(200);
