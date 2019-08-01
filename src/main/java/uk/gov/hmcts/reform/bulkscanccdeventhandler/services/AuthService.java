@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.services;
 
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
@@ -10,12 +9,9 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.Unauthenti
 import java.util.List;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
-import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
 public class AuthService {
-
-    private static final Logger logger = getLogger(AuthService.class);
 
     private final AuthTokenValidator authTokenValidator;
     private final List<String> allowedServices;
@@ -38,7 +34,6 @@ public class AuthService {
 
     public void assertIsAllowedService(String serviceName) {
         if (!allowedServices.contains(serviceName)) {
-            logger.info("'{}' is not configured to use the service", serviceName);
             throw new ForbiddenException("S2S token is not authorized to use the service");
         }
     }
