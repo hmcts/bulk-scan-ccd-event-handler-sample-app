@@ -11,7 +11,7 @@ public class ExceptionRecord {
     public final String caseTypeId;
     public final String poBox;
     public final String jurisdiction;
-    public final Classification classification;
+    public final JourneyClassification journeyClassification;
     public final LocalDateTime deliveryDate;
     public final LocalDateTime openingDate;
     public final List<ScannedDocument> scannedDocuments;
@@ -21,7 +21,7 @@ public class ExceptionRecord {
         @JsonProperty("case_type_id") String caseTypeId,
         @JsonProperty("po_box") String poBox,
         @JsonProperty("jurisdiction") String jurisdiction,
-        @JsonProperty("journey_classification") Classification classification,
+        @JsonProperty("journey_classification") JourneyClassification journeyClassification,
         @JsonProperty("delivery_date") LocalDateTime deliveryDate,
         @JsonProperty("opening_date") LocalDateTime openingDate,
         @JsonProperty("scanned_document") List<ScannedDocument> scannedDocuments,
@@ -30,7 +30,7 @@ public class ExceptionRecord {
         this.caseTypeId = caseTypeId;
         this.poBox = poBox;
         this.jurisdiction = jurisdiction;
-        this.classification = classification;
+        this.journeyClassification = journeyClassification;
         this.deliveryDate = deliveryDate;
         this.openingDate = openingDate;
         this.scannedDocuments = scannedDocuments;
