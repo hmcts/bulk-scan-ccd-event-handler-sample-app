@@ -15,21 +15,21 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.ADDRESS_LINE_1;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.ADDRESS_LINE_2;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.ADDRESS_LINE_3;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.CONTACT_NUMBER;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.COUNTRY;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.COUNTY;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.DATE_OF_BIRTH;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.EMAIL;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.FIRST_NAME;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.LAST_NAME;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.LEGACY_ID;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.POST_CODE;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.POST_TOWN;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors.errors;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors.result;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.shared.OcrFieldNames.ADDRESS_LINE_1;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.shared.OcrFieldNames.ADDRESS_LINE_2;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.shared.OcrFieldNames.ADDRESS_LINE_3;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.shared.OcrFieldNames.CONTACT_NUMBER;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.shared.OcrFieldNames.COUNTRY;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.shared.OcrFieldNames.COUNTY;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.shared.OcrFieldNames.DATE_OF_BIRTH;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.shared.OcrFieldNames.EMAIL;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.shared.OcrFieldNames.FIRST_NAME;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.shared.OcrFieldNames.LAST_NAME;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.shared.OcrFieldNames.LEGACY_ID;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.shared.OcrFieldNames.POST_CODE;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.shared.OcrFieldNames.POST_TOWN;
 
 @Service
 public class CaseDataCreator {
@@ -126,7 +126,8 @@ public class CaseDataCreator {
                     postCode.get(),
                     postTown.get(),
                     county.get(),
-                    country.get())
+                    country.get()
+                )
             );
         } else {
             return errors(fieldErrors);
