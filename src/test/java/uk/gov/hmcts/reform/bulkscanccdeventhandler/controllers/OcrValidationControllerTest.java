@@ -15,9 +15,9 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrDataValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrValidationResult;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.exceptions.FormNotFoundException;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.AuthService;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.ForbiddenException;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.UnauthenticatedException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.ForbiddenException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.UnauthenticatedException;
 
 import java.io.IOException;
 
