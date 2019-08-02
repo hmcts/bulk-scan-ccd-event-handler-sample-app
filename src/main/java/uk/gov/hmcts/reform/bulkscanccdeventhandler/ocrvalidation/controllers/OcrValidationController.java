@@ -46,7 +46,7 @@ public class OcrValidationController {
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ApiOperation("Validates OCR form data based on form type")
-    @ApiResponses( {
+    @ApiResponses({
         @ApiResponse(
             code = 200, response = OcrValidationResponse.class, message = "Validation executed successfully"
         ),
