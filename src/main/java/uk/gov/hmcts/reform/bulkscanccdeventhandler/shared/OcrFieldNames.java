@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.bulkscanccdeventhandler.model;
+package uk.gov.hmcts.reform.bulkscanccdeventhandler.shared;
 
 public final class OcrFieldNames {
 

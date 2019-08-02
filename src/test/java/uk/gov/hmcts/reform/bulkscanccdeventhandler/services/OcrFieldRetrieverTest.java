@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.CcdCollectionElement;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrData;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors;
 
 import java.time.LocalDate;
