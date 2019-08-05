@@ -1,5 +1,9 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.common;
 
+import java.util.List;
+
+import static java.util.Arrays.asList;
+
 public final class OcrFieldNames {
 
     public static final String LEGACY_ID = "legacy_id";
@@ -18,5 +22,9 @@ public final class OcrFieldNames {
 
     private OcrFieldNames() {
         // utility class, not to be instantiated
+    }
+
+    public static List<String> getRequiredFields() {
+        return asList(FIRST_NAME, LAST_NAME);
     }
 }
