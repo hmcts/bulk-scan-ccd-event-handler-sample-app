@@ -111,7 +111,6 @@ public class ExceptionRecordToCaseTransformerTest {
         assertThat(caseData.address.county).isEqualTo("county");
 
         assertThat(caseData.scannedDocuments).hasSize(2);
-
         assertThat(caseData.scannedDocuments)
             .as("Documents should reference source exception record")
             .extracting(doc -> doc.value.exceptionRecordReference)
