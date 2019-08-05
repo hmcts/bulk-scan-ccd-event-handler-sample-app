@@ -20,11 +20,11 @@ public class ExceptionRecord {
     public ExceptionRecord(
         @JsonProperty("case_type_id") String caseTypeId,
         @JsonProperty("po_box") String poBox,
-        @JsonProperty("jurisdiction") String jurisdiction,
+        @JsonProperty("po_box_jurisdiction") String jurisdiction,
         @JsonProperty("journey_classification") JourneyClassification journeyClassification,
         @JsonProperty("delivery_date") LocalDateTime deliveryDate,
         @JsonProperty("opening_date") LocalDateTime openingDate,
-        @JsonProperty("scanned_document") List<ScannedDocument> scannedDocuments,
+        @JsonProperty("scanned_documents") List<ScannedDocument> scannedDocuments,
         @JsonProperty("ocr_data_fields") List<OcrDataField> ocrDataFields
     ) {
         this.caseTypeId = caseTypeId;
