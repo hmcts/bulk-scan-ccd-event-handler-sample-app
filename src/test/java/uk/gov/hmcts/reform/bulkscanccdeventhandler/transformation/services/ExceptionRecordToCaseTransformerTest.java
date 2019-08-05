@@ -112,11 +112,13 @@ public class ExceptionRecordToCaseTransformerTest {
 
         assertThat(caseData.scannedDocuments).hasSize(2);
 
-        checkScannedDoc(caseData.scannedDocuments.get(0).value, erDoc1);
-        assertThat(caseData.scannedDocuments.get(0).value.exceptionRecordReference).isEqualTo(exceptionRecord.id);
+        assertThat(caseData.scannedDocuments)
+            .as("Documents should reference source exception record")
+            .extracting(doc -> doc.value.exceptionRecordReference)
+            .containsExactly(exceptionRecord.id, exceptionRecord.id);
 
+        checkScannedDoc(caseData.scannedDocuments.get(0).value, erDoc1);
         checkScannedDoc(caseData.scannedDocuments.get(1).value, erDoc2);
-        assertThat(caseData.scannedDocuments.get(1).value.exceptionRecordReference).isEqualTo(exceptionRecord.id);
     }
 
     private void checkScannedDoc(
