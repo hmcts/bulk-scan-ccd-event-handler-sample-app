@@ -37,10 +37,10 @@ public class ExceptionRecordToCaseTransformer {
     }
     // endregion
 
-    public SuccessfulTransformationResponse toCase(ExceptionRecord er) {
-        validator.assertIsValid(er);
+    public SuccessfulTransformationResponse toCase(ExceptionRecord exceptionRecord) {
+        validator.assertIsValid(exceptionRecord);
 
-        SampleCase caseData = buildCase(er);
+        SampleCase caseData = buildCase(exceptionRecord);
 
         return new SuccessfulTransformationResponse(
             new CaseCreationDetails(
