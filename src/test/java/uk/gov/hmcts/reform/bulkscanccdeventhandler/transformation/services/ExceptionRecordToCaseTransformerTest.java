@@ -18,10 +18,13 @@ import static java.time.LocalDateTime.now;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer.CASE_TYPE_ID;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer.EVENT_ID;
 
 @ExtendWith(MockitoExtension.class)
 public class ExceptionRecordToCaseTransformerTest {
@@ -76,15 +79,24 @@ public class ExceptionRecordToCaseTransformerTest {
         SuccessfulTransformationResponse result = service.toCase(er);
 
         // then
-        assertThat(result.warnings).isEmpty();
 
-        assertThat(result.caseCreationDetails.caseTypeId).isEqualTo(ExceptionRecordToCaseTransformer.CASE_TYPE_ID);
-        assertThat(result.caseCreationDetails.eventId).isEqualTo(ExceptionRecordToCaseTransformer.EVENT_ID);
+        assertSoftly(softly -> {
+            softly.assertThat(result.warnings).isEmpty();
 
-        assertThat(result.caseCreationDetails.caseData.firstName).isEqualTo("John");
-        assertThat(result.caseCreationDetails.caseData.lastName).isEqualTo("Smith");
-        assertThat(result.caseCreationDetails.caseData.address).isEqualTo(address);
-        assertThat(result.caseCreationDetails.caseData.scannedDocuments).containsExactlyInAnyOrder(doc1, doc2);
+            softly.assertThat(result.caseCreationDetails.caseTypeId).isEqualTo(CASE_TYPE_ID);
+            softly.assertThat(result.caseCreationDetails.eventId).isEqualTo(EVENT_ID);
+
+            softly.assertThat(result.caseCreationDetails.caseData.firstName).isEqualTo("John");
+            softly.assertThat(result.caseCreationDetails.caseData.lastName).isEqualTo("Smith");
+            softly.assertThat(result.caseCreationDetails.caseData.address).isEqualTo(address);
+            softly.assertThat(result.caseCreationDetails.caseData.scannedDocuments)
+                .containsExactlyElementsOf(
+                    asList(
+                        doc1,
+                        doc2
+                    )
+                );
+        });
     }
 
     @Test
