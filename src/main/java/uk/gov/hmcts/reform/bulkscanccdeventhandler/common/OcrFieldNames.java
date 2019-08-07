@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.common;
 
-import java.util.List;
+import com.google.common.collect.ImmutableSet;
 
-import static java.util.Arrays.asList;
+import java.util.Set;
 
 public final class OcrFieldNames {
 
@@ -24,7 +24,7 @@ public final class OcrFieldNames {
         // utility class, not to be instantiated
     }
 
-    public static List<String> getRequiredFields() {
-        return asList(FIRST_NAME, LAST_NAME);
+    public static Set<String> getRequiredFields() {
+        return ImmutableSet.of(FIRST_NAME, LAST_NAME);
     }
 }
