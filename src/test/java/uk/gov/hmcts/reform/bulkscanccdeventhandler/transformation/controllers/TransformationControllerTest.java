@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.controllers;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.microsoft.applicationinsights.web.dependencies.apachecommons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,13 +22,10 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Succ
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
-import static java.time.format.DateTimeFormatter.ISO_INSTANT;
 import static java.util.Arrays.asList;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -48,14 +44,14 @@ public class TransformationControllerTest {
 
     @Test
     public void should_return_proper_status_codes_for_auth_exceptions() throws Exception {
-        List<Pair<RuntimeException, HttpStatus>> cases =
+        List<Pair<RuntimeException, HttpStatus>> exceptionsAndStatuses =
             asList(
                 Pair.of(new UnauthenticatedException(null), UNAUTHORIZED),
                 Pair.of(new InvalidTokenException(null, null), UNAUTHORIZED),
                 Pair.of(new ForbiddenException(null), FORBIDDEN)
             );
 
-        for (Pair<RuntimeException, HttpStatus> pair : cases) {
+        for (Pair<RuntimeException, HttpStatus> pair : exceptionsAndStatuses) {
             Mockito.reset(authService);
             given(authService.authenticate(any())).willThrow(pair.getLeft());
 
@@ -94,8 +90,8 @@ public class TransformationControllerTest {
                                 "url-1",
                                 "dcn-1",
                                 "file-name-1",
-                                LocalDateTime.parse("2011-12-03T10:15:30.000Z", ISO_DATE_TIME),
-                                null,
+                                LocalDateTime.parse("2011-12-03T10:15:30.123", ISO_DATE_TIME),
+                                LocalDateTime.parse("2011-12-04T10:15:30.123", ISO_DATE_TIME),
                                 "ref-1"
                             ),
                             new ScannedDocument(
@@ -104,8 +100,8 @@ public class TransformationControllerTest {
                                 "url-2",
                                 "dcn-2",
                                 "file-name-2",
-                                null,
-                                null,
+                                LocalDateTime.parse("2011-12-05T10:15:30.123", ISO_DATE_TIME),
+                                LocalDateTime.parse("2011-12-06T10:15:30.123", ISO_DATE_TIME),
                                 "ref-2"
                             )
                         )
@@ -142,16 +138,16 @@ public class TransformationControllerTest {
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].url").value("url-1"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].controlNumber").value("dcn-1"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].fileName").value("file-name-1"))
-            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].scannedDate").value("2011-12-03T10:15:30Z"))
-            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].deliveryDate").value(nullValue()))
+            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].scannedDate").value("2011-12-03T10:15:30.123"))
+            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].deliveryDate").value("2011-12-04T10:15:30.123"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].exceptionRecordReference").value("ref-1"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].type").value("type-2"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].subtype").value("subtype-2"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].url").value("url-2"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].controlNumber").value("dcn-2"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].fileName").value("file-name-2"))
-            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].scannedDate").value(nullValue()))
-            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].deliveryDate").value(nullValue()))
+            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].scannedDate").value("2011-12-05T10:15:30.123"))
+            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].deliveryDate").value("2011-12-06T10:15:30.123"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].exceptionRecordReference").value("ref-2"))
             .andExpect(jsonPath("$.warnings[0]").value("warning-1"))
             .andExpect(jsonPath("$.warnings[1]").value("warning-2"));
