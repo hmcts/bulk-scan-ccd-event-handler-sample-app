@@ -25,7 +25,6 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.F
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.LAST_NAME;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.POST_CODE;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.POST_TOWN;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType.CONTACT;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType.PERSONAL;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus.ERRORS;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus.SUCCESS;
@@ -63,14 +62,14 @@ public class OcrDataValidator {
         List<String> missingFields = OcrFormValidationHelper.findBlankFields(mandatoryFields, ocrData);
         List<String> errors = OcrFormValidationHelper.getErrorMessagesForMissingFields(missingFields);
 
-        if (formType.equals(CONTACT)) {
+        if (formType.equals(PERSONAL)) {
             String email = OcrFormValidationHelper.findOcrFormFieldValue(EMAIL, ocrData);
             String phone = OcrFormValidationHelper.findOcrFormFieldValue(CONTACT_NUMBER, ocrData);
 
-            if (!errors.contains(EMAIL) && !isValidEmailAddress(email)) {
+            if (!errors.contains(EMAIL) && email != null && !isValidEmailAddress(email)) {
                 errors.add("Invalid email address");
             }
-            if (!errors.contains(CONTACT_NUMBER) && !isValidPhoneNumber(phone)) {
+            if (!errors.contains(CONTACT_NUMBER) && phone != null && !isValidPhoneNumber(phone)) {
                 errors.add("Invalid phone number");
             }
         }

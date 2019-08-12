@@ -24,7 +24,6 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.F
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.LAST_NAME;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.POST_CODE;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.POST_TOWN;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType.CONTACT;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType.PERSONAL;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus.ERRORS;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus.SUCCESS;
@@ -197,7 +196,7 @@ class OcrDataValidatorTest {
         );
 
         // when
-        OcrValidationResult result = validator.validate(CONTACT, ocrDataFields);
+        OcrValidationResult result = validator.validate(PERSONAL, ocrDataFields);
 
         // then
         assertThat(result).isNotNull();
@@ -230,7 +229,7 @@ class OcrDataValidatorTest {
         );
 
         // when
-        OcrValidationResult result = validator.validate(CONTACT, ocrDataFields);
+        OcrValidationResult result = validator.validate(PERSONAL, ocrDataFields);
 
         // then
         assertThat(result).isNotNull();

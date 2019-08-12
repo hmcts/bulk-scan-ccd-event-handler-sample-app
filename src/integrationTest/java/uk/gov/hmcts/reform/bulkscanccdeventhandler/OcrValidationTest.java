@@ -110,7 +110,7 @@ class OcrValidationTest {
         String content = readResource("ocr-data/invalid/invalid-data-format.json");
 
         mvc.perform(
-            post("/forms/CONTACT/validate-ocr")
+            post("/forms/PERSONAL/validate-ocr")
                 .header("ServiceAuthorization", "auth-header-value")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
