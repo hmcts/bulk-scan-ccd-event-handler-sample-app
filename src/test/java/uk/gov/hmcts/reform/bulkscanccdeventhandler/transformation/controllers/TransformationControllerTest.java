@@ -1,7 +1,10 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.controllers;
 
-import com.microsoft.applicationinsights.web.dependencies.apachecommons.lang3.tuple.Pair;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -22,7 +25,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Succ
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.stream.Stream;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 import static java.util.Arrays.asList;
@@ -43,22 +46,26 @@ public class TransformationControllerTest {
     @MockBean private ExceptionRecordToCaseTransformer transformer;
     @MockBean private AuthService authService;
 
-    @Test
-    public void should_return_proper_status_codes_for_auth_exceptions() throws Exception {
-        List<Pair<RuntimeException, HttpStatus>> exceptionsAndStatuses =
-            asList(
-                Pair.of(new UnauthenticatedException(null), UNAUTHORIZED),
-                Pair.of(new InvalidTokenException(null, null), UNAUTHORIZED),
-                Pair.of(new ForbiddenException(null), FORBIDDEN)
-            );
+    @BeforeEach
+    void setUp() {
+        Mockito.reset(authService);
+    }
 
-        for (Pair<RuntimeException, HttpStatus> pair : exceptionsAndStatuses) {
-            Mockito.reset(authService);
-            given(authService.authenticate(any())).willThrow(pair.getLeft());
+    @ParameterizedTest
+    @MethodSource("exceptionsAndStatuses")
+    public void should_return_proper_status_codes_for_auth_exceptions(RuntimeException exc, HttpStatus status) throws Exception {
+        given(authService.authenticate(any())).willThrow(exc);
 
-            sendRequest("{}")
-                .andExpect(status().is(pair.getRight().value()));
-        }
+        sendRequest("{}")
+            .andExpect(status().is(status.value()));
+    }
+
+    private static Stream<Arguments> exceptionsAndStatuses() {
+        return Stream.of(
+            Arguments.of(new UnauthenticatedException(null), UNAUTHORIZED),
+            Arguments.of(new InvalidTokenException(null, null), UNAUTHORIZED),
+            Arguments.of(new ForbiddenException(null), FORBIDDEN)
+        );
     }
 
     @Test
