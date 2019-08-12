@@ -87,16 +87,7 @@ public class OcrDataValidator {
     }
 
     private List<String> getMandatoryFieldsForForm(FormType formType) {
-        if (formType.equals(CONTACT)) {
-            return asList(
-                ADDRESS_LINE_1,
-                EMAIL,
-                POST_CODE,
-                COUNTRY,
-                CONTACT_NUMBER
-            );
-
-        } else if (formType.equals(PERSONAL)) {
+        if (formType.equals(PERSONAL)) {
             return Arrays.asList(
                 FIRST_NAME,
                 LAST_NAME
@@ -108,15 +99,19 @@ public class OcrDataValidator {
     }
 
     private List<String> getOptionalFieldsForForm(FormType formType) {
-        if (formType.equals(CONTACT)) {
+        if (formType.equals(PERSONAL)) {
             return asList(
+                ADDRESS_LINE_1,
                 ADDRESS_LINE_2,
                 ADDRESS_LINE_3,
                 POST_TOWN,
-                COUNTY
+                COUNTY,
+                COUNTRY,
+                CONTACT_NUMBER,
+                POST_CODE,
+                EMAIL,
+                DATE_OF_BIRTH
             );
-        } else if (formType.equals(PERSONAL)) {
-            return singletonList(DATE_OF_BIRTH);
         }
 
         log.info("Invalid Form type {}", formType);
