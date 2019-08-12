@@ -70,7 +70,7 @@ public class OcrFormValidationTest {
 
     @Test
     public void should_return_warnings_when_optional_fields_are_missing() {
-        Response response = sendOcrFormValidationRequest("CONTACT", "missing-optional-fields.json");
+        Response response = sendOcrFormValidationRequest("PERSONAL", "missing-optional-fields.json");
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -84,7 +84,7 @@ public class OcrFormValidationTest {
 
     @Test
     public void should_return_errors_when_additional_validations_are_failing() {
-        Response response = sendOcrFormValidationRequest("CONTACT", "invalid-form-data.json");
+        Response response = sendOcrFormValidationRequest("PERSONAL", "invalid-form-data.json");
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
