@@ -1,4 +1,5 @@
 {
+  "_comment": "Missing optional fields post_town and county",
   "ocr_data_fields": [
     {
       "name": "first_name",
@@ -23,10 +24,6 @@
     {
       "name": "address_line_3",
       "value": "Victoria"
-    },
-    {
-      "name": "county",
-      "value": "London"
     },
     {
       "name": "post_code",
