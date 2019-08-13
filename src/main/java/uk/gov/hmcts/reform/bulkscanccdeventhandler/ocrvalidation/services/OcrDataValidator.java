@@ -7,7 +7,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -38,6 +37,21 @@ public class OcrDataValidator {
 
     private static final Logger log = LoggerFactory.getLogger(OcrDataValidator.class);
 
+    private static final List<String> personalFormMandatoryFields = asList(FIRST_NAME, LAST_NAME);
+
+    private static final List<String> personalFormOptionalFields = asList(
+        ADDRESS_LINE_1,
+        ADDRESS_LINE_2,
+        ADDRESS_LINE_3,
+        POST_TOWN,
+        COUNTY,
+        COUNTRY,
+        CONTACT_NUMBER,
+        POST_CODE,
+        EMAIL,
+        DATE_OF_BIRTH
+    );
+
     public OcrValidationResult validate(FormType formType, List<OcrDataField> ocrData) {
         List<String> duplicateOcrFields = OcrFormValidationHelper.findDuplicateOcrFields(ocrData);
 
@@ -66,10 +80,10 @@ public class OcrDataValidator {
             String email = OcrFormValidationHelper.findOcrFormFieldValue(EMAIL, ocrData);
             String phone = OcrFormValidationHelper.findOcrFormFieldValue(CONTACT_NUMBER, ocrData);
 
-            if (!errors.contains(EMAIL) && email != null && !isValidEmailAddress(email)) {
+            if (email != null && !isValidEmailAddress(email)) {
                 errors.add("Invalid email address");
             }
-            if (!errors.contains(CONTACT_NUMBER) && phone != null && !isValidPhoneNumber(phone)) {
+            if (phone != null && !isValidPhoneNumber(phone)) {
                 errors.add("Invalid phone number");
             }
         }
@@ -86,35 +100,11 @@ public class OcrDataValidator {
     }
 
     private List<String> getMandatoryFieldsForForm(FormType formType) {
-        if (formType.equals(PERSONAL)) {
-            return Arrays.asList(
-                FIRST_NAME,
-                LAST_NAME
-            );
-        }
-
-        log.info("Invalid Form type {}", formType);
-        return emptyList();
+        return formType.equals(PERSONAL) ? personalFormMandatoryFields : emptyList();
     }
 
     private List<String> getOptionalFieldsForForm(FormType formType) {
-        if (formType.equals(PERSONAL)) {
-            return asList(
-                ADDRESS_LINE_1,
-                ADDRESS_LINE_2,
-                ADDRESS_LINE_3,
-                POST_TOWN,
-                COUNTY,
-                COUNTRY,
-                CONTACT_NUMBER,
-                POST_CODE,
-                EMAIL,
-                DATE_OF_BIRTH
-            );
-        }
-
-        log.info("Invalid Form type {}", formType);
-        return emptyList();
+        return formType.equals(PERSONAL) ? personalFormOptionalFields : emptyList();
     }
 
     private ValidationStatus getValidationStatus(boolean errorsExist, boolean warningsExist) {
