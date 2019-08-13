@@ -96,7 +96,7 @@ public class OcrFormValidationTest {
             .header("ServiceAuthorization", "Bearer " + testHelper.s2sSignIn())
             .header(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .baseUri(testUrl)
-            .body(testHelper.fileContentAsBytes(fileName))
+            .body(TestHelper.fileContentAsBytes(fileName))
             .when()
             .post("/forms/" + formType + "/validate-ocr")
             .andReturn();

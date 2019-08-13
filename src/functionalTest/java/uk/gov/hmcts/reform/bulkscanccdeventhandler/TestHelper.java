@@ -57,7 +57,7 @@ public class TestHelper {
             .print();
     }
 
-    protected byte[] fileContentAsBytes(String file) {
+    static byte[] fileContentAsBytes(String file) {
         try {
             return Resources.toByteArray(Resources.getResource(file));
         } catch (IOException e) {
