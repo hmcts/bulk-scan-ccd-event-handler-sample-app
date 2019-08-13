@@ -32,6 +32,8 @@ public class TestHelper {
         this.s2sUrl = config.getString("test-s2s-url");
         this.s2sName = config.getString("test-s2s-name");
         this.s2sSecret = config.getString("test-s2s-secret");
+
+        RestAssured.useRelaxedHTTPSValidation();
     }
 
     protected String s2sSignIn() {
@@ -42,7 +44,6 @@ public class TestHelper {
 
         Response response = RestAssured
             .given()
-            .relaxedHTTPSValidation()
             .baseUri(s2sUrl)
             .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .body(params)

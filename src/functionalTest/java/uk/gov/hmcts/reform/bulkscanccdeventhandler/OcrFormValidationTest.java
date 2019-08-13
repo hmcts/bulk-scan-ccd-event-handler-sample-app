@@ -92,7 +92,6 @@ public class OcrFormValidationTest {
     private Response sendOcrFormValidationRequest(String formType, String fileName) {
         return RestAssured
             .given()
-            .relaxedHTTPSValidation()
             .header("ServiceAuthorization", "Bearer " + testHelper.s2sSignIn())
             .header(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .baseUri(testUrl)
