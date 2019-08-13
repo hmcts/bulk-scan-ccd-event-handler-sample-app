@@ -76,16 +76,14 @@ public class OcrDataValidator {
         List<String> missingFields = OcrFormValidationHelper.findBlankFields(mandatoryFields, ocrData);
         List<String> errors = OcrFormValidationHelper.getErrorMessagesForMissingFields(missingFields);
 
-        if (formType.equals(PERSONAL)) {
-            String email = OcrFormValidationHelper.findOcrFormFieldValue(EMAIL, ocrData);
-            String phone = OcrFormValidationHelper.findOcrFormFieldValue(CONTACT_NUMBER, ocrData);
+        String email = OcrFormValidationHelper.findOcrFormFieldValue(EMAIL, ocrData);
+        String phone = OcrFormValidationHelper.findOcrFormFieldValue(CONTACT_NUMBER, ocrData);
 
-            if (email != null && !isValidEmailAddress(email)) {
-                errors.add("Invalid email address");
-            }
-            if (phone != null && !isValidPhoneNumber(phone)) {
-                errors.add("Invalid phone number");
-            }
+        if (email != null && !isValidEmailAddress(email)) {
+            errors.add("Invalid email address");
+        }
+        if (phone != null && !isValidPhoneNumber(phone)) {
+            errors.add("Invalid phone number");
         }
 
         return errors;
