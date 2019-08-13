@@ -7,7 +7,7 @@ public class InvalidExceptionRecordException extends RuntimeException {
     public final List<String> errors;
 
     public InvalidExceptionRecordException(List<String> errors) {
-        super(String.join(",", errors));
+        super("Validation errors: " + String.join(", ", errors));
         this.errors = errors;
     }
 }
