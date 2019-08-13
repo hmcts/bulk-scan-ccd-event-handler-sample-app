@@ -2,6 +2,8 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -15,8 +17,24 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public class TestHelper {
 
-    protected String s2sSignIn(String s2sName, String s2sSecret, String s2sUrl) {
+    private final String testUrl;
 
+    private final String s2sUrl;
+
+    private final String s2sName;
+
+    private final String s2sSecret;
+
+    TestHelper() {
+        Config config = ConfigFactory.load();
+
+        this.testUrl = config.getString("test-url");
+        this.s2sUrl = config.getString("test-s2s-url");
+        this.s2sName = config.getString("test-s2s-name");
+        this.s2sSecret = config.getString("test-s2s-secret");
+    }
+
+    protected String s2sSignIn() {
         Map<String, Object> params = ImmutableMap.of(
             "microservice", s2sName,
             "oneTimePassword", new GoogleAuthenticator().getTotpPassword(s2sSecret)

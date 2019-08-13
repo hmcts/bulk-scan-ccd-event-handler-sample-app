@@ -25,21 +25,12 @@ public class OcrFormValidationTest {
 
     private String testUrl;
 
-    private String s2sUrl;
-
-    private String s2sName;
-
-    private String s2sSecret;
-
     private final TestHelper testHelper = new TestHelper();
 
     @BeforeEach
     public void setUp() {
         Config config = ConfigFactory.load();
         this.testUrl = config.getString("test-url");
-        this.s2sUrl = config.getString("test-s2s-url");
-        this.s2sName = config.getString("test-s2s-name");
-        this.s2sSecret = config.getString("test-s2s-secret");
     }
 
     @Test
@@ -102,7 +93,7 @@ public class OcrFormValidationTest {
         return RestAssured
             .given()
             .relaxedHTTPSValidation()
-            .header("ServiceAuthorization", "Bearer " + testHelper.s2sSignIn(s2sName, s2sSecret, s2sUrl))
+            .header("ServiceAuthorization", "Bearer " + testHelper.s2sSignIn())
             .header(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .baseUri(testUrl)
             .body(testHelper.fileContentAsBytes(fileName))
