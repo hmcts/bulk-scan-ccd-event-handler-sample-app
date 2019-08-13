@@ -64,7 +64,7 @@ public class OcrFormValidationTest {
             .as(OcrValidationResponse.class, ObjectMapperType.JACKSON_2);
 
         assertThat(validationResponse.status).isEqualTo(ValidationStatus.ERRORS);
-        assertThat(validationResponse.errors).containsExactly("first_name is missing");
+        assertThat(validationResponse.errors).containsExactly("last_name is missing");
         assertThat(validationResponse.warnings).isEmpty();
     }
 
