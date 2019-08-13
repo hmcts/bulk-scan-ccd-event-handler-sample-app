@@ -7,6 +7,7 @@ import com.typesafe.config.ConfigFactory;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class TestHelper {
         RestAssured.useRelaxedHTTPSValidation();
     }
 
-    protected String s2sSignIn() {
+    private String s2sSignIn() {
         Map<String, Object> params = ImmutableMap.of(
             "microservice", s2sName,
             "oneTimePassword", new GoogleAuthenticator().getTotpPassword(s2sSecret)
@@ -56,6 +57,18 @@ public class TestHelper {
         return response
             .getBody()
             .print();
+    }
+
+    Response postWithBody(String location, byte[] body) {
+        return RestAssured
+            .given()
+            .header("ServiceAuthorization", "Bearer " + s2sSignIn())
+            .header(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .baseUri(testUrl)
+            .body(body)
+            .when()
+            .post(location)
+            .andReturn();
     }
 
     static byte[] fileContentAsBytes(String file) {

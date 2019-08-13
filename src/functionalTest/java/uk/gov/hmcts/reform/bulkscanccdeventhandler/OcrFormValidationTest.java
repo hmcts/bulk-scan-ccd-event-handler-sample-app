@@ -1,21 +1,15 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler;
 
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
-import io.restassured.RestAssured;
 import io.restassured.mapper.ObjectMapperType;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.OcrValidationResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 @ExtendWith(SpringExtension.class)
 @TestPropertySource("classpath:application.conf")
@@ -23,15 +17,7 @@ public class OcrFormValidationTest {
 
     private static final String FORM_TYPE_PERSONAL = "PERSONAL";
 
-    private String testUrl;
-
     private final TestHelper testHelper = new TestHelper();
-
-    @BeforeEach
-    public void setUp() {
-        Config config = ConfigFactory.load();
-        this.testUrl = config.getString("test-url");
-    }
 
     @Test
     public void should_validate_ocr_data_and_return_success() {
@@ -90,14 +76,9 @@ public class OcrFormValidationTest {
     }
 
     private Response sendOcrFormValidationRequest(String formType, String fileName) {
-        return RestAssured
-            .given()
-            .header("ServiceAuthorization", "Bearer " + testHelper.s2sSignIn())
-            .header(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .baseUri(testUrl)
-            .body(TestHelper.fileContentAsBytes(fileName))
-            .when()
-            .post("/forms/" + formType + "/validate-ocr")
-            .andReturn();
+        return testHelper.postWithBody(
+            "/forms/" + formType + "/validate-ocr",
+            TestHelper.fileContentAsBytes(fileName)
+        );
     }
 }
