@@ -17,7 +17,7 @@ properties([
 
 def secrets = [
   's2s-${env}': [
-    secret('bulk-scan-sample-app-tests-s2s-secret', 'TEST_S2S_SECRET')
+    secret('microservicekey-bulk-scan-sample-app-tests', 'TEST_S2S_SECRET')
   ]
 ]
 
