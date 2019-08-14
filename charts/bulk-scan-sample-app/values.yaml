@@ -1,8 +1,9 @@
 java:
   applicationPort: 8484
   environment:
-    image: ${IMAGE_NAME}
     S2S_NAME: "bulk_scan_ccd_sample_app"
+
+  image: 'https://hmctspublic.azurecr.io/bulk-scan/sample-app:latest'
 
   keyVaults:
     "s2s":
