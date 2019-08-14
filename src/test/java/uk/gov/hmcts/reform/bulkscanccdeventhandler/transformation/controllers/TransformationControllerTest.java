@@ -27,7 +27,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.Excep
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.InvalidExceptionRecordException;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
