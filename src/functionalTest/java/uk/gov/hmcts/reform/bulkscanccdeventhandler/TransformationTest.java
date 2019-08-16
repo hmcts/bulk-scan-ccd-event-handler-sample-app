@@ -21,6 +21,7 @@ public class TransformationTest {
 
     private final TestHelper testHelper = new TestHelper();
 
+    @SuppressWarnings("unchecked")
     @Test
     public void should_transform_exception_record_successfully_without_any_warnings() {
         Response response = testHelper.postWithBody(
