@@ -1,7 +1,3 @@
-output "microserviceName" {
-  value = "${var.component}"
-}
-
 output "TEST_S2S_URL" {
   value = "${local.s2s_url}"
 }
