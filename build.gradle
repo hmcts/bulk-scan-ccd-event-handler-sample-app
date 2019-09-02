@@ -152,6 +152,10 @@ dependencyManagement {
     dependencySet(group: 'com.fasterxml.jackson.core', version: '2.9.9.2') {
       entry 'jackson-databind'
     }
+    // CVE-2019-10086
+    dependencySet(group: 'commons-beanutils', version: '1.9.4') {
+      entry 'commons-beanutils'
+    }
     // align with jupiter version
     dependencySet(group: 'org.mockito', version: '3.0.0') {
       entry 'mockito-core'
