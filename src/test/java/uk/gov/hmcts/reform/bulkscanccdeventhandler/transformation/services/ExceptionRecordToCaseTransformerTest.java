@@ -75,8 +75,8 @@ public class ExceptionRecordToCaseTransformerTest {
 
         // and
         given(addressExtractor.extractFrom(er.ocrDataFields)).willReturn(address);
-        given(documentMapper.toCaseDoc(er.scannedDocuments.get(0), er.id)).willReturn(doc1);
-        given(documentMapper.toCaseDoc(er.scannedDocuments.get(1), er.id)).willReturn(doc2);
+        given(documentMapper.toCaseDoc(er.scannedDocuments.get(0), er.caseTypeId)).willReturn(doc1);
+        given(documentMapper.toCaseDoc(er.scannedDocuments.get(1), er.caseTypeId)).willReturn(doc2);
         given(caseValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
         // when
         SuccessfulTransformationResponse result = service.toCase(er);
