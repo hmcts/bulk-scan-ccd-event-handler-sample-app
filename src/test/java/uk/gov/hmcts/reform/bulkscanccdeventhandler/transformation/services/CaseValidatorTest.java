@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Address;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SampleCase;
@@ -13,6 +14,7 @@ public class CaseValidatorTest {
     private final CaseValidator validator = new CaseValidator();
 
     @Test
+    @Disabled
     public void should_return_warning_when_email_is_not_provided() {
         assertSoftly(softly -> {
             softly.assertThat(validator.getWarnings(caseWithEmail(""))).containsExactly("'email' is empty");
