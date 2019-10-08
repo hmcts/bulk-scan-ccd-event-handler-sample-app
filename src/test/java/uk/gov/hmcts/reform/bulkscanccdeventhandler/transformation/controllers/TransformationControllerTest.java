@@ -19,6 +19,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.ForbiddenExceptio
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.UnauthenticatedException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Address;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.CaseCreationDetails;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.DocumentUrl;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Item;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ScannedDocument;
@@ -98,7 +99,11 @@ public class TransformationControllerTest {
                             new Item<>(new ScannedDocument(
                                 "type-1",
                                 "subtype-1",
-                                "url-1",
+                                new DocumentUrl(
+                                    "url-1",
+                                    "binary-url-1",
+                                    "file-name-1"
+                                ),
                                 "dcn-1",
                                 "file-name-1",
                                 LocalDateTime.parse("2011-12-03T10:15:30.123", ISO_DATE_TIME),
@@ -108,7 +113,11 @@ public class TransformationControllerTest {
                             new Item<>(new ScannedDocument(
                                 "type-2",
                                 "subtype-2",
-                                "url-2",
+                                new DocumentUrl(
+                                    "url-2",
+                                    "binary-url-2",
+                                    "file-name-2"
+                                ),
                                 "dcn-2",
                                 "file-name-2",
                                 LocalDateTime.parse("2011-12-05T10:15:30.123", ISO_DATE_TIME),
@@ -146,7 +155,9 @@ public class TransformationControllerTest {
             .andExpect(jsonPath("$.case_creation_details.case_data.address.country").value("country"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].value.type").value("type-1"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].value.subtype").value("subtype-1"))
-            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].value.url").value("url-1"))
+            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].value.url.document_url").value("url-1"))
+            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].value.url.document_binary_url").value("binary-url-1"))
+            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].value.url.document_filename").value("file-name-1"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].value.controlNumber").value("dcn-1"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].value.fileName").value("file-name-1"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].value.scannedDate").value("2011-12-03T10:15:30.123"))
@@ -154,7 +165,9 @@ public class TransformationControllerTest {
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[0].value.exceptionRecordReference").value("ref-1"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].value.type").value("type-2"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].value.subtype").value("subtype-2"))
-            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].value.url").value("url-2"))
+            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].value.url.document_url").value("url-2"))
+            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].value.url.document_binary_url").value("binary-url-2"))
+            .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].value.url.document_filename").value("file-name-2"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].value.controlNumber").value("dcn-2"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].value.fileName").value("file-name-2"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].value.scannedDate").value("2011-12-05T10:15:30.123"))

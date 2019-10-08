@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.InputScannedDoc;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.DocumentUrl;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Item;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ScannedDocument;
 
@@ -21,7 +22,11 @@ public class DocumentMapper {
             return new Item<>(new ScannedDocument(
                 exceptionRecordDoc.type,
                 exceptionRecordDoc.subtype,
-                exceptionRecordDoc.url,
+                new DocumentUrl(
+                    exceptionRecordDoc.document.url,
+                    exceptionRecordDoc.document.binaryUrl,
+                    exceptionRecordDoc.document.filename
+                ),
                 exceptionRecordDoc.controlNumber,
                 exceptionRecordDoc.fileName,
                 exceptionRecordDoc.scannedDate,
