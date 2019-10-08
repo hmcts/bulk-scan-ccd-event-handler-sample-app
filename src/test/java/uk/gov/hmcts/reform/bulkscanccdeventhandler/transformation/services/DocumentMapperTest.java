@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.InputScannedDoc;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.InputScannedDocumentUrl;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Item;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ScannedDocument;
 
@@ -16,7 +17,19 @@ public class DocumentMapperTest {
     @Test
     public void should_map_models() {
         // given
-        InputScannedDoc input = new InputScannedDoc("type", "subtype", "url", "dcn", "hello.pdf", now(), now());
+        InputScannedDoc input = new InputScannedDoc(
+            "type",
+            "subtype",
+            new InputScannedDocumentUrl(
+                "url",
+                "file-name",
+                "binary-url"
+            ),
+            "dcn",
+            "hello.pdf",
+            now(),
+            now()
+        );
         String refId = "ref-id";
 
         // when
@@ -26,7 +39,9 @@ public class DocumentMapperTest {
         assertSoftly(softly -> {
             softly.assertThat(output.value.type).isEqualTo(input.type);
             softly.assertThat(output.value.subtype).isEqualTo(input.subtype);
-            softly.assertThat(output.value.url).isEqualTo(input.url);
+            softly.assertThat(output.value.url.documentUrl).isEqualTo(input.url.documentUrl);
+            softly.assertThat(output.value.url.documentFilename).isEqualTo(input.url.documentFilename);
+            softly.assertThat(output.value.url.documentBinaryUrl).isEqualTo(input.url.documentBinaryUrl);
             softly.assertThat(output.value.controlNumber).isEqualTo(input.controlNumber);
             softly.assertThat(output.value.fileName).isEqualTo(input.fileName);
             softly.assertThat(output.value.deliveryDate).isEqualTo(input.deliveryDate);
