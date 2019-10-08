@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.TestPropertySource;
@@ -52,7 +51,6 @@ public class TransformationTest {
     }
 
     @Test
-    @Disabled
     public void should_transform_exception_record_successfully_with_warning() {
         Response response = testHelper.postWithBody(
             "/transform-exception-record",
