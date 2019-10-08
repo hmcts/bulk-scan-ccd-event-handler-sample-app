@@ -10,7 +10,11 @@
     {
       "type": "Form",
       "subtype": "XYZ",
-      "url": "url",
+      "url": {
+        "document_url": "url",
+        "document_filename": "file.pdf",
+        "document_binary_url": "url/binary"
+      },
       "control_number": "987654321",
       "file_name": "987654321-123456789.pdf",
       "scanned_date": "2019-08-01T00:01:02.345Z",
