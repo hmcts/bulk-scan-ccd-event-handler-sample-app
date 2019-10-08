@@ -8,7 +8,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.ExceptionRecord;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.InputScannedDoc;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.JourneyClassification;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Address;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Item;
@@ -24,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.getSampleInputDocument;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer.CASE_TYPE_ID;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer.EVENT_ID;
 
@@ -64,8 +64,8 @@ public class ExceptionRecordToCaseTransformerTest {
             now(),
             now(),
             asList(
-                new InputScannedDoc("type1", "subtype1", "url1", "dcn1", "filename1", now(), now()),
-                new InputScannedDoc("type2", "subtype2", "url2", "dcn2", "filename2", now(), now())
+                getSampleInputDocument("1"),
+                getSampleInputDocument("2")
             ),
             asList(
                 new OcrDataField(OcrFieldNames.FIRST_NAME, "John"),
