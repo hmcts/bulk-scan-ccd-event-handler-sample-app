@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler;
 
 import io.restassured.mapper.ObjectMapperType;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.TestPropertySource;
@@ -49,7 +48,6 @@ public class OcrFormValidationTest {
     }
 
     @Test
-    @Disabled
     public void should_return_warnings_when_optional_fields_are_missing() {
         Response response = sendOcrFormValidationRequest(FORM_TYPE_PERSONAL, "missing-optional-fields.json");
 
