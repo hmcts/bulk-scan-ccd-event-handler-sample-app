@@ -13,7 +13,7 @@ public class ScannedDocument {
     public final String subtype;
 
     @JsonProperty
-    public final String url;
+    public final ScannedDocumentUrl url;
 
     @JsonProperty
     public final String controlNumber;
@@ -33,7 +33,7 @@ public class ScannedDocument {
     public ScannedDocument(
         @JsonProperty("type") String type,
         @JsonProperty("subtype") String subtype,
-        @JsonProperty("url") String url,
+        @JsonProperty("url") ScannedDocumentUrl url,
         @JsonProperty("controlNumber") String controlNumber,
         @JsonProperty("fileName") String fileName,
         @JsonProperty("scannedDate") LocalDateTime scannedDate,

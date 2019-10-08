@@ -9,6 +9,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.ExceptionRecord;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.InputScannedDoc;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.InputScannedDocumentUrl;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.JourneyClassification;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Address;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Item;
@@ -64,8 +65,32 @@ public class ExceptionRecordToCaseTransformerTest {
             now(),
             now(),
             asList(
-                new InputScannedDoc("type1", "subtype1", "url1", "dcn1", "filename1", now(), now()),
-                new InputScannedDoc("type2", "subtype2", "url2", "dcn2", "filename2", now(), now())
+                new InputScannedDoc(
+                    "type1",
+                    "subtype1",
+                    new InputScannedDocumentUrl(
+                        "url1",
+                        "filename1",
+                        "url1/binary"
+                    ),
+                    "dcn1",
+                    "filename1",
+                    now(),
+                    now()
+                ),
+                new InputScannedDoc(
+                    "type2",
+                    "subtype2",
+                    new InputScannedDocumentUrl(
+                        "url2",
+                        "filename2",
+                        "url2/binary"
+                    ),
+                    "dcn2",
+                    "filename2",
+                    now(),
+                    now()
+                )
             ),
             asList(
                 new OcrDataField(OcrFieldNames.FIRST_NAME, "John"),

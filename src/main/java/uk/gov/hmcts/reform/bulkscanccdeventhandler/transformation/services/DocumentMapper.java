@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.InputScannedDoc;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Item;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ScannedDocument;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ScannedDocumentUrl;
 
 @Component
 public class DocumentMapper {
@@ -21,7 +22,11 @@ public class DocumentMapper {
             return new Item<>(new ScannedDocument(
                 exceptionRecordDoc.type,
                 exceptionRecordDoc.subtype,
-                exceptionRecordDoc.url,
+                new ScannedDocumentUrl(
+                    exceptionRecordDoc.url.documentUrl,
+                    exceptionRecordDoc.url.documentFilename,
+                    exceptionRecordDoc.url.documentBinaryUrl
+                ),
                 exceptionRecordDoc.controlNumber,
                 exceptionRecordDoc.fileName,
                 exceptionRecordDoc.scannedDate,
