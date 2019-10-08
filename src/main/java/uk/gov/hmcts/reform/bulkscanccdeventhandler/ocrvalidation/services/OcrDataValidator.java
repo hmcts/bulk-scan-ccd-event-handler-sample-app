@@ -27,6 +27,7 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.P
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType.PERSONAL;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus.ERRORS;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus.SUCCESS;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus.WARNINGS;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrFormValidationHelper.getOcrFieldNames;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrFormValidationHelper.isValidEmailAddress;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrFormValidationHelper.isValidPhoneNumber;
@@ -109,9 +110,9 @@ public class OcrDataValidator {
             return ERRORS;
         }
 
-        //if (warningsExist) {
-        //    return WARNINGS;
-        //}
+        if (warningsExist) {
+            return WARNINGS;
+        }
         return SUCCESS;
     }
 
