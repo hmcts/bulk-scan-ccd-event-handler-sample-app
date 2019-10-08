@@ -5,9 +5,9 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.Input
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Item;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ScannedDocument;
 
-import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.getSampleInputDocument;
 
 public class DocumentMapperTest {
 
@@ -16,7 +16,7 @@ public class DocumentMapperTest {
     @Test
     public void should_map_models() {
         // given
-        InputScannedDoc input = new InputScannedDoc("type", "subtype", "url", "dcn", "hello.pdf", now(), now());
+        InputScannedDoc input = getSampleInputDocument();
         String refId = "ref-id";
 
         // when
@@ -26,7 +26,9 @@ public class DocumentMapperTest {
         assertSoftly(softly -> {
             softly.assertThat(output.value.type).isEqualTo(input.type);
             softly.assertThat(output.value.subtype).isEqualTo(input.subtype);
-            softly.assertThat(output.value.url).isEqualTo(input.url);
+            softly.assertThat(output.value.document)
+                .usingRecursiveComparison()
+                .isEqualTo(input.document);
             softly.assertThat(output.value.controlNumber).isEqualTo(input.controlNumber);
             softly.assertThat(output.value.fileName).isEqualTo(input.fileName);
             softly.assertThat(output.value.deliveryDate).isEqualTo(input.deliveryDate);
