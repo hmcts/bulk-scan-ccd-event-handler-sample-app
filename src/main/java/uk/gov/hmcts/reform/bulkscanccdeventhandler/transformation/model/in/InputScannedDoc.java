@@ -8,7 +8,7 @@ public class InputScannedDoc {
 
     public final String type;
     public final String subtype;
-    public final InputScannedDocumentUrl url;
+    public final String url;
     public final String controlNumber;
     public final String fileName;
     public final LocalDateTime scannedDate;
@@ -17,7 +17,7 @@ public class InputScannedDoc {
     public InputScannedDoc(
         @JsonProperty("type") String type,
         @JsonProperty("subtype") String subtype,
-        @JsonProperty("url") InputScannedDocumentUrl url,
+        @JsonProperty("url") String url,
         @JsonProperty("control_number") String controlNumber,
         @JsonProperty("file_name") String fileName,
         @JsonProperty("scanned_date") LocalDateTime scannedDate,
