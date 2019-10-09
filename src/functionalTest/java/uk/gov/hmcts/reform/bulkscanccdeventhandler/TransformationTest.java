@@ -44,7 +44,7 @@ public class TransformationTest {
                 .getMap("case_creation_details")
                 .get("case_data");
 
-            softly.assertThat(caseData.get("email")).isEqualTo("non-empty-email");
+            softly.assertThat(caseData.get("email")).isEqualTo("hello@test.com");
 
             softly.assertAll();
         });
