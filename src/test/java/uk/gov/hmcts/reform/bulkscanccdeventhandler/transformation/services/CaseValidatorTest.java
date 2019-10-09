@@ -21,6 +21,14 @@ public class CaseValidatorTest {
     }
 
     @Test
+    public void should_return_warning_when_email_is_invalid() {
+        assertSoftly(softly -> {
+            softly.assertThat(validator.getWarnings(caseWithEmail("invalidemail")))
+                .containsExactly("'email' is invalid invalidemail");
+        });
+    }
+
+    @Test
     void should_return_empty_array_if_case_is_valid() {
         assertThat(validator.getWarnings(caseWithEmail("hello@test.com"))).isEmpty();
     }

@@ -8,6 +8,7 @@ import java.util.List;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.util.ValidationHelper.isValidEmailAddress;
 
 @Component
 public class CaseValidator {
@@ -15,6 +16,12 @@ public class CaseValidator {
     public List<String> getWarnings(SampleCase theCase) {
         return Strings.isNullOrEmpty(theCase.email)
             ? singletonList("'email' is empty")
-            : emptyList();
+            : getEmailValidationResult(theCase);
+    }
+
+    private List<String> getEmailValidationResult(SampleCase theCase) {
+        return isValidEmailAddress(theCase.email)
+            ? emptyList()
+            : singletonList("'email' is invalid " + theCase.email);
     }
 }
