@@ -29,8 +29,8 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.ou
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus.SUCCESS;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus.WARNINGS;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrFormValidationHelper.getOcrFieldNames;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrFormValidationHelper.isValidEmailAddress;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrFormValidationHelper.isValidPhoneNumber;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.util.ValidationHelper.isValidEmailAddress;
 
 @Service
 public class OcrDataValidator {

@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services;
 
-import org.apache.commons.validator.routines.EmailValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 
 import java.util.Collection;
@@ -47,10 +46,6 @@ public final class OcrFormValidationHelper {
             .findFirst()
             .map(v -> v.value)
             .orElse(null);
-    }
-
-    public static boolean isValidEmailAddress(String email) {
-        return EmailValidator.getInstance().isValid(email);
     }
 
     public static boolean isValidPhoneNumber(String phone) {
