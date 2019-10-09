@@ -33,7 +33,7 @@
     },
     {
       "name": "email",
-      "value": "non-empty-email"
+      "value": "hello@test.com"
     }
   ]
 }
