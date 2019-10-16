@@ -68,6 +68,7 @@ public class ExceptionRecordValidatorTest {
             "er-case-type",
             "er-pobox",
             "er-jurisdiction",
+            "er-form-type",
             JourneyClassification.NEW_APPLICATION,
             now(),
             now(),

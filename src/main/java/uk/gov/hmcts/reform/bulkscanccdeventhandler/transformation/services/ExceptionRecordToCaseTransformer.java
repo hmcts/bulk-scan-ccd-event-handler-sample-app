@@ -66,7 +66,7 @@ public class ExceptionRecordToCaseTransformer {
             addressExtractor.extractFrom(er.ocrDataFields),
             er.scannedDocuments
                 .stream()
-                .map(it -> documentMapper.toCaseDoc(it, er.caseTypeId))
+                .map(it -> documentMapper.toCaseDoc(it, er.id))
                 .collect(toList())
         );
     }
