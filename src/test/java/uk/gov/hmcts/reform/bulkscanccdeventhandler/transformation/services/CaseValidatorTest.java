@@ -40,7 +40,8 @@ public class CaseValidatorTest {
             "contact-number",
             email,
             new Address("line-1", "line-2", "line-3", "post-code", "post-town", "county", "country"),
-            emptyList()
+            emptyList(),
+            "er-id"
         );
     }
 }

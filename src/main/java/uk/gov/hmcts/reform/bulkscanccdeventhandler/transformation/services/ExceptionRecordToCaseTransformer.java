@@ -67,7 +67,8 @@ public class ExceptionRecordToCaseTransformer {
             er.scannedDocuments
                 .stream()
                 .map(it -> documentMapper.toCaseDoc(it, er.id))
-                .collect(toList())
+                .collect(toList()),
+            er.id
         );
     }
 }
