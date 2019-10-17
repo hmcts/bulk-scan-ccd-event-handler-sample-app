@@ -1,8 +1,13 @@
 java:
   applicationPort: 8484
+  aadIdentityName: bsp
   environment:
-    CORE_CASE_DATA_API_URL: http://ccd-data-store-api-aat.service.core-compute-aat.internal
     S2S_NAME: bulk_scan_ccd_sample_app
-    S2S_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-
+    S2S_URL: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+    CORE_CASE_DATA_API_URL: http://ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   image: 'https://hmctspublic.azurecr.io/bulk-scan/sample-app:latest'
+  keyVaults:
+    "bulk-scan":
+      resourceGroup: bulk-scan
+      secrets:
+        - s2s-secret-bulk-scan-sample-app

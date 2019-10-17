@@ -1,4 +1,8 @@
 java:
+  environment:
+    S2S_URL: "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+    CORE_CASE_DATA_API_URL: "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
   # Don't modify below here
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
+  aadIdentityName:
