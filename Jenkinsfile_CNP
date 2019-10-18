@@ -26,16 +26,15 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 }
 
 withPipeline(type, product, component) {
+  // Vars needed for smoke / functional testing
+  env.TEST_S2S_NAME = 'bulk_scan_sample_app_tests'
+  env.TEST_S2S_URL = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
 
   before('smoketest:preview') {
     withAksClient('nonprod') {
-
       // Vars needed for AKS testing
-      env.TEST_S2S_NAME = 'bulk_scan_sample_app_tests'
-      env.TEST_S2S_URL = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
       env.S2S_NAME = 'bulk_scan_ccd_sample_app'
       env.S2S_URL = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
-      env.CORE_CASE_DATA_API_URL = 'http://ccd-data-store-api-aat.service.core-compute-aat.internal'
     }
   }
 
