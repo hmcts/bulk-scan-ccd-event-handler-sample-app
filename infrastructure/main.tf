@@ -19,6 +19,7 @@ module "bulk-scan-ccd-event-handler-sample-app" {
   subscription        = "${var.subscription}"
   capacity            = "${var.capacity}"
   common_tags         = "${var.common_tags}"
+  enable_ase          = "${var.enable_ase}"
 
   app_settings = {
     S2S_URL                 = "${local.s2s_url}"
