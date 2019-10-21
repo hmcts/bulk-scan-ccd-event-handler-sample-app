@@ -124,7 +124,8 @@ public class TransformationControllerTest {
                                 LocalDateTime.parse("2011-12-06T10:15:30.123", ISO_DATE_TIME),
                                 "ref-2"
                             ))
-                        )
+                        ),
+                        "er-id"
                     )
                 ),
                 asList(
@@ -173,6 +174,7 @@ public class TransformationControllerTest {
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].value.scannedDate").value("2011-12-05T10:15:30.123"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].value.deliveryDate").value("2011-12-06T10:15:30.123"))
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].value.exceptionRecordReference").value("ref-2"))
+            .andExpect(jsonPath("$.case_creation_details.case_data.bulkScanCaseReference").value("er-id"))
             .andExpect(jsonPath("$.warnings[0]").value("warning-1"))
             .andExpect(jsonPath("$.warnings[1]").value("warning-2"));
     }

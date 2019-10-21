@@ -12,6 +12,7 @@ public class SampleCase {
     public final String email;
     public final Address address;
     public final List<Item<ScannedDocument>> scannedDocuments;
+    public final String bulkScanCaseReference;
 
     public SampleCase(
         String legacyId,
@@ -21,7 +22,8 @@ public class SampleCase {
         String contactNumber,
         String email,
         Address address,
-        List<Item<ScannedDocument>> scannedDocuments
+        List<Item<ScannedDocument>> scannedDocuments,
+        String bulkScanCaseReference
     ) {
         this.legacyId = legacyId;
         this.firstName = firstName;
@@ -31,5 +33,6 @@ public class SampleCase {
         this.email = email;
         this.address = address;
         this.scannedDocuments = scannedDocuments;
+        this.bulkScanCaseReference = bulkScanCaseReference;
     }
 }
