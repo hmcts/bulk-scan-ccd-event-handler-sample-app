@@ -1,5 +1,6 @@
 java:
   applicationPort: 8484
+  ingressHost: bulk-scan-sample-app-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   aadIdentityName: bsp
   environment:
     S2S_NAME: bulk_scan_ccd_sample_app
