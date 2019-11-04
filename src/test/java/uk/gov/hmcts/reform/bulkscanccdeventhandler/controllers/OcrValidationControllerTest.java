@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
@@ -26,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,7 +52,7 @@ class OcrValidationControllerTest {
             .perform(
                 post("/forms/PERSONAL/validate-ocr")
                     .header("ServiceAuthorization", "")
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(APPLICATION_JSON_VALUE)
                     .content(requestBody)
             )
             .andExpect(status().isUnauthorized());
@@ -67,7 +67,7 @@ class OcrValidationControllerTest {
             .perform(
                 post("/forms/PERSONAL/validate-ocr")
                     .header("ServiceAuthorization", "test-token")
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(APPLICATION_JSON_VALUE)
                     .content(requestBody)
             )
             .andExpect(status().isUnauthorized());
@@ -82,7 +82,7 @@ class OcrValidationControllerTest {
             .perform(
                 post("/forms/PERSONAL/validate-ocr")
                     .header("ServiceAuthorization", "test-token")
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(APPLICATION_JSON_VALUE)
                     .content(requestBody)
             )
             .andExpect(status().isForbidden())
@@ -100,12 +100,12 @@ class OcrValidationControllerTest {
         mockMvc
             .perform(
                 post("/forms/PERSONAL/validate-ocr")
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
                     .content(requestBody)
             )
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(APPLICATION_JSON_VALUE))
             .andExpect(content().json(readResource("ocr-data/response/valid-ocr-response.json")));
     }
 
@@ -115,7 +115,7 @@ class OcrValidationControllerTest {
         mockMvc
             .perform(
                 post("/forms/PERSONAL/validate-ocr")
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
                     .content(readResource("ocr-data/invalid/missing-ocr-fields.json"))
             )
@@ -128,7 +128,7 @@ class OcrValidationControllerTest {
         mockMvc
             .perform(
                 post("/forms/PERSONAL/validate-ocr")
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
                     .content(readResource("ocr-data/invalid/empty-ocr-fields.json"))
             )
@@ -141,7 +141,7 @@ class OcrValidationControllerTest {
         MvcResult mvcResult = mockMvc
             .perform(
                 post("/forms/invalid-form-type/validate-ocr")
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
                     .content(readResource("ocr-data/invalid/invalid-form-type.json"))
             )
@@ -160,7 +160,7 @@ class OcrValidationControllerTest {
         MvcResult mvcResult = mockMvc
             .perform(
                 post("/forms/Personal/validate-ocr") //only PERSONAL is valid form type
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
                     .content(readResource("ocr-data/invalid/invalid-form-type.json"))
             ).andReturn();
