@@ -138,8 +138,7 @@ def versions = [
   junit           : '5.5.2',
   junitPlatform   : '1.5.2',
   reformLogging   : '5.1.1',
-  springBoot      : springBoot.class.package.implementationVersion,
-  springfoxSwagger: '2.9.2'
+  springBoot      : springBoot.class.package.implementationVersion
 ]
 
 ext["rest-assured.version"] = '4.1.2'
@@ -169,7 +168,7 @@ dependencies {
   compile group: 'uk.gov.hmcts.reform', name: 'health-spring-boot-starter', version: '0.0.5'
   compile group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.0.0'
 
-  compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
+  compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 
   compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
   compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
