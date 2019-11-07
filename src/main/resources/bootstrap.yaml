@@ -5,5 +5,4 @@ spring:
       prefixed: true
       paths: /mnt/secrets/bulk-scan
       aliases:
-        s2s-secret-bulk-scan-sample-app: S2S_SECRET
         app-insights-instrumentation-key: azure.application-insights.instrumentation-key

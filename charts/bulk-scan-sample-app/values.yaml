@@ -10,5 +10,4 @@ java:
     "bulk-scan":
       resourceGroup: bulk-scan
       secrets:
-        - s2s-secret-bulk-scan-sample-app
         - app-insights-instrumentation-key
