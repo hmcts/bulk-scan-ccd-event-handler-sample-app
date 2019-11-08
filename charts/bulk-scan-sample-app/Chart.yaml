@@ -1,3 +1,4 @@
+apiVersion: v1
 name: bulk-scan-sample-app
 home: https://github.com/hmcts/bulk-scan-ccd-event-handler-sample-app
 version: 0.0.7
