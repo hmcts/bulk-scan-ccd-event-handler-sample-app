@@ -30,14 +30,6 @@ withPipeline(type, product, component) {
   env.TEST_S2S_NAME = 'bulk_scan_sample_app_tests'
   env.TEST_S2S_URL = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
 
-  before('smoketest:preview') {
-    withAksClient('nonprod') {
-      // Vars needed for AKS testing
-      env.S2S_NAME = 'bulk_scan_ccd_sample_app'
-      env.S2S_URL = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
-    }
-  }
-
   after('test') {
     builder.gradle('integration')
   }
