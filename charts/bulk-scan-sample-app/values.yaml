@@ -10,3 +10,9 @@ java:
       resourceGroup: bulk-scan
       secrets:
         - app-insights-instrumentation-key
+bulk-scan-processor:
+  java:
+    environment:
+      STORAGE_BLOB_SELECTED_CONTAINER: "bulkscan"
+bulkscan:
+  enabled: false
