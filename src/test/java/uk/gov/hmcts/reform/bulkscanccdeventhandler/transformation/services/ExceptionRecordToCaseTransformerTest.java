@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.JourneyClassi
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Address;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.ScannedDocument;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SuccessfulTransformationResponse;
 
