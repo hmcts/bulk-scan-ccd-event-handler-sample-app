@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import org.junit.jupiter.api.Test;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.JourneyClassification;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.ExceptionRecord;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.JourneyClassification;
 
 import java.util.List;
 

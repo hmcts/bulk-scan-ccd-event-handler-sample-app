@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in;
+package uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in;
 
 public enum JourneyClassification {
     EXCEPTION,

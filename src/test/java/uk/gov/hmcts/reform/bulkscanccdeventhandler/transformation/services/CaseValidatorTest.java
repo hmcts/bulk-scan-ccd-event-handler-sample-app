@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Address;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SampleCase;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Address;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;

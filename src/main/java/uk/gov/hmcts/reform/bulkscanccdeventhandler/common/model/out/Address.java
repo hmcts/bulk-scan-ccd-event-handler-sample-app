@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out;
+package uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out;
 
 public class Address {
 

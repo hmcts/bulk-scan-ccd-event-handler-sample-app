@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.InputScannedDoc;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Item;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ScannedDocument;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.ScannedDocument;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;

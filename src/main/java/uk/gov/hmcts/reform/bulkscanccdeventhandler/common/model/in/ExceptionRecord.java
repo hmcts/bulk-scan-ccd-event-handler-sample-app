@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in;
+package uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
