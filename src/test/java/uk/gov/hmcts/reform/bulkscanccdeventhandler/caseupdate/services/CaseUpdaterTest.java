@@ -19,19 +19,19 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class CaseUpdaterTest {
+public class CaseUpdaterTest {
 
     @Mock private AddressExtractor addressExtractor;
 
     private CaseUpdater caseUpdater;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         this.caseUpdater = new CaseUpdater(addressExtractor);
     }
 
     @Test
-    void should_overwrite_address_with_address_from_exception_record() {
+    public void should_overwrite_address_with_address_from_exception_record() {
         // given
 
         Address originalCaseAddress = new Address("a", "b", "c", "d", "e", "f", "g");
