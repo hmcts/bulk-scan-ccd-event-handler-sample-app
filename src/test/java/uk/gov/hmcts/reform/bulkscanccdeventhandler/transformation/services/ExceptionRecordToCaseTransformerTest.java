@@ -6,12 +6,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Address;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.ScannedDocument;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.ExceptionRecord;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.JourneyClassification;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Address;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Item;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ScannedDocument;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SuccessfulTransformationResponse;
 
 import static java.time.LocalDateTime.now;

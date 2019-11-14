@@ -1,10 +1,10 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.DocumentUrl;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.ScannedDocument;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.InputScannedDoc;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.DocumentUrl;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Item;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ScannedDocument;
 
 @Component
 public class DocumentMapper {

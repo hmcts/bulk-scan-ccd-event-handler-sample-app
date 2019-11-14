@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SampleCase;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 
 import java.util.List;
 
