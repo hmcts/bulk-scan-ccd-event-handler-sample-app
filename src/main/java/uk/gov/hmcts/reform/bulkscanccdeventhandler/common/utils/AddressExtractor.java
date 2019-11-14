@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
+package uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils;
 
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Address;
@@ -13,7 +13,7 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.C
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.COUNTY;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.POST_CODE;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.POST_TOWN;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.utils.OcrFieldExtractor.get;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.OcrFieldExtractor.get;
 
 @Component
 public class AddressExtractor {
