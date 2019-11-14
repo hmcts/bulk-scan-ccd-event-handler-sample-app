@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.utils;
 
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.ExceptionRecord;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler;
 
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.InputScannedDoc;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.InputScannedDocUrl;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDocUrl;
 
 import static java.time.LocalDateTime.now;
 

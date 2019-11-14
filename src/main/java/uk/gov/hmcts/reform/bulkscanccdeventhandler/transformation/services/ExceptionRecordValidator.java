@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.ExceptionRecord;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
 
 import java.util.Set;
 
