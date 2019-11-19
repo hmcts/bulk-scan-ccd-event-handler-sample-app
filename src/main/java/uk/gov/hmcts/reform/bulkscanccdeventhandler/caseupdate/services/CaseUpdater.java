@@ -43,11 +43,11 @@ public class CaseUpdater {
         return new SuccessfulUpdateResponse(
             new CaseUpdateDetails(
                 // This is just a sample implementation.
-                // You can use different event IDs based on the changes made to a case.
+                // You can use different event IDs based on the changes made to a case...
                 EVENT_ID,
                 newCase
             ),
-            // This is just a sample implementation, put any warnings for the case worker here.
+            // ... and put any warnings here.
             emptyList()
         );
     }
