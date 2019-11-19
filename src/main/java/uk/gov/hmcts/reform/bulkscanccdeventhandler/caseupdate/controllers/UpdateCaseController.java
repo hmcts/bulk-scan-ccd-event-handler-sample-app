@@ -20,8 +20,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 @RestController
 public class UpdateCaseController {
 
-    public static final String EVENT_ID = "UpdateCase";
-
     private static final Logger LOGGER = getLogger(UpdateCaseController.class);
 
     private final AuthService authService;
@@ -48,11 +46,7 @@ public class UpdateCaseController {
         SampleCase updatedCase = caseUpdater.update(req.caseDetails.caseData, req.exceptionRecord);
 
         return new SuccessfulUpdateResponse(
-            new CaseUpdateDetails(
-                req.caseDetails.caseTypeId,
-                EVENT_ID,
-                updatedCase
-            ),
+            new CaseUpdateDetails(updatedCase),
             emptyList()
         );
     }
