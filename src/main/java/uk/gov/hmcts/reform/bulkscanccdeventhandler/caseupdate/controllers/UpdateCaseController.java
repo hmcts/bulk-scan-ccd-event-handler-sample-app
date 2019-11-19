@@ -6,15 +6,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdate;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services.CaseUpdater;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 
 import javax.validation.Valid;
 
-import static java.util.Collections.emptyList;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
@@ -22,11 +19,10 @@ public class UpdateCaseController {
 
     private static final Logger LOGGER = getLogger(UpdateCaseController.class);
 
-    public static final String EVENT_ID = "SAMPLE_EVENT_ID";
-
     private final AuthService authService;
     private final CaseUpdater caseUpdater;
 
+    // region constructor
     public UpdateCaseController(
         AuthService authService,
         CaseUpdater caseUpdater
@@ -34,6 +30,7 @@ public class UpdateCaseController {
         this.authService = authService;
         this.caseUpdater = caseUpdater;
     }
+    // endregion
 
     @PostMapping("/update-case")
     public SuccessfulUpdateResponse updateCase(
@@ -45,14 +42,6 @@ public class UpdateCaseController {
 
         authService.assertIsAllowedService(serviceName);
 
-        SampleCase updatedCase = caseUpdater.update(req.caseDetails.caseData, req.exceptionRecord);
-
-        return new SuccessfulUpdateResponse(
-            // This is just a sample implementation.
-            // You can use different event IDs based on the changes made to a case.
-            new CaseUpdateDetails(EVENT_ID, updatedCase),
-            // This is just a sample implementation, put any warnings for the case worker here.
-            emptyList()
-        );
+        return caseUpdater.update(req);
     }
 }
