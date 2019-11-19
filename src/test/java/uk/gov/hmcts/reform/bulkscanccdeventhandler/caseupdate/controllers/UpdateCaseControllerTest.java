@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.CaseUpdateDetails;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services.CaseUpdater;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.ForbiddenException;
@@ -107,12 +109,20 @@ class UpdateCaseControllerTest {
             ),
             "er-id"
         );
-        given(caseUpdater.update(any(), any())).willReturn(sampleCase);
+        given(caseUpdater.update(any()))
+            .willReturn(
+                new SuccessfulUpdateResponse(
+                    new CaseUpdateDetails(
+                        CaseUpdater.EVENT_ID,
+                        sampleCase
+                    ),
+                    asList("warning-1", "warning-2")
+                )
+            );
 
         sendRequest("{}")
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.case_update_details.case_type_id").value("case-type-id"))
-            .andExpect(jsonPath("$.case_update_details.event_id").value("event-id"))
+            .andExpect(jsonPath("$.case_update_details.event_id").value(CaseUpdater.EVENT_ID))
             .andExpect(jsonPath("$.case_update_details.case_data.legacyId").value("legacy-id"))
             .andExpect(jsonPath("$.case_update_details.case_data.firstName").value("first-name"))
             .andExpect(jsonPath("$.case_update_details.case_data.lastName").value("last-name"))
