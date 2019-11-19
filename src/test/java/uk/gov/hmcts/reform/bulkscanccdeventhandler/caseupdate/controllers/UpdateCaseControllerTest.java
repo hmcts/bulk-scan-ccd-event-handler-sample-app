@@ -60,7 +60,6 @@ class UpdateCaseControllerTest {
 
     @Test
     public void should_return_updated_case_details() throws Exception {
-        // given
         SampleCase sampleCase = new SampleCase(
             "legacy-id",
             "first-name",
