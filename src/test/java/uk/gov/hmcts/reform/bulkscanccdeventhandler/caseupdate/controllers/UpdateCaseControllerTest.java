@@ -59,7 +59,7 @@ class UpdateCaseControllerTest {
     }
 
     @Test
-    public void should_return_expected_case_details() throws Exception {
+    public void should_return_updated_case_details() throws Exception {
         // given
         SampleCase sampleCase = new SampleCase(
             "legacy-id",
@@ -159,7 +159,6 @@ class UpdateCaseControllerTest {
             .andExpect(jsonPath("$.case_update_details.case_data.bulkScanCaseReference").value("er-id"))
             .andExpect(jsonPath("$.warnings[0]").value("warning-1"))
             .andExpect(jsonPath("$.warnings[1]").value("warning-2"));
-
     }
 
     private static Stream<Arguments> exceptionsAndStatuses() {
