@@ -6,7 +6,7 @@ import java.util.List;
 
 public class SuccessfulUpdateResponse {
 
-    @JsonProperty("case_details")
+    @JsonProperty("case_update_details")
     public final CaseUpdateDetails caseUpdateDetails;
 
     @JsonProperty("warnings")
