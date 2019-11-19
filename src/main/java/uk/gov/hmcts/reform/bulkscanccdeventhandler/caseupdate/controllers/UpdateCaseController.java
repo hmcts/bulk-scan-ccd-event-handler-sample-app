@@ -22,6 +22,8 @@ public class UpdateCaseController {
 
     private static final Logger LOGGER = getLogger(UpdateCaseController.class);
 
+    public static final String EVENT_ID = "SAMPLE_EVENT_ID";
+
     private final AuthService authService;
     private final CaseUpdater caseUpdater;
 
@@ -46,7 +48,10 @@ public class UpdateCaseController {
         SampleCase updatedCase = caseUpdater.update(req.caseDetails.caseData, req.exceptionRecord);
 
         return new SuccessfulUpdateResponse(
-            new CaseUpdateDetails(updatedCase),
+            // This is just a sample implementation.
+            // You can use different event IDs based on the changes made to a case.
+            new CaseUpdateDetails(EVENT_ID, updatedCase),
+            // This is just a sample implementation, put any warnings for the case worker here.
             emptyList()
         );
     }
