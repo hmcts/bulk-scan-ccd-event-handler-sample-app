@@ -20,7 +20,11 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services.CaseUpdat
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.ForbiddenException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.UnauthenticatedException;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.*;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Address;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.DocumentUrl;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.ScannedDocument;
 
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
@@ -45,7 +49,7 @@ class UpdateCaseControllerTest {
     @MockBean private AuthService authService;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         Mockito.reset(authService);
     }
 
