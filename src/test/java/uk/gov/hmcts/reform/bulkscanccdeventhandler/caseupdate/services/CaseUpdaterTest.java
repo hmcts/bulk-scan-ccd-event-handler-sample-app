@@ -24,8 +24,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 public class CaseUpdaterTest {
 
-    @Mock
-    private AddressExtractor addressExtractor;
+    @Mock private AddressExtractor addressExtractor;
 
     private CaseUpdater caseUpdater;
 
