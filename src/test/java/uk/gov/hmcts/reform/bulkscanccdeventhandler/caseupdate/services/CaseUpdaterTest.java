@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
+@SuppressWarnings("checkstyle:lineLength")
 @ExtendWith(MockitoExtension.class)
 public class CaseUpdaterTest {
 
