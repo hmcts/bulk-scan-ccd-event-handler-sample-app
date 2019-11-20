@@ -1,10 +1,12 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler;
 
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services.CaseUpdater;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.OK;
@@ -17,7 +19,6 @@ public class UpdateCaseTest {
 
     @Test
     public void should_update_case() {
-
         // given
         byte[] request = TestHelper.fileContentAsBytes("updatecase/valid-request.json");
 
@@ -26,6 +27,8 @@ public class UpdateCaseTest {
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(OK.value());
-        assertThat(response.getBody().jsonPath().getList("warnings")).isEmpty();
+        JsonPath json = response.getBody().jsonPath();
+        assertThat(json.getList("warnings")).isEmpty();
+        assertThat(json.getMap("case_creation_details").get("event_id")).isEqualTo(CaseUpdater.EVENT_ID);
     }
 }

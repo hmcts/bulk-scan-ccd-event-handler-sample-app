@@ -25,16 +25,8 @@
     ],
     "ocr_data_fields": [
       {
-        "name": "first_name",
-        "value": "john"
-      },
-      {
-        "name": "last_name",
-        "value": "smith"
-      },
-      {
-        "name": "email",
-        "value": "hello@test.com"
+        "name": "country",
+        "value": "wonderland"
       }
     ]
   },
