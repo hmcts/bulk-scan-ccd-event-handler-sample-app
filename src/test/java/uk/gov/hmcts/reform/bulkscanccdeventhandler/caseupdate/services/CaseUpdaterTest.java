@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseDetails;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdate;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.JourneyClassification;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Address;
@@ -18,6 +21,7 @@ import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
+@SuppressWarnings("checkstyle:lineLength")
 @ExtendWith(MockitoExtension.class)
 public class CaseUpdaterTest {
 
@@ -65,18 +69,24 @@ public class CaseUpdaterTest {
         given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
 
         // when
-        SampleCase updatedCase = caseUpdater.update(originalCase, exceptionRecord);
+        SuccessfulUpdateResponse result =
+            caseUpdater.update(
+                new CaseUpdate(
+                    exceptionRecord,
+                    new CaseDetails("some_type", originalCase)
+                )
+            );
 
         // then
-        assertThat(updatedCase.address.addressLine1).isEqualTo(exceptionRecordAddress.addressLine1);
-        assertThat(updatedCase.address.addressLine2).isEqualTo(exceptionRecordAddress.addressLine2);
-        assertThat(updatedCase.address.addressLine3).isEqualTo(exceptionRecordAddress.addressLine3);
-        assertThat(updatedCase.address.country).isEqualTo(exceptionRecordAddress.country);
-        assertThat(updatedCase.address.county).isEqualTo(exceptionRecordAddress.county);
-        assertThat(updatedCase.address.postCode).isEqualTo(exceptionRecordAddress.postCode);
-        assertThat(updatedCase.address.postTown).isEqualTo(exceptionRecordAddress.postTown);
+        assertThat(result.caseUpdateDetails.caseData.address.addressLine1).isEqualTo(exceptionRecordAddress.addressLine1);
+        assertThat(result.caseUpdateDetails.caseData.address.addressLine2).isEqualTo(exceptionRecordAddress.addressLine2);
+        assertThat(result.caseUpdateDetails.caseData.address.addressLine3).isEqualTo(exceptionRecordAddress.addressLine3);
+        assertThat(result.caseUpdateDetails.caseData.address.country).isEqualTo(exceptionRecordAddress.country);
+        assertThat(result.caseUpdateDetails.caseData.address.county).isEqualTo(exceptionRecordAddress.county);
+        assertThat(result.caseUpdateDetails.caseData.address.postCode).isEqualTo(exceptionRecordAddress.postCode);
+        assertThat(result.caseUpdateDetails.caseData.address.postTown).isEqualTo(exceptionRecordAddress.postTown);
 
-        assertThat(updatedCase)
+        assertThat(result.caseUpdateDetails.caseData)
             .extracting(c -> tuple(
                 c.legacyId,
                 c.firstName,
@@ -91,5 +101,8 @@ public class CaseUpdaterTest {
                 originalCase.dateOfBirth,
                 originalCase.bulkScanCaseReference
             ));
+
+        assertThat(result.warnings).isEmpty();
+        assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
     }
 }
