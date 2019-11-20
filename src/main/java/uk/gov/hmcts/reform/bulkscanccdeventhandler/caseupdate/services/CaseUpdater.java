@@ -13,7 +13,7 @@ import static java.util.Collections.emptyList;
 @Service
 public class CaseUpdater {
 
-    public static final String EVENT_ID = "SAMPLE_EVENT_ID";
+    public static final String EVENT_ID = "attachScannedDocs";
 
     private final AddressExtractor addressExtractor;
 
