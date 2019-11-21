@@ -10,7 +10,7 @@ public class Item<T> {
     @JsonProperty("value")
     public final T value;
 
-    public Item(T value) {
+    public Item(@JsonProperty("value")T value) {
         this.value = value;
     }
 }
