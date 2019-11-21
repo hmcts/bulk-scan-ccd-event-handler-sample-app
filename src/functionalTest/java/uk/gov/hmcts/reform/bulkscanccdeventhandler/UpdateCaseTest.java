@@ -29,6 +29,6 @@ public class UpdateCaseTest {
         assertThat(response.getStatusCode()).isEqualTo(OK.value());
         JsonPath json = response.getBody().jsonPath();
         assertThat(json.getList("warnings")).isEmpty();
-        assertThat(json.getMap("case_creation_details").get("event_id")).isEqualTo(CaseUpdater.EVENT_ID);
+        assertThat(json.getMap("case_update_details").get("event_id")).isEqualTo(CaseUpdater.EVENT_ID);
     }
 }
