@@ -5,4 +5,4 @@ dependencies:
   - name: bulk-scan
     version: ~0.1.15
     repository: '@hmctspublic'
-    condition: bulkscan.enabled
+    condition: bulk-scan.enabled
