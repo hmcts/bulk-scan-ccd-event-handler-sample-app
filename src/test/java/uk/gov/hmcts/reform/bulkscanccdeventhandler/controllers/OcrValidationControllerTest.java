@@ -133,7 +133,7 @@ class OcrValidationControllerTest {
     }
 
     @Test
-    void should_return_form_not_found_in_errors_when_form_type_is_invalid() throws Exception {
+    void should_return_200_with_form_not_found_error_when_form_type_is_invalid() throws Exception {
         given(authService.authenticate("testServiceAuthHeader")).willReturn("testServiceName");
 
         mockMvc
@@ -152,7 +152,7 @@ class OcrValidationControllerTest {
     }
 
     @Test
-    void should_return_form_not_found_in_errors_when_form_type_case_does_not_match() throws Exception {
+    void should_return_200_with_form_not_found_error_when_form_type_case_does_not_match() throws Exception {
         given(authService.authenticate("testServiceAuthHeader")).willReturn("testServiceName");
         mockMvc
             .perform(
