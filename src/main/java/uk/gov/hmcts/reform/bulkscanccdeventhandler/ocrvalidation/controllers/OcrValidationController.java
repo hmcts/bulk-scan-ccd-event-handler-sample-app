@@ -26,6 +26,7 @@ import javax.validation.Valid;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.ok;
 
+@SuppressWarnings({"squid:S5131"}) /* squid for returning formType validation error in 200 response */
 @RestController
 public class OcrValidationController {
     private static final Logger logger = getLogger(OcrValidationController.class);
