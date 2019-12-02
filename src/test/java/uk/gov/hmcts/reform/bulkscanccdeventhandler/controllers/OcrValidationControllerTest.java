@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.ForbiddenException;
@@ -16,12 +15,10 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.controllers.Ocr
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrDataValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrValidationResult;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.exceptions.FormNotFoundException;
 
 import java.io.IOException;
 
 import static java.util.Collections.emptyList;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -136,38 +133,38 @@ class OcrValidationControllerTest {
     }
 
     @Test
-    void should_return_form_not_found_exception_when_form_type_is_invalid() throws Exception {
+    void should_return_200_with_form_not_found_error_when_form_type_is_invalid() throws Exception {
         given(authService.authenticate("testServiceAuthHeader")).willReturn("testServiceName");
-        MvcResult mvcResult = mockMvc
+
+        mockMvc
             .perform(
                 post("/forms/invalid-form-type/validate-ocr")
                     .contentType(APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
                     .content(readResource("ocr-data/invalid/invalid-form-type.json"))
             )
-            .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"error\":\"Form type 'invalid-form-type' not found\"}"))
-            .andReturn();
-
-        assertThat(mvcResult.getResolvedException())
-            .isInstanceOf(FormNotFoundException.class)
-            .hasMessageContaining("Form type 'invalid-form-type' not found");
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(APPLICATION_JSON_VALUE))
+            .andExpect(content().json(
+                "{\"warnings\":[],\"errors\":[\"Form type 'invalid-form-type' not found\"],"
+                    + "\"status\":\"ERRORS\"}"
+            ));
     }
 
     @Test
-    void should_return_form_not_found_exception_when_form_type_case_does_not_match() throws Exception {
+    void should_return_200_with_form_not_found_error_when_form_type_case_does_not_match() throws Exception {
         given(authService.authenticate("testServiceAuthHeader")).willReturn("testServiceName");
-        MvcResult mvcResult = mockMvc
+        mockMvc
             .perform(
                 post("/forms/Personal/validate-ocr") //only PERSONAL is valid form type
                     .contentType(APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
                     .content(readResource("ocr-data/invalid/invalid-form-type.json"))
-            ).andReturn();
-
-        assertThat(mvcResult.getResolvedException())
-            .isInstanceOf(FormNotFoundException.class)
-            .hasMessageContaining("Form type 'Personal' not found");
+            )
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(APPLICATION_JSON_VALUE))
+            .andExpect(content()
+                .json("{\"warnings\":[],\"errors\":[\"Form type 'Personal' not found\"],\"status\":\"ERRORS\"}"));
     }
 
     private String readResource(final String fileName) throws IOException {

@@ -9,7 +9,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.ForbiddenException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.UnauthenticatedException;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.exceptions.FormNotFoundException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ApiError;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ErrorResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.InvalidExceptionRecordException;
@@ -17,7 +16,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.Inval
 import static java.util.Collections.emptyList;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.http.ResponseEntity.status;
@@ -38,12 +36,6 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<ApiError> handleUnauthenticatedException(UnauthenticatedException exc) {
         log.warn(exc.getMessage(), exc);
         return status(UNAUTHORIZED).body(new ApiError(exc.getMessage()));
-    }
-
-    @ExceptionHandler(FormNotFoundException.class)
-    protected ResponseEntity<ApiError> handleFormNotFoundException(FormNotFoundException exc) {
-        log.warn(exc.getMessage(), exc);
-        return status(NOT_FOUND).body(new ApiError(exc.getMessage()));
     }
 
     @ExceptionHandler(ForbiddenException.class)

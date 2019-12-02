@@ -12,14 +12,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriUtils;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataValidationRequest;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.OcrValidationResponse;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrDataValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrValidationResult;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.exceptions.FormNotFoundException;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import javax.validation.Valid;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -51,16 +54,20 @@ public class OcrValidationController {
             code = 200, response = OcrValidationResponse.class, message = "Validation executed successfully"
         ),
         @ApiResponse(code = 401, message = "Provided S2S token is missing or invalid"),
-        @ApiResponse(code = 403, message = "S2S token is not authorized to use the service"),
-        @ApiResponse(code = 404, message = "Form type not found")
+        @ApiResponse(code = 403, message = "S2S token is not authorized to use the service")
     })
     public ResponseEntity<OcrValidationResponse> validateOcrData(
         @RequestHeader(name = "ServiceAuthorization", required = false) String serviceAuthHeader,
         @PathVariable(name = "form-type", required = false) String formType,
         @Valid @RequestBody OcrDataValidationRequest request
     ) {
-        if (!EnumUtils.isValidEnum(FormType.class, formType)) {
-            throw new FormNotFoundException("Form type '" + formType + "' not found");
+        String encodedFormType = UriUtils.encode(formType, StandardCharsets.UTF_8);
+        if (!EnumUtils.isValidEnum(FormType.class, encodedFormType)) {
+            return ok().body(new OcrValidationResponse(
+                Collections.emptyList(),
+                Collections.singletonList("Form type '" + encodedFormType + "' not found"),
+                ValidationStatus.ERRORS
+            ));
         }
 
         String serviceName = authService.authenticate(serviceAuthHeader);
@@ -68,7 +75,9 @@ public class OcrValidationController {
 
         authService.assertIsAllowedService(serviceName);
 
-        OcrValidationResult result = ocrDataValidator.validate(FormType.valueOf(formType), request.getOcrDataFields());
+        OcrValidationResult result = ocrDataValidator.validate(
+            FormType.valueOf(encodedFormType), request.getOcrDataFields()
+        );
 
         return ok().body(new OcrValidationResponse(result.warnings, result.errors, result.status));
     }
