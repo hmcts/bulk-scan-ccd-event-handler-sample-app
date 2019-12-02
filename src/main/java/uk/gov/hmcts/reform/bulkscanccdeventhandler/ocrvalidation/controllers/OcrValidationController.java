@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.commons.lang3.EnumUtils;
+import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriUtils;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataValidationRequest;
@@ -21,7 +21,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.Valid
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrDataValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrValidationResult;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import javax.validation.Valid;
 
@@ -61,7 +60,7 @@ public class OcrValidationController {
         @PathVariable(name = "form-type", required = false) String formType,
         @Valid @RequestBody OcrDataValidationRequest request
     ) {
-        String encodedFormType = UriUtils.encode(formType, StandardCharsets.UTF_8.name());
+        String encodedFormType = Encode.forJava(formType);
         if (!EnumUtils.isValidEnum(FormType.class, encodedFormType)) {
             return ok().body(new OcrValidationResponse(
                 Collections.emptyList(),
