@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriUtils;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataValidationRequest;
@@ -20,13 +21,13 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.Valid
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrDataValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrValidationResult;
 
-import java.util.Collections;
 import javax.validation.Valid;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.ok;
 
-@SuppressWarnings({"squid:S5131"}) /* squid for returning formType validation error in 200 response */
 @RestController
 public class OcrValidationController {
     private static final Logger logger = getLogger(OcrValidationController.class);
@@ -60,7 +61,8 @@ public class OcrValidationController {
         @PathVariable(name = "form-type", required = false) String formType,
         @Valid @RequestBody OcrDataValidationRequest request
     ) {
-        if (!EnumUtils.isValidEnum(FormType.class, formType)) {
+        String encodedFormType = UriUtils.encode(formType, StandardCharsets.UTF_8.name());
+        if (!EnumUtils.isValidEnum(FormType.class, encodedFormType)) {
             return ok().body(new OcrValidationResponse(
                 Collections.emptyList(),
                 Collections.singletonList("Form type '" + formType + "' not found"),
