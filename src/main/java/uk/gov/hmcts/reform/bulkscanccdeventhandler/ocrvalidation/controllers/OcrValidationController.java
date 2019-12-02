@@ -21,9 +21,9 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.Valid
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrDataValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrValidationResult;
 
-import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import javax.validation.Valid;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.ok;
