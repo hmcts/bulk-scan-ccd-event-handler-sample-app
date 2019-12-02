@@ -16,10 +16,11 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataValidationRequest;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.OcrValidationResponse;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrDataValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrValidationResult;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.exceptions.FormNotFoundException;
 
+import java.util.Collections;
 import javax.validation.Valid;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -51,8 +52,7 @@ public class OcrValidationController {
             code = 200, response = OcrValidationResponse.class, message = "Validation executed successfully"
         ),
         @ApiResponse(code = 401, message = "Provided S2S token is missing or invalid"),
-        @ApiResponse(code = 403, message = "S2S token is not authorized to use the service"),
-        @ApiResponse(code = 404, message = "Form type not found")
+        @ApiResponse(code = 403, message = "S2S token is not authorized to use the service")
     })
     public ResponseEntity<OcrValidationResponse> validateOcrData(
         @RequestHeader(name = "ServiceAuthorization", required = false) String serviceAuthHeader,
@@ -60,7 +60,11 @@ public class OcrValidationController {
         @Valid @RequestBody OcrDataValidationRequest request
     ) {
         if (!EnumUtils.isValidEnum(FormType.class, formType)) {
-            throw new FormNotFoundException("Form type '" + formType + "' not found");
+            return ok().body(new OcrValidationResponse(
+                Collections.emptyList(),
+                Collections.singletonList("Form type '" + formType + "' not found"),
+                ValidationStatus.ERRORS
+            ));
         }
 
         String serviceName = authService.authenticate(serviceAuthHeader);
