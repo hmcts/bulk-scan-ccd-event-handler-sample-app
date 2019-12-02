@@ -64,7 +64,7 @@ public class OcrValidationController {
         if (!EnumUtils.isValidEnum(FormType.class, encodedFormType)) {
             return ok().body(new OcrValidationResponse(
                 Collections.emptyList(),
-                Collections.singletonList("Form type '" + formType + "' not found"),
+                Collections.singletonList("Form type '" + encodedFormType + "' not found"),
                 ValidationStatus.ERRORS
             ));
         }
@@ -74,7 +74,7 @@ public class OcrValidationController {
 
         authService.assertIsAllowedService(serviceName);
 
-        OcrValidationResult result = ocrDataValidator.validate(FormType.valueOf(formType), request.getOcrDataFields());
+        OcrValidationResult result = ocrDataValidator.validate(FormType.valueOf(encodedFormType), request.getOcrDataFields());
 
         return ok().body(new OcrValidationResponse(result.warnings, result.errors, result.status));
     }
