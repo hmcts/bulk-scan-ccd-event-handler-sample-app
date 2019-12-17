@@ -9,6 +9,6 @@ java:
     "bulk-scan":
       resourceGroup: bulk-scan
       secrets:
-        - app-insights-instrumentation-key
+        - app-insights-instrumentation-key-sample-app
 bulk-scan:
   enabled: false
