@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.controllers;
 
+import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -11,8 +12,12 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
 
 import javax.validation.Valid;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 @RestController
 public class UpdateCaseController {
+
+    private static final Logger LOG = getLogger(UpdateCaseController.class);
 
     private final AuthService authService;
     private final CaseUpdater caseUpdater;
@@ -33,6 +38,8 @@ public class UpdateCaseController {
         @Valid @RequestBody CaseUpdate req
     ) {
         String serviceName = authService.authenticate(serviceAuthHeader);
+        LOG.info("Request received to update case with OCR from service {}", serviceName);
+
         authService.assertIsAllowedService(serviceName);
 
         return caseUpdater.update(req);
