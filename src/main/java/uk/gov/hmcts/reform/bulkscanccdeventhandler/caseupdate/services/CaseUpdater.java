@@ -13,8 +13,6 @@ import static java.util.Collections.emptyList;
 @Service
 public class CaseUpdater {
 
-    public static final String EVENT_ID = "attachScannedDocs";
-
     private final AddressExtractor addressExtractor;
 
     public CaseUpdater(AddressExtractor addressExtractor) {
@@ -41,13 +39,8 @@ public class CaseUpdater {
         );
 
         return new SuccessfulUpdateResponse(
-            new CaseUpdateDetails(
-                // This is just a sample implementation.
-                // You can use different event IDs based on the changes made to a case...
-                EVENT_ID,
-                newCase
-            ),
-            // ... and put any warnings here.
+            new CaseUpdateDetails(newCase),
+            // ... put any warnings here
             emptyList()
         );
     }

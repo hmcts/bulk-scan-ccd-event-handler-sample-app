@@ -103,6 +103,5 @@ public class CaseUpdaterTest {
             ));
 
         assertThat(result.warnings).isEmpty();
-        assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
     }
 }

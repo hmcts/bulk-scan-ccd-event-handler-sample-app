@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services.CaseUpdater;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.OK;
@@ -29,6 +28,5 @@ public class UpdateCaseTest {
         assertThat(response.getStatusCode()).isEqualTo(OK.value());
         JsonPath json = response.getBody().jsonPath();
         assertThat(json.getList("warnings")).isEmpty();
-        assertThat(json.getMap("case_update_details").get("event_id")).isEqualTo(CaseUpdater.EVENT_ID);
     }
 }
