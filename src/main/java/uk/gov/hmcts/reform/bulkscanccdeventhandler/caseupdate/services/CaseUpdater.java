@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services;
 
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdate;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.CaseUpdateDetails;
@@ -9,11 +10,14 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
 
 import static java.util.Collections.emptyList;
+import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
 public class CaseUpdater {
 
     public static final String EVENT_ID = "attachScannedDocs";
+
+    private static final Logger LOG = getLogger(CaseUpdater.class);
 
     private final AddressExtractor addressExtractor;
 
@@ -24,8 +28,10 @@ public class CaseUpdater {
     public SuccessfulUpdateResponse update(CaseUpdate caseUpdate) {
         Address newAddress = addressExtractor.extractFrom(caseUpdate.exceptionRecord.ocrDataFields);
 
-        SampleCase originalCase = caseUpdate.caseDetails.caseData;
+        LOG.info("Case update , case details id: {}",caseUpdate.caseDetails.id);
 
+
+        SampleCase originalCase = caseUpdate.caseDetails.caseData;
         // This is just a sample implementation, we only overwrite the address here.
         // You'll probably update other fields and add new documents in your service case.
         SampleCase newCase = new SampleCase(
