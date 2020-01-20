@@ -73,7 +73,7 @@ public class CaseUpdaterTest {
             caseUpdater.update(
                 new CaseUpdate(
                     exceptionRecord,
-                    new CaseDetails("some_type", originalCase)
+                    new CaseDetails("1234567890","some_type", originalCase)
                 )
             );
 
