@@ -5,6 +5,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 
 public class CaseDetails {
 
+    //id is for logging
     public final String id;
     public final String caseTypeId;
     public final SampleCase caseData;
