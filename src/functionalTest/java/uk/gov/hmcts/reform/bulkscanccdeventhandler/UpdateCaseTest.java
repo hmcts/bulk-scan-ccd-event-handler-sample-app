@@ -20,7 +20,7 @@ public class UpdateCaseTest {
     @Test
     public void should_update_case() {
         // given
-        byte[] request = TestHelper.fileContentAsBytes("updatecase/valid-request.json");
+        String request = TestHelper.fileContentAsString("updatecase/valid-request.json");
 
         // when
         Response response = testHelper.postWithBody("/update-case", request);

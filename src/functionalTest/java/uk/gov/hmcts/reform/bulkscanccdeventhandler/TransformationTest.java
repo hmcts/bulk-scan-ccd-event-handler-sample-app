@@ -26,7 +26,7 @@ public class TransformationTest {
     public void should_transform_exception_record_successfully_without_any_warnings() {
         Response response = testHelper.postWithBody(
             "/transform-exception-record",
-            TestHelper.fileContentAsBytes("exception-records/valid.json")
+            TestHelper.fileContentAsString("exception-records/valid.json")
         );
 
         assertThat(response.getStatusCode()).isEqualTo(OK.value());
@@ -54,7 +54,7 @@ public class TransformationTest {
     public void should_transform_exception_record_successfully_with_warning() {
         Response response = testHelper.postWithBody(
             "/transform-exception-record",
-            TestHelper.fileContentAsBytes("exception-records/valid-missing-email.json")
+            TestHelper.fileContentAsString("exception-records/valid-missing-email.json")
         );
 
         assertThat(response.getStatusCode()).isEqualTo(OK.value());
@@ -72,7 +72,7 @@ public class TransformationTest {
     public void should_not_transform_exception_record_and_respond_with_422() {
         Response response = testHelper.postWithBody(
             "/transform-exception-record",
-            TestHelper.fileContentAsBytes("exception-records/invalid-missing-last-name.json")
+            TestHelper.fileContentAsString("exception-records/invalid-missing-last-name.json")
         );
 
         assertThat(response.getStatusCode()).isEqualTo(UNPROCESSABLE_ENTITY.value());
