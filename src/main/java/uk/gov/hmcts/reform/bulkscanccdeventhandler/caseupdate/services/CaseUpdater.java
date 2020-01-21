@@ -5,9 +5,15 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdate;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Address;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.ScannedDocument;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Collections.emptyList;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -30,7 +36,6 @@ public class CaseUpdater {
 
         LOG.info("Case update , case details id: {}",caseUpdate.caseDetails.id);
 
-
         SampleCase originalCase = caseUpdate.caseDetails.caseData;
         // This is just a sample implementation, we only overwrite the address here.
         // You'll probably update other fields and add new documents in your service case.
@@ -42,7 +47,7 @@ public class CaseUpdater {
             originalCase.contactNumber,
             originalCase.email,
             newAddress,
-            originalCase.scannedDocuments,
+            mergeScannedDocument(originalCase.scannedDocuments, caseUpdate.exceptionRecord.scannedDocuments),
             originalCase.bulkScanCaseReference
         );
 
@@ -56,5 +61,29 @@ public class CaseUpdater {
             // ... and put any warnings here.
             emptyList()
         );
+    }
+
+    private List<Item<ScannedDocument>> mergeScannedDocument(
+        List<Item<ScannedDocument>> caseScannedDocument,
+        List<InputScannedDoc> exceptionScannedDocument
+    ) {
+
+        if (caseScannedDocument == null && exceptionScannedDocument == null) {
+            return null;
+        }
+
+        List<Item<ScannedDocument>> newScannedDocuments;
+        if (caseScannedDocument == null) {
+            newScannedDocuments = new ArrayList<>();
+        } else {
+            newScannedDocuments = new ArrayList<Item<ScannedDocument>>(caseScannedDocument);
+        }
+
+        if (exceptionScannedDocument != null) {
+            exceptionScannedDocument
+                .stream()
+                .forEach(e -> newScannedDocuments.add(new Item<ScannedDocument>(new ScannedDocument(e))));
+        }
+        return newScannedDocuments;
     }
 }

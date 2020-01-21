@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
 
 import java.time.LocalDateTime;
 
@@ -48,5 +49,20 @@ public class ScannedDocument {
         this.scannedDate = scannedDate;
         this.deliveryDate = deliveryDate;
         this.exceptionRecordReference = exceptionRecordReference;
+    }
+
+    public ScannedDocument(InputScannedDoc inputScannedDoc) {
+        this.type = inputScannedDoc.type;
+        this.subtype = inputScannedDoc.subtype;
+        this.document = new DocumentUrl(
+            inputScannedDoc.document.url,
+            inputScannedDoc.document.binaryUrl,
+            inputScannedDoc.document.filename
+        );
+        this.controlNumber = inputScannedDoc.controlNumber;
+        this.fileName = inputScannedDoc.fileName;
+        this.scannedDate = inputScannedDoc.scannedDate;
+        this.deliveryDate = inputScannedDoc.deliveryDate;
+        this.exceptionRecordReference = null;
     }
 }
