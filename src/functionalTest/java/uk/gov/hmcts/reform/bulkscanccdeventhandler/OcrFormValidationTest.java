@@ -78,7 +78,7 @@ public class OcrFormValidationTest {
     private Response sendOcrFormValidationRequest(String formType, String fileName) {
         return testHelper.postWithBody(
             "/forms/" + formType + "/validate-ocr",
-            TestHelper.fileContentAsBytes(fileName)
+            TestHelper.fileContentAsString(fileName)
         );
     }
 }

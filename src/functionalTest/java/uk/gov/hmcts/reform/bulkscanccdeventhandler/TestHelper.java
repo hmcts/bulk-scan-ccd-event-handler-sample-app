@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler;
 
+import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
 import com.typesafe.config.Config;
@@ -61,7 +62,7 @@ class TestHelper {
             .print();
     }
 
-    Response postWithBody(String location, byte[] body) {
+    Response postWithBody(String location, String body) {
         return RestAssured
             .given()
             .header("ServiceAuthorization", "Bearer " + s2sSignIn())
@@ -75,11 +76,11 @@ class TestHelper {
             .andReturn();
     }
 
-    static byte[] fileContentAsBytes(String file) {
+    static String fileContentAsString(String filePath) {
         try {
-            return Resources.toByteArray(Resources.getResource(file));
+            return Resources.toString(Resources.getResource(filePath), Charsets.UTF_8);
         } catch (IOException e) {
-            throw new RuntimeException("Could not load file " + file, e);
+            throw new RuntimeException("Could not load file " + filePath, e);
         }
     }
 
