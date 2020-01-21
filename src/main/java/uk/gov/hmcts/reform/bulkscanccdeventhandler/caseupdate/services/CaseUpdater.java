@@ -67,22 +67,17 @@ public class CaseUpdater {
         List<Item<ScannedDocument>> caseScannedDocument,
         List<InputScannedDoc> exceptionScannedDocument
     ) {
-
-        if (caseScannedDocument == null && exceptionScannedDocument == null) {
-            return null;
-        }
-
         List<Item<ScannedDocument>> newScannedDocuments;
         if (caseScannedDocument == null) {
             newScannedDocuments = new ArrayList<>();
         } else {
-            newScannedDocuments = new ArrayList<Item<ScannedDocument>>(caseScannedDocument);
+            newScannedDocuments = new ArrayList<>(caseScannedDocument);
         }
 
         if (exceptionScannedDocument != null) {
             exceptionScannedDocument
                 .stream()
-                .forEach(e -> newScannedDocuments.add(new Item<ScannedDocument>(new ScannedDocument(e))));
+                .forEach(e -> newScannedDocuments.add(new Item<>(new ScannedDocument(e))));
         }
         return newScannedDocuments;
     }
