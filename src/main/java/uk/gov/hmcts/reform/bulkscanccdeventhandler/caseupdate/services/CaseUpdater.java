@@ -68,11 +68,6 @@ public class CaseUpdater {
         List<Item<ScannedDocument>> caseScannedDocument,
         List<InputScannedDoc> exceptionScannedDocument
     ) {
-
-        if (caseScannedDocument == null && exceptionScannedDocument == null) {
-            return null;
-        }
-
         List<Item<ScannedDocument>> newScannedDocuments;
         if (caseScannedDocument == null) {
             newScannedDocuments = new ArrayList<>();
