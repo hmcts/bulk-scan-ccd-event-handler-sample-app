@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 public class SampleCase {
@@ -17,15 +15,15 @@ public class SampleCase {
     public final String bulkScanCaseReference;
 
     public SampleCase(
-        @JsonProperty("legacyId") String legacyId,
-        @JsonProperty("firstName") String firstName,
-        @JsonProperty("lastName") String lastName,
-        @JsonProperty("dateOfBirth") String dateOfBirth,
-        @JsonProperty("contactNumber") String contactNumber,
-        @JsonProperty("email") String email,
-        @JsonProperty("address") Address address,
-        @JsonProperty("scannedDocuments") List<Item<ScannedDocument>> scannedDocuments,
-        @JsonProperty("bulkScanCaseReference") String bulkScanCaseReference
+        String legacyId,
+        String firstName,
+        String lastName,
+        String dateOfBirth,
+        String contactNumber,
+        String email,
+        Address address,
+        List<Item<ScannedDocument>> scannedDocuments,
+        String bulkScanCaseReference
     ) {
         this.legacyId = legacyId;
         this.firstName = firstName;

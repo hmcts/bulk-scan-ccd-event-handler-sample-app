@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.controllers;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,12 +9,13 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.CaseUpdateDetails;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services.CaseUpdater;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.ForbiddenException;
@@ -26,7 +25,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.DocumentUrl;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.ScannedDocument;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
 
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
@@ -42,14 +40,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings("checkstyle:lineLength")
-@WebMvcTest({UpdateCaseController.class, AddressExtractor.class})
+@WebMvcTest(UpdateCaseController.class)
 class UpdateCaseControllerTest {
 
     @Autowired private transient MockMvc mockMvc;
 
-    @SpyBean private CaseUpdater caseUpdater;
+    @MockBean private CaseUpdater caseUpdater;
     @MockBean private AuthService authService;
-    @MockBean private AddressExtractor addressExtractor;
 
     @BeforeEach
     public void setUp() {
@@ -115,17 +112,18 @@ class UpdateCaseControllerTest {
             ),
             "er-id"
         );
-
-        given(addressExtractor.extractFrom(any()))
+        given(caseUpdater.update(any()))
             .willReturn(
-                new Address("address-line-1","address-line-2","address-line-3",
-                    "post-code","post-town","county","country"
-                    )
+                new SuccessfulUpdateResponse(
+                    new CaseUpdateDetails(
+                        CaseUpdater.EVENT_ID,
+                        sampleCase
+                    ),
+                    asList("warning-1", "warning-2")
+                )
             );
 
-        String requestContent = Resources.toString(Resources.getResource("request/update-request.json"), Charsets.UTF_8);
-
-        sendRequest(requestContent)
+        sendRequest("{}")
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.case_update_details.event_id").value(CaseUpdater.EVENT_ID))
             .andExpect(jsonPath("$.case_update_details.case_data.legacyId").value("legacy-id"))
@@ -161,11 +159,9 @@ class UpdateCaseControllerTest {
             .andExpect(jsonPath("$.case_update_details.case_data.scannedDocuments[1].value.scannedDate").value("2011-12-05T10:15:30.123"))
             .andExpect(jsonPath("$.case_update_details.case_data.scannedDocuments[1].value.deliveryDate").value("2011-12-06T10:15:30.123"))
             .andExpect(jsonPath("$.case_update_details.case_data.scannedDocuments[1].value.exceptionRecordReference").value("ref-2"))
-
-            .andExpect(jsonPath("$.case_update_details.case_data.scannedDocuments[2].value.controlNumber").value("dcn1"))
-            .andExpect(jsonPath("$.case_update_details.case_data.scannedDocuments[3].value.controlNumber").value("dcn2"))
-            .andExpect(jsonPath("$.case_update_details.case_data.bulkScanCaseReference").value("er-id"));
-
+            .andExpect(jsonPath("$.case_update_details.case_data.bulkScanCaseReference").value("er-id"))
+            .andExpect(jsonPath("$.warnings[0]").value("warning-1"))
+            .andExpect(jsonPath("$.warnings[1]").value("warning-2"));
     }
 
     private static Stream<Arguments> exceptionsAndStatuses() {

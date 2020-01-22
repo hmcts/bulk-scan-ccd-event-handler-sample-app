@@ -14,9 +14,9 @@ public class DocumentUrl {
     public final String filename;
 
     public DocumentUrl(
-        @JsonProperty("document_url") String url,
-        @JsonProperty("document_binary_url") String binaryUrl,
-        @JsonProperty("document_filename") String filename
+        String url,
+        String binaryUrl,
+        String filename
     ) {
         this.url = url;
         this.binaryUrl = binaryUrl;

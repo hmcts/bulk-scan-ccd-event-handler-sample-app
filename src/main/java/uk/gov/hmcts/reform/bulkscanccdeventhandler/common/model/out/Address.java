@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Address {
 
     public final String addressLine1;
@@ -13,13 +11,13 @@ public class Address {
     public final String country;
 
     public Address(
-        @JsonProperty("addressLine1") String addressLine1,
-        @JsonProperty("addressLine2") String addressLine2,
-        @JsonProperty("addressLine3")String addressLine3,
-        @JsonProperty("postCode") String postCode,
-        @JsonProperty("postTown") String postTown,
-        @JsonProperty("county") String county,
-        @JsonProperty("country") String country
+        String addressLine1,
+        String addressLine2,
+        String addressLine3,
+        String postCode,
+        String postTown,
+        String county,
+        String country
     ) {
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
