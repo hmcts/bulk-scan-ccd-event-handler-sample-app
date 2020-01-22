@@ -30,12 +30,5 @@ public class UpdateCaseTest {
         JsonPath json = response.getBody().jsonPath();
         assertThat(json.getList("warnings")).isEmpty();
         assertThat(json.getMap("case_update_details").get("event_id")).isEqualTo(CaseUpdater.EVENT_ID);
-
-        assertThat(json.getString("$.case_update_details.case_data.scannedDocuments[0].value.controlNumber"))
-            .isEqualTo("Axy-12321");
-
-        assertThat(json.getString("$.case_update_details.case_data.scannedDocuments[0].value.type"))
-            .isEqualTo("Form1");
-
     }
 }

@@ -49,5 +49,4 @@ public class ScannedDocument {
         this.deliveryDate = deliveryDate;
         this.exceptionRecordReference = exceptionRecordReference;
     }
-
 }
