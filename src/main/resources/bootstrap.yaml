@@ -5,4 +5,4 @@ spring:
       prefixed: true
       paths: /mnt/secrets/bulk-scan
       aliases:
-        app-insights-instrumentation-key-sample-app: azure.application-insights.instrumentation-key
+        app-insights-instrumentation-key: azure.application-insights.instrumentation-key
