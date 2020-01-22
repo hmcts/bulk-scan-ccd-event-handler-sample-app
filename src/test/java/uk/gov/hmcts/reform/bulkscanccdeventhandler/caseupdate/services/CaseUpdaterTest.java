@@ -43,8 +43,9 @@ public class CaseUpdaterTest {
     }
 
     /**
-     * should override the address with exception record address data
-     * and return total document list by merging the document list with exception and case
+     * should override the address with exception record address data.
+     * should return total document list by merging the document list with exception and case
+     *
      */
     @Test
     public void should_update_case_data_with_exception_record() {
@@ -65,7 +66,7 @@ public class CaseUpdaterTest {
             "email",
             originalCaseAddress,
             Arrays.asList(
-                new Item(
+                new Item<ScannedDocument>(
                     new ScannedDocument(
                         "type_A",
                         "subtype_A",
@@ -97,7 +98,7 @@ public class CaseUpdaterTest {
                 new InputScannedDoc(
                     "Form_1",
                     "subtype_1",
-                    new InputScannedDocUrl("file://file_1", "binary_url_1", "file_name_1") ,
+                    new InputScannedDocUrl("file://file_1", "binary_url_1", "file_name_1"),
                     "control_number_1",
                     "file_name_11",
                     exScannedDate,
