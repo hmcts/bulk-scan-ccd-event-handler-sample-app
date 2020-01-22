@@ -31,7 +31,6 @@
     ]
   },
   "case_details": {
-    "id": "9876543210123456",
     "case_type_id": "some_case_type",
     "case_data": {
       "legacyId": "123",
