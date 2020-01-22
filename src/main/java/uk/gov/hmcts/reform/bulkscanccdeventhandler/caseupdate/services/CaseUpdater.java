@@ -35,7 +35,7 @@ public class CaseUpdater {
     public SuccessfulUpdateResponse update(CaseUpdate caseUpdate) {
         Address newAddress = addressExtractor.extractFrom(caseUpdate.exceptionRecord.ocrDataFields);
 
-        LOG.info("Case update , case details id: {}",caseUpdate.caseDetails.id);
+        LOG.info("Case update, case details id: {}",caseUpdate.caseDetails.id);
 
         SampleCase originalCase = caseUpdate.caseDetails.caseData;
         // This is just a sample implementation, we only overwrite the address here.
