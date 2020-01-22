@@ -17,6 +17,7 @@ import java.util.List;
 
 import static java.util.Collections.emptyList;
 import static org.slf4j.LoggerFactory.getLogger;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.ScannedDocumentMapper.mapToScannedDocument;
 
 @Service
 public class CaseUpdater {
@@ -82,7 +83,9 @@ public class CaseUpdater {
         if (exceptionScannedDocument != null) {
             exceptionScannedDocument
                 .stream()
-                .forEach(e -> newScannedDocuments.add(new Item<ScannedDocument>(new ScannedDocument(e))));
+                .forEach(
+                    scannedDoc -> newScannedDocuments.add(new Item<ScannedDocument>(mapToScannedDocument(scannedDoc)))
+                );
         }
         return newScannedDocuments;
     }
