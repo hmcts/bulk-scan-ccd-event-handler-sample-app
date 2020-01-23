@@ -5,12 +5,19 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdate;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Address;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.ScannedDocument;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Collections.emptyList;
 import static org.slf4j.LoggerFactory.getLogger;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.ScannedDocumentMapper.mapToScannedDocument;
 
 @Service
 public class CaseUpdater {
@@ -28,8 +35,7 @@ public class CaseUpdater {
     public SuccessfulUpdateResponse update(CaseUpdate caseUpdate) {
         Address newAddress = addressExtractor.extractFrom(caseUpdate.exceptionRecord.ocrDataFields);
 
-        LOG.info("Case update , case details id: {}",caseUpdate.caseDetails.id);
-
+        LOG.info("Case update, case details id: {}",caseUpdate.caseDetails.id);
 
         SampleCase originalCase = caseUpdate.caseDetails.caseData;
         // This is just a sample implementation, we only overwrite the address here.
@@ -42,7 +48,7 @@ public class CaseUpdater {
             originalCase.contactNumber,
             originalCase.email,
             newAddress,
-            originalCase.scannedDocuments,
+            mergeScannedDocuments(originalCase.scannedDocuments, caseUpdate.exceptionRecord.scannedDocuments),
             originalCase.bulkScanCaseReference
         );
 
@@ -56,5 +62,26 @@ public class CaseUpdater {
             // ... and put any warnings here.
             emptyList()
         );
+    }
+
+    private List<Item<ScannedDocument>> mergeScannedDocuments(
+        List<Item<ScannedDocument>> caseScannedDocuments,
+        List<InputScannedDoc> exceptionScannedDocuments
+    ) {
+        List<Item<ScannedDocument>> newScannedDocuments;
+        if (caseScannedDocuments == null) {
+            newScannedDocuments = new ArrayList<>();
+        } else {
+            newScannedDocuments = new ArrayList<>(caseScannedDocuments);
+        }
+
+        if (exceptionScannedDocuments != null) {
+            exceptionScannedDocuments
+                .stream()
+                .forEach(
+                    scannedDoc -> newScannedDocuments.add(new Item<ScannedDocument>(mapToScannedDocument(scannedDoc)))
+                );
+        }
+        return newScannedDocuments;
     }
 }
