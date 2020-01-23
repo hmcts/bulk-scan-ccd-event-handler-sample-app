@@ -79,7 +79,7 @@ public class CaseUpdater {
             exceptionScannedDocument
                 .stream()
                 .forEach(
-                    scannedDoc -> newScannedDocuments.add(new Item(mapToScannedDocument(scannedDoc)))
+                    scannedDoc -> newScannedDocuments.add(new Item<ScannedDocument>(mapToScannedDocument(scannedDoc)))
                 );
         }
         return newScannedDocuments;
