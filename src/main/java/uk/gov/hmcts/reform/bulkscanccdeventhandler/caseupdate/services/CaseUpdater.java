@@ -72,14 +72,14 @@ public class CaseUpdater {
         if (caseScannedDocument == null) {
             newScannedDocuments = new ArrayList<>();
         } else {
-            newScannedDocuments = new ArrayList<Item<ScannedDocument>>(caseScannedDocument);
+            newScannedDocuments = new ArrayList<>(caseScannedDocument);
         }
 
         if (exceptionScannedDocument != null) {
             exceptionScannedDocument
                 .stream()
                 .forEach(
-                    scannedDoc -> newScannedDocuments.add(new Item<ScannedDocument>(mapToScannedDocument(scannedDoc)))
+                    scannedDoc -> newScannedDocuments.add(new Item(mapToScannedDocument(scannedDoc)))
                 );
         }
         return newScannedDocuments;
