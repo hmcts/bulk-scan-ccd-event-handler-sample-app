@@ -59,10 +59,25 @@
               "document_binary_url": "binary-url",
               "document_filename": "987654321-123456789.pdf"
             },
-            "control_number": "123456789",
-            "file_name": "987654321-123456789.pdf",
-            "scanned_date": "2019-08-01T00:01:02.345Z",
-            "delivery_date": "2019-08-01T01:02:03.456Z"
+            "controlNumber": "123456789",
+            "fileName": "987654321-123456789.pdf",
+            "scannedDate": "2019-08-01T00:01:02.345Z",
+            "deliveryDate": "2019-08-01T01:02:03.456Z"
+          }
+        },
+        {
+          "value": {
+            "type": "Form-2",
+            "subtype": "ABC",
+            "url": {
+              "document_url": "url-2",
+              "document_binary_url": "binary-url-2",
+              "document_filename": "987654321-123456789.pdf"
+            },
+            "controlNumber": "111111111",
+            "fileName": "11111111-123456789.pdf",
+            "scannedDate": "2020-01-11T00:01:02.345Z",
+            "deliveryDate": "2020-01-12T01:02:03.456Z"
           }
         }
       ],

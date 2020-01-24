@@ -37,10 +37,6 @@ public class UpdateCaseController {
         @RequestHeader(name = "ServiceAuthorization", required = false) String serviceAuthHeader,
         @Valid @RequestBody CaseUpdate req
     ) {
-        String serviceName = authService.authenticate(serviceAuthHeader);
-        LOG.info("Request received to update case with OCR from service {}", serviceName);
-
-        authService.assertIsAllowedService(serviceName);
 
         return caseUpdater.update(req);
     }
