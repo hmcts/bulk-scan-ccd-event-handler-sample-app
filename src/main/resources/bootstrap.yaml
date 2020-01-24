@@ -2,7 +2,7 @@ spring:
   cloud:
     propertiesvolume:
       enabled: true
-      prefixed: true
+      prefixed: false
       paths: /mnt/secrets/bulk-scan
       aliases:
         app-insights-instrumentation-key-sample-app: azure.application-insights.instrumentation-key
