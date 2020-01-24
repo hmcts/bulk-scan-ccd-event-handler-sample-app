@@ -1,0 +1,70 @@
+{
+  "case_update_details": {
+    "event_id": "attachScannedDocs",
+    "case_data": {
+      "legacyId": "123",
+      "firstName": "foob",
+      "lastName": "bar",
+      "dateOfBirth": "2019-08-02",
+      "contactNumber": "555-555-555",
+      "email": "hello@example.com",
+      "address": {
+        "addressLine1": null,
+        "addressLine2": null,
+        "addressLine3": null,
+        "postCode": null,
+        "postTown": null,
+        "county": null,
+        "country": "wonderland"
+      },
+      "scannedDocuments": {
+        "value": [
+          {
+            "type": "Form",
+            "subtype": "XYZ",
+            "url": {
+              "document_url": "url",
+              "document_binary_url": "binary-url",
+              "document_filename": "987654321-123456789.pdf"
+            },
+            "control_number": "1123456789",
+            "file_name": "987654321-123456789.pdf",
+            "scanned_date": "2019-08-01T00:01:02.345",
+            "delivery_date": "2019-08-01T01:02:03.456",
+            "exception_record_reference": null
+          },
+          {
+            "type": "Form",
+            "subtype": "XYZ",
+            "url": {
+              "document_url": "url",
+              "document_binary_url": "binary-url",
+              "document_filename": "987654321-123456789.pdf"
+            },
+            "control_number": "2123456789",
+            "file_name": "1987654321-123456789.pdf",
+            "scanned_date": "2019-09-01T00:01:02.345",
+            "delivery_date": "2019-10-01T01:02:03.456",
+            "exception_record_reference": null
+          },
+          {
+            "type": "Form",
+            "subtype": "XYZ",
+            "url": {
+              "document_url": "url",
+              "document_binary_url": "binary-url",
+              "document_filename": "987654321-123456789.pdf"
+            },
+            "control_number": "987654321",
+            "file_name": "987654321-123456789.pdf",
+            "scanned_date": "2019-08-01T00:01:02.345",
+            "delivery_date": "2019-08-01T01:02:03.456",
+            "exception_record_reference": null
+          }
+        ]
+      },
+      "bulkScanCaseReference": "REF-123-123"
+    }
+  },
+  "warnings": []
+}

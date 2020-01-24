@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.CaseCreationDetails;
@@ -65,10 +66,10 @@ public class ExceptionRecordToCaseTransformer {
             get(er, CONTACT_NUMBER),
             get(er, EMAIL),
             addressExtractor.extractFrom(er.ocrDataFields),
-            er.scannedDocuments
+            new Item(er.scannedDocuments
                 .stream()
                 .map(it -> documentMapper.toCaseDoc(it, er.id))
-                .collect(toList()),
+                .collect(toList())),
             er.id
         );
     }

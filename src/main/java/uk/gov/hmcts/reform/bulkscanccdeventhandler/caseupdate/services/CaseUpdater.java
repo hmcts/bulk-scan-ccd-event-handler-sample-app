@@ -48,7 +48,7 @@ public class CaseUpdater {
             originalCase.contactNumber,
             originalCase.email,
             newAddress,
-            mergeScannedDocuments(originalCase.scannedDocuments, caseUpdate.exceptionRecord.scannedDocuments),
+            mergeScannedDocuments(originalCase.scannedDocuments.value, caseUpdate.exceptionRecord.scannedDocuments),
             originalCase.bulkScanCaseReference
         );
 
@@ -64,11 +64,11 @@ public class CaseUpdater {
         );
     }
 
-    private List<Item<ScannedDocument>> mergeScannedDocuments(
-        List<Item<ScannedDocument>> caseScannedDocuments,
+    private Item mergeScannedDocuments(
+        List<ScannedDocument> caseScannedDocuments,
         List<InputScannedDoc> exceptionScannedDocuments
     ) {
-        List<Item<ScannedDocument>> newScannedDocuments;
+        List<ScannedDocument> newScannedDocuments;
         if (caseScannedDocuments == null) {
             newScannedDocuments = new ArrayList<>();
         } else {
@@ -78,10 +78,10 @@ public class CaseUpdater {
         if (exceptionScannedDocuments != null) {
             exceptionScannedDocuments
                 .stream()
-                .forEach(
-                    scannedDoc -> newScannedDocuments.add(new Item<ScannedDocument>(mapToScannedDocument(scannedDoc)))
-                );
+                .map(inScannedDoc -> mapToScannedDocument(inScannedDoc))
+                .forEach(scannedDoc -> newScannedDocuments.add(scannedDoc));
+
         }
-        return newScannedDocuments;
+        return new Item(newScannedDocuments);
     }
 }

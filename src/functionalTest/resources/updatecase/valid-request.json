@@ -49,9 +49,9 @@
         "county": "foo",
         "country":  "foo"
       },
-      "scannedDocuments": [
-        {
-          "value": {
+      "scannedDocuments": {
+        "value": [
+          {
             "type": "Form",
             "subtype": "XYZ",
             "url": {
@@ -59,13 +59,26 @@
               "document_binary_url": "binary-url",
               "document_filename": "987654321-123456789.pdf"
             },
-            "control_number": "123456789",
+            "control_number": "1123456789",
             "file_name": "987654321-123456789.pdf",
             "scanned_date": "2019-08-01T00:01:02.345Z",
             "delivery_date": "2019-08-01T01:02:03.456Z"
+          },
+          {
+            "type": "Form",
+            "subtype": "XYZ",
+            "url": {
+              "document_url": "url",
+              "document_binary_url": "binary-url",
+              "document_filename": "987654321-123456789.pdf"
+            },
+            "control_number": "2123456789",
+            "file_name": "1987654321-123456789.pdf",
+            "scanned_date": "2019-09-01T00:01:02.345Z",
+            "delivery_date": "2019-10-01T01:02:03.456Z"
           }
-        }
-      ],
+        ]
+      },
       "bulkScanCaseReference": "REF-123-123"
     }
   }

@@ -6,39 +6,39 @@ import java.time.LocalDateTime;
 
 public class ScannedDocument {
 
-    @JsonProperty
+    @JsonProperty("type")
     public final String type;
 
-    @JsonProperty
+    @JsonProperty("subtype")
     public final String subtype;
 
     @JsonProperty("url")
     public final DocumentUrl document;
 
-    @JsonProperty
+    @JsonProperty("control_number")
     public final String controlNumber;
 
-    @JsonProperty
+    @JsonProperty("file_name")
     public final String fileName;
 
-    @JsonProperty
+    @JsonProperty("scanned_date")
     public final LocalDateTime scannedDate;
 
-    @JsonProperty
+    @JsonProperty("delivery_date")
     public final LocalDateTime deliveryDate;
 
-    @JsonProperty
+    @JsonProperty("exception_record_reference")
     public final String exceptionRecordReference;
 
     public ScannedDocument(
         @JsonProperty("type") String type,
         @JsonProperty("subtype") String subtype,
         @JsonProperty("url") DocumentUrl document,
-        @JsonProperty("controlNumber") String controlNumber,
-        @JsonProperty("fileName") String fileName,
-        @JsonProperty("scannedDate") LocalDateTime scannedDate,
-        @JsonProperty("deliveryDate") LocalDateTime deliveryDate,
-        @JsonProperty("exceptionRecordReference") String exceptionRecordReference
+        @JsonProperty("control_number") String controlNumber,
+        @JsonProperty("file_name") String fileName,
+        @JsonProperty("scanned_date") LocalDateTime scannedDate,
+        @JsonProperty("delivery_date") LocalDateTime deliveryDate,
+        @JsonProperty("exception_record_reference") String exceptionRecordReference
     ) {
         this.type = type;
         this.subtype = subtype;
