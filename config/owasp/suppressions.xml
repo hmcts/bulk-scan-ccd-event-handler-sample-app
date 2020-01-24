@@ -20,7 +20,7 @@
     <notes><![CDATA[
       used in the smoke tests and functional tests.
     ]]></notes>
-    <cpe regex="true">^a:apache:groovy:2\.5\.8$</cpe>
+    <cpe regex="true">^a:apache:groovy:2\.5\.9$</cpe>
     <cve>CVE-2016-6497</cve>
   </suppress>
 
