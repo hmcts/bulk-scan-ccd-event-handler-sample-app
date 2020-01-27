@@ -159,6 +159,9 @@ dependencies {
   def withoutJunit4 = {
     exclude group: 'junit', module: 'junit'
   }
+  def withoutSpringCloudContext = {
+    exclude group: 'org.springframework.cloud', module: 'spring-cloud-context'
+  }
 
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
@@ -169,6 +172,7 @@ dependencies {
 
   implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 
+  implementation group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.0.4', withoutSpringCloudContext
   implementation group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
   implementation group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.1.RELEASE'
