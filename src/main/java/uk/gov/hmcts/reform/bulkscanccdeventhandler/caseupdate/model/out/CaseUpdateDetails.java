@@ -5,6 +5,9 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 
 public class CaseUpdateDetails {
 
+    @JsonProperty("state")
+    public final String state;
+
     @JsonProperty("event_id")
     public final String eventId;
 
@@ -13,9 +16,11 @@ public class CaseUpdateDetails {
 
     // region constructor
     public CaseUpdateDetails(
+        String state,
         String eventId,
         SampleCase caseData
     ) {
+        this.state = state;
         this.eventId = eventId;
         this.caseData = caseData;
     }

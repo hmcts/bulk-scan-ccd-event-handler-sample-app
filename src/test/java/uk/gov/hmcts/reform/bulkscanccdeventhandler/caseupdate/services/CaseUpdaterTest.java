@@ -153,6 +153,7 @@ public class CaseUpdaterTest {
 
         assertThat(result.warnings).isEmpty();
         assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
+        assertThat(result.caseUpdateDetails.state).isNull();
         assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(0).value.type)
             .isEqualTo("type_A");
         assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(0).value.subtype)

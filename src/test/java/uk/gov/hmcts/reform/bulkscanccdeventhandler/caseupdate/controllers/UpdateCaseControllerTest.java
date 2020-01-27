@@ -116,6 +116,7 @@ class UpdateCaseControllerTest {
             .willReturn(
                 new SuccessfulUpdateResponse(
                     new CaseUpdateDetails(
+                        null,
                         CaseUpdater.EVENT_ID,
                         sampleCase
                     ),
@@ -126,6 +127,7 @@ class UpdateCaseControllerTest {
         sendRequest("{}")
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.case_update_details.event_id").value(CaseUpdater.EVENT_ID))
+            .andExpect(jsonPath("$.case_update_details.state").isEmpty())
             .andExpect(jsonPath("$.case_update_details.case_data.legacyId").value("legacy-id"))
             .andExpect(jsonPath("$.case_update_details.case_data.firstName").value("first-name"))
             .andExpect(jsonPath("$.case_update_details.case_data.lastName").value("last-name"))

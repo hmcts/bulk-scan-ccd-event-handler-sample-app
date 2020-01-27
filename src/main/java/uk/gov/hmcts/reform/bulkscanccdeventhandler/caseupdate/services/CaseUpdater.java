@@ -54,6 +54,7 @@ public class CaseUpdater {
 
         return new SuccessfulUpdateResponse(
             new CaseUpdateDetails(
+                null,
                 // This is just a sample implementation.
                 // You can use different event IDs based on the changes made to a case...
                 EVENT_ID,
