@@ -1,7 +1,8 @@
-provider "azurerm" {}
+provider "azurerm" {
+  version = "=1.42.0"
+}
 
 locals {
-  ase_name            = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
   is_preview          = "${(var.env == "preview" || var.env == "spreview")}"
   local_env           = "${local.is_preview ? "aat" : var.env}"
   s2s_rg              = "rpe-service-auth-provider-${local.local_env}"
