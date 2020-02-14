@@ -38,7 +38,6 @@ withPipeline(type, product, component) {
     sh "rm -rf infrastructure/"
   }
 
-  enableDockerBuild()
   enableAksStagingDeployment()
   installCharts()
   enableSlackNotifications(channel)
