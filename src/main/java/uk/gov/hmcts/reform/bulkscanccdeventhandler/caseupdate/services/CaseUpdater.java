@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services;
 
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdate;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
@@ -33,6 +34,11 @@ public class CaseUpdater {
     }
 
     public SuccessfulUpdateResponse update(CaseUpdate caseUpdate) {
+        Assert.notEmpty(
+            caseUpdate.exceptionRecord.scannedDocuments,
+            "Missing scanned documents in exception record"
+        );
+
         Address newAddress = addressExtractor.extractFrom(caseUpdate.exceptionRecord.ocrDataFields);
 
         LOG.info("Case update, case details id: {}",caseUpdate.caseDetails.id);
@@ -75,13 +81,10 @@ public class CaseUpdater {
             newScannedDocuments = new ArrayList<>(caseScannedDocuments);
         }
 
-        if (exceptionScannedDocuments != null) {
-            exceptionScannedDocuments
-                .stream()
-                .forEach(
-                    scannedDoc -> newScannedDocuments.add(new Item<ScannedDocument>(mapToScannedDocument(scannedDoc)))
-                );
-        }
+        exceptionScannedDocuments.forEach(scannedDoc ->
+            newScannedDocuments.add(new Item<>(mapToScannedDocument(scannedDoc)))
+        );
+
         return newScannedDocuments;
     }
 }

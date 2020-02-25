@@ -25,9 +25,11 @@ import java.util.Arrays;
 import static java.time.LocalDateTime.now;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @SuppressWarnings("checkstyle:lineLength")
 @ExtendWith(MockitoExtension.class)
@@ -220,7 +222,7 @@ public class CaseUpdaterTest {
     }
 
     @Test
-    public void should_update_case_data_without_any_documents() {
+    public void should_not_update_case_data_without_any_documents() {
         // given
 
         Address originalCaseAddress = new Address("a", "b", "c", "d", "e", "f", "g");
@@ -254,44 +256,19 @@ public class CaseUpdaterTest {
             emptyList()
         );
 
-        given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
-
         // when
-        SuccessfulUpdateResponse result =
+        IllegalArgumentException exception = catchThrowableOfType(() ->
             caseUpdater.update(
                 new CaseUpdate(
                     exceptionRecord,
                     new CaseDetails("1234567890","some_type", originalCase)
                 )
-            );
+            ),
+            IllegalArgumentException.class
+        );
 
         // then
-        assertThat(result.caseUpdateDetails.caseData.address.addressLine1).isEqualTo(exceptionRecordAddress.addressLine1);
-        assertThat(result.caseUpdateDetails.caseData.address.addressLine2).isEqualTo(exceptionRecordAddress.addressLine2);
-        assertThat(result.caseUpdateDetails.caseData.address.addressLine3).isEqualTo(exceptionRecordAddress.addressLine3);
-        assertThat(result.caseUpdateDetails.caseData.address.country).isEqualTo(exceptionRecordAddress.country);
-        assertThat(result.caseUpdateDetails.caseData.address.county).isEqualTo(exceptionRecordAddress.county);
-        assertThat(result.caseUpdateDetails.caseData.address.postCode).isEqualTo(exceptionRecordAddress.postCode);
-        assertThat(result.caseUpdateDetails.caseData.address.postTown).isEqualTo(exceptionRecordAddress.postTown);
-
-        assertThat(result.caseUpdateDetails.caseData)
-            .extracting(c -> tuple(
-                c.legacyId,
-                c.firstName,
-                c.lastName,
-                c.dateOfBirth,
-                c.bulkScanCaseReference
-            ))
-            .isEqualTo(tuple(
-                originalCase.legacyId,
-                originalCase.firstName,
-                originalCase.lastName,
-                originalCase.dateOfBirth,
-                originalCase.bulkScanCaseReference
-            ));
-
-        assertThat(result.warnings).isEmpty();
-        assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments).isEmpty();
+        assertThat(exception).hasMessage("Missing scanned documents in exception record");
+        verifyNoInteractions(addressExtractor);
     }
 }
