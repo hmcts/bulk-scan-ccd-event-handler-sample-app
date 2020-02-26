@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Erro
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.InvalidExceptionRecordException;
 
 import static java.util.Collections.emptyList;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -47,6 +48,11 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidExceptionRecordException.class)
     protected ResponseEntity<ErrorResponse> handleInvalidExceptionRecord(InvalidExceptionRecordException exc) {
         return status(UNPROCESSABLE_ENTITY).body(new ErrorResponse(exc.getErrors(), emptyList()));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<ApiError> handleIllegalArgumentException(IllegalArgumentException exc) {
+        return status(BAD_REQUEST).body(new ApiError(exc.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)

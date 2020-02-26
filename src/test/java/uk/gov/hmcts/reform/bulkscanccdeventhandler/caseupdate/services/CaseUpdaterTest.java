@@ -25,9 +25,11 @@ import java.util.Arrays;
 import static java.time.LocalDateTime.now;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @SuppressWarnings("checkstyle:lineLength")
 @ExtendWith(MockitoExtension.class)
@@ -217,5 +219,56 @@ public class CaseUpdaterTest {
         assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(2).value.document.binaryUrl)
             .isEqualTo("binary_url_2");
 
+    }
+
+    @Test
+    public void should_not_update_case_data_without_any_documents() {
+        // given
+
+        Address originalCaseAddress = new Address("a", "b", "c", "d", "e", "f", "g");
+        Address exceptionRecordAddress = new Address("0", "1", "2", "3", "4", "5", "6");
+
+        LocalDateTime caseScannedDate = now();
+        LocalDateTime caseDeliveryDate = now();
+
+        SampleCase originalCase = new SampleCase(
+            "legacy-id",
+            "first-name",
+            "last-name",
+            "date-of-birth",
+            "contact-number",
+            "email",
+            originalCaseAddress,
+            emptyList(),
+            "er-id"
+        );
+
+        ExceptionRecord exceptionRecord = new ExceptionRecord(
+            "er-id",
+            "er-case-type",
+            "er-pobox",
+            "er-jurisdiction",
+            "er-form-type",
+            JourneyClassification.SUPPLEMENTARY_EVIDENCE_WITH_OCR,
+            now(),
+            now(),
+            emptyList(),
+            emptyList()
+        );
+
+        // when
+        IllegalArgumentException exception = catchThrowableOfType(() ->
+            caseUpdater.update(
+                new CaseUpdate(
+                    exceptionRecord,
+                    new CaseDetails("1234567890","some_type", originalCase)
+                )
+            ),
+            IllegalArgumentException.class
+        );
+
+        // then
+        assertThat(exception).hasMessage("Missing scanned documents in exception record");
+        verifyNoInteractions(addressExtractor);
     }
 }
