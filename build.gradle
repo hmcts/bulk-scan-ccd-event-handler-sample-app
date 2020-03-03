@@ -149,7 +149,7 @@ dependencyManagement {
       entry 'commons-beanutils'
     }
     // align with jupiter version
-    dependencySet(group: 'org.mockito', version: '3.2.4') {
+    dependencySet(group: 'org.mockito', version: '3.3.1') {
       entry 'mockito-core'
     }
   }
@@ -185,7 +185,7 @@ dependencies {
   testImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
   testImplementation group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
 
-  testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.2.4'
+  testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.3.1'
   testImplementation group: 'com.typesafe', name: 'config', version: '1.4.0'
   testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.14.0'
   testImplementation group: 'io.rest-assured', name: 'rest-assured'
