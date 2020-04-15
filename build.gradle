@@ -140,7 +140,7 @@ def versions = [
   springBoot      : springBoot.class.package.implementationVersion
 ]
 
-ext["rest-assured.version"] = '4.3.0'
+ext["rest-assured.version"] = '4.2.0'
 
 dependencyManagement {
   dependencies {
