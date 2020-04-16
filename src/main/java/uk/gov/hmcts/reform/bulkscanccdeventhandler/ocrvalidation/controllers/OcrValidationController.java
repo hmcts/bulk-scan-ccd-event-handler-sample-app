@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriUtils;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataValidationRequest;
@@ -21,10 +20,10 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.Valid
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrDataValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrValidationResult;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import javax.validation.Valid;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -61,25 +60,23 @@ public class OcrValidationController {
         @PathVariable(name = "form-type", required = false) String formType,
         @Valid @RequestBody OcrDataValidationRequest request
     ) {
-        String encodedFormType = UriUtils.encode(formType, StandardCharsets.UTF_8);
-        if (!EnumUtils.isValidEnum(FormType.class, encodedFormType)) {
-            return ok().body(new OcrValidationResponse(
-                Collections.emptyList(),
-                Collections.singletonList("Form type '" + encodedFormType + "' not found"),
-                ValidationStatus.ERRORS
-            ));
-        }
-
         String serviceName = authService.authenticate(serviceAuthHeader);
         logger.info("Request received to validate ocr data from service {}", serviceName);
-
         authService.assertIsAllowedService(serviceName);
 
-        OcrValidationResult result = ocrDataValidator.validate(
-            FormType.valueOf(encodedFormType), request.getOcrDataFields()
-        );
+        if (!EnumUtils.isValidEnum(FormType.class, formType)) {
+            return ok().body(new OcrValidationResponse(
+                emptyList(),
+                singletonList("Form type '" + formType + "' not found"),
+                ValidationStatus.ERRORS
+            ));
+        } else {
+            OcrValidationResult result = ocrDataValidator.validate(
+                FormType.valueOf(formType), request.getOcrDataFields()
+            );
 
-        return ok().body(new OcrValidationResponse(result.warnings, result.errors, result.status));
+            return ok().body(new OcrValidationResponse(result.warnings, result.errors, result.status));
+        }
     }
 
 }
