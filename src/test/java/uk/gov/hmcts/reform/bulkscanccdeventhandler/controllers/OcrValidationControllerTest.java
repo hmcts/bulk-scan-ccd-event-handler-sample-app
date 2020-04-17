@@ -167,6 +167,21 @@ class OcrValidationControllerTest {
                 .json("{\"warnings\":[],\"errors\":[\"Form type 'Personal' not found\"],\"status\":\"ERRORS\"}"));
     }
 
+    @Test
+    void should_return_403_status_when_both_s2s_token_and_form_type_are_invalid() throws Exception {
+        given(authService.authenticate(any())).willThrow(ForbiddenException.class);
+
+        mockMvc
+            .perform(
+                post("/forms/INVALID-FORM-TYPE/validate-ocr")
+                    .header("ServiceAuthorization", "test-token")
+                    .contentType(APPLICATION_JSON_VALUE)
+                    .content(readResource("ocr-data/valid/valid-ocr-data.json"))
+            )
+            .andExpect(status().isForbidden())
+            .andExpect(content().json("{\"error\":\"S2S token is not authorized to use the service\"}"));
+    }
+
     private String readResource(final String fileName) throws IOException {
         return Resources.toString(Resources.getResource(fileName), Charsets.UTF_8);
     }
