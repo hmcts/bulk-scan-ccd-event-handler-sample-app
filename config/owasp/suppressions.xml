@@ -33,4 +33,9 @@
     <cve>CVE-2016-6798</cve>
   </suppress>
 
+  <suppress>
+    <gav regex="true">^.*log4j.*$</gav>
+    <cve>CVE-2020-9488</cve>
+  </suppress>
+
 </suppressions>
