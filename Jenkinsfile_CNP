@@ -34,7 +34,8 @@ withPipeline(type, product, component) {
 
   after('test') {
     build job: 'HMCTS_BSP/bulk-scan-ccd-event-handler-sample-app/PR-136',
-      parameters: ['wait': false]
+      parameters: [],
+      wait: false
     //builder.gradle('functional')
   }
 
