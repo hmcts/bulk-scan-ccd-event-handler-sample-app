@@ -36,7 +36,7 @@ withPipeline(type, product, component) {
     build job: 'HMCTS_BSP/bulk-scan-ccd-event-handler-sample-app/PR-136',
       parameters: [],
       wait: false
-    //builder.gradle('functional')
+    builder.gradle('integration')
   }
 
   after('smoketest:aat') {
