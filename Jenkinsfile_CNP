@@ -33,7 +33,9 @@ withPipeline(type, product, component) {
   env.TEST_S2S_URL = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
 
   after('test') {
-    builder.gradle('integration')
+    build job: 'HMCTS_BSP/bulk-scan-ccd-event-handler-sample-app/PR-136',
+      parameters: []
+    //builder.gradle('functional')
   }
 
   after('smoketest:aat') {
