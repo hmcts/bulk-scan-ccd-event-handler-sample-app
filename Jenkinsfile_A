@@ -33,17 +33,6 @@ withPipeline(type, product, component) {
   env.TEST_S2S_NAME = 'bulk_scan_sample_app_tests'
   env.TEST_S2S_URL = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
 
-  after('test') {
-    //build job: 'HMCTS_BSP/bulk-scan-ccd-event-handler-sample-app/PR-136',
-    //  parameters: [string(name: 'LIB_VERSION', value: testBranch)],
-    //  wait: false
-    builder.gradle('integration')
-  }
-
-  after('smoketest:aat') {
-    sh "rm -rf infrastructure/"
-  }
-
   enableAksStagingDeployment()
   //installCharts()
   //enableSlackNotifications(channel)
