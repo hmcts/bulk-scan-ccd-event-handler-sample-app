@@ -1,6 +1,6 @@
 dependencies:
   - name: java
-    version: ~2.15.0
+    version: ~2.18.0
     repository: '@hmctspublic'
   - name: bulk-scan
     version: ~0.1.15
