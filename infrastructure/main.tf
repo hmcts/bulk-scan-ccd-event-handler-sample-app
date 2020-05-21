@@ -26,3 +26,24 @@ module "bulk-scan-ccd-event-handler-sample-app" {
     S2S_URL                 = local.s2s_url
   }
 }
+
+data "azurerm_key_vault" "bulk_scan_key_vault" {
+  name                = "${local.vaultName}"
+  resource_group_name = "${local.vaultName}"
+}
+
+data "azurerm_key_vault" "s2s_key_vault" {
+  name                = "s2s-${var.env}"
+  resource_group_name = "${local.s2s_rg}"
+}
+
+data "azurerm_key_vault_secret" "s2s_secret" {
+  key_vault_id = "${data.azurerm_key_vault.s2s_key_vault.id}"
+  name         = "microservicekey-bulk-scan-sample-app-tests"
+}
+
+resource "azurerm_key_vault_secret" "sample_app_s2s_secret" {
+  key_vault_id = "${data.azurerm_key_vault.bulk_scan_key_vault.id}"
+  name         = "microservicekey-bulk-scan-sample-app-tests"
+  value        = "${data.azurerm_key_vault_secret.s2s_secret.value}"
+}
