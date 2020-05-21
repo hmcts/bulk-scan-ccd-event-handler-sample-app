@@ -44,6 +44,6 @@ data "azurerm_key_vault_secret" "s2s_secret" {
 
 resource "azurerm_key_vault_secret" "sample_app_s2s_secret" {
   key_vault_id = "${data.azurerm_key_vault.bulk_scan_key_vault.id}"
-  name         = "sample_app_s2s_secret"
+  name         = "sample-app-s2s-secret"
   value        = "${data.azurerm_key_vault_secret.s2s_secret.value}"
 }
