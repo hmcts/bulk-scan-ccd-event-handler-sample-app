@@ -25,6 +25,26 @@
 
   <suppress until="2020-11-01">
     <notes><![CDATA[
+   file name: pact-jvm-provider-4.0.10.jar
+   ]]></notes>
+    <sha1>f6faed1cbff8ac867afe3ed6154b113e6c8849cb</sha1>
+    <cve>CVE-2019-11065</cve>
+    <cve>CVE-2019-15052</cve>
+    <cve>CVE-2019-16370</cve>
+  </suppress>
+
+  <suppress until="2020-11-01">
+    <notes><![CDATA[
+   file name: pact-jvm-provider-junit5-4.0.10.jar
+   ]]></notes>
+    <sha1>49a6015c6b84b7a9b719159f3c86e1b143a16277</sha1>
+    <cve>CVE-2019-11065</cve>
+    <cve>CVE-2019-15052</cve>
+    <cve>CVE-2019-16370</cve>
+  </suppress>
+
+  <suppress until="2020-11-01">
+    <notes><![CDATA[
    file name: pact-jvm-matchers_2.12-3.6.15.jar
    ]]></notes>
     <sha1>de554230aa8bd38611003ce5feddb8d9c7eeeb7d</sha1>
