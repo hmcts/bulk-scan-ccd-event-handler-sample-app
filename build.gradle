@@ -133,6 +133,8 @@ def pactBrokerUrl = 'https://pact-broker.platform.hmcts.net'
 pact {
   serviceProviders {
     'sample_app_ocr_validation' {
+      hasPactsFromPactBroker(pactBrokerUrl)
+      pact.verifier.publishResult = true
     }
   }
 }
@@ -203,7 +205,7 @@ dependencies {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
-  testImplementation group: 'au.com.dius', name: 'pact-jvm-provider-junit5_2.12', version: '3.6.15'
+  testImplementation group: 'au.com.dius', name: 'pact-jvm-provider-junit5', version: '4.0.10'
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
