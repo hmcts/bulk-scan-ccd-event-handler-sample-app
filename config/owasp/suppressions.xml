@@ -23,4 +23,88 @@
     <cve>CVE-2016-6798</cve>
   </suppress>
 
+  <suppress until="2020-11-01">
+    <notes><![CDATA[
+   file name: pact-jvm-matchers_2.12-3.6.15.jar
+   ]]></notes>
+    <sha1>de554230aa8bd38611003ce5feddb8d9c7eeeb7d</sha1>
+    <cve>CVE-2019-11065</cve>
+    <cve>CVE-2019-15052</cve>
+    <cve>CVE-2019-16370</cve>
+  </suppress>
+
+  <suppress until="2020-11-01">
+    <notes><![CDATA[
+   file name: pact-jvm-model-3.6.15.jar
+   ]]></notes>
+    <sha1>6fa7bf625df236cb195bc603b057d873cfd83969</sha1>
+    <cve>CVE-2019-11065</cve>
+    <cve>CVE-2019-15052</cve>
+    <cve>CVE-2019-16370</cve>
+  </suppress>
+
+  <suppress until="2020-11-01">
+    <notes><![CDATA[
+   file name: pact-jvm-pact-broker-3.6.15.jar
+   ]]></notes>
+    <sha1>acf02223b37313ccf21b039e18bbf9e507df82bd</sha1>
+    <cve>CVE-2019-11065</cve>
+    <cve>CVE-2019-15052</cve>
+    <cve>CVE-2019-16370</cve>
+  </suppress>
+
+  <suppress until="2020-11-01">
+    <notes><![CDATA[
+   file name: pact-jvm-provider-junit5_2.12-3.6.15.jar
+   ]]></notes>
+    <sha1>983076e3bf0fb99365f264afc8499b00d83d3846</sha1>
+    <cve>CVE-2019-11065</cve>
+    <cve>CVE-2019-15052</cve>
+    <cve>CVE-2019-16370</cve>
+  </suppress>
+
+  <suppress until="2020-11-01">
+    <notes><![CDATA[
+   file name: pact-jvm-provider_2.12-3.6.15.jar
+   ]]></notes>
+    <sha1>82eb8cbfc9c5563e28a84f6337fd2f25012f5754</sha1>
+    <cve>CVE-2019-11065</cve>
+    <cve>CVE-2019-15052</cve>
+    <cve>CVE-2019-16370</cve>
+  </suppress>
+
+  <suppress until="2020-11-01">
+    <notes><![CDATA[
+   file name: pact-jvm-support-3.6.15.jar
+   ]]></notes>
+    <sha1>fbc0d627099c0e8d09c4f3705072534335baa5f3</sha1>
+    <cve>CVE-2019-11065</cve>
+    <cve>CVE-2019-15052</cve>
+    <cve>CVE-2019-16370</cve>
+  </suppress>
+
+  <suppress until="2020-11-01">
+    <notes><![CDATA[
+   file name: scala-java8-compat_2.12-0.9.0.jar
+   ]]></notes>
+    <sha1>9525fb6bbf54a9caf0f7e1b65b261215b02fe939</sha1>
+    <cve>CVE-2017-15288</cve>
+  </suppress>
+
+  <suppress until="2020-11-01">
+    <notes><![CDATA[
+   file name: scala-parser-combinators_2.12-1.0.6.jar
+   ]]></notes>
+    <sha1>2785fb31169d9a89298eb05f748d90205bc2592e</sha1>
+    <cve>CVE-2017-15288</cve>
+  </suppress>
+
+  <suppress until="2020-11-01">
+    <notes><![CDATA[
+   file name: scala-xml_2.12-1.0.6.jar
+   ]]></notes>
+    <sha1>e22de3366a698a9f744106fb6dda4335838cf6a7</sha1>
+    <cve>CVE-2017-15288</cve>
+  </suppress>
+
 </suppressions>
