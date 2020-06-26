@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@SIDM_increase_FuncTest_timout")
 import uk.gov.hmcts.contino.GradleBuilder
 
 def type = "java"
