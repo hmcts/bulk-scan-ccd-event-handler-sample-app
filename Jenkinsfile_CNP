@@ -1,7 +1,8 @@
 #!groovy
 
-@Library("Infrastructure@SIDM_increase_FuncTest_timout")
+@Library("Infrastructure")
 import uk.gov.hmcts.contino.GradleBuilder
+import uk.gov.hmcts.contino.AppPipelineDsl
 
 def type = "java"
 def product = "bulk-scan"
