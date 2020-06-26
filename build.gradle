@@ -134,7 +134,6 @@ pact {
   serviceProviders {
     'sample_app_ocr_validation' {
       hasPactsFromPactBroker(pactBrokerUrl)
-      pact.verifier.publishResult = true
     }
   }
 }
