@@ -33,17 +33,14 @@ public class OcrValidationContractTest {
 
     @BeforeEach
     void setupTestTarget(PactVerificationContext context) {
-        System.getProperties().setProperty("pact.verifier.publishResults", "true");
         context.setTarget(new HttpTestTarget("localhost", port, "/"));
         when(authService.authenticate(any())).thenReturn("bulk_scan_sample_app_test");
         doNothing().when(authService).assertIsAllowedService(any());
-        System.out.println("SET MOCK values");
     }
 
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
     void pactVerificationTestTemplate(PactVerificationContext context) {
-        System.out.println("RUN VERIFICATION nnnnnnnnn");
         context.verifyInteraction();
     }
 
