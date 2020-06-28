@@ -132,7 +132,7 @@ def pactBrokerUrl = 'https://pact-broker.platform.hmcts.net'
 
 pact {
   serviceProviders {
-    'Sample_app' {
+    'sample_app_ocr_validation' {
       hasPactsFromPactBroker(pactBrokerUrl)
     }
   }
