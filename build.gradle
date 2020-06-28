@@ -128,6 +128,9 @@ dependencyCheck {
   }
 }
 
+def pactBrokerUrl = 'https://pact-broker.platform.hmcts.net'
+
+
 task runProviderPactVerification { }
 
 runProviderPactVerification.finalizedBy pactVerify
