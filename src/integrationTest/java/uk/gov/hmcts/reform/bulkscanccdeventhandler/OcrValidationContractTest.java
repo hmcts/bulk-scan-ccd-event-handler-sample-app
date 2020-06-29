@@ -9,9 +9,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.ForbiddenException;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @Provider("sample_app_ocr_validation")
@@ -23,10 +29,14 @@ public class OcrValidationContractTest {
     @LocalServerPort
     private int port;
 
+    @MockBean
+    private AuthService authService;
 
     @BeforeEach
     void setupTestTarget(PactVerificationContext context) {
         context.setTarget(new HttpTestTarget("localhost", port, "/"));
+        when(authService.authenticate(any())).thenReturn("bulk_scan_sample_app_test");
+        doThrow(new ForbiddenException("Teat data is not good")).when(authService).assertIsAllowedService(any());
     }
 
     @TestTemplate
