@@ -128,7 +128,12 @@ dependencyCheck {
   }
 }
 
-task runProviderPactVerification { }
+task runProviderPactVerification {
+  properties {
+    property "pact.verifier.publishResults", "true"
+    property "pact.provider.version", "0.0.1"
+  }
+}
 
 runProviderPactVerification.finalizedBy pactVerify
 repositories {
