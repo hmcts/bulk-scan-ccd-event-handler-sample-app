@@ -128,13 +128,6 @@ dependencyCheck {
   }
 }
 
-pact {
-  publish {
-    pactBrokerUrl = 'https://pact-broker.platform.hmcts.net'
-    version = '0.0.1'
-  }
-}
-
 task runProviderPactVerification { }
 
 runProviderPactVerification.finalizedBy pactVerify
