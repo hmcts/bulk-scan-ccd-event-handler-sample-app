@@ -44,5 +44,4 @@ public class OcrValidationContractTest {
     void pactVerificationTestTemplate(PactVerificationContext context) {
         context.verifyInteraction();
     }
-
 }
