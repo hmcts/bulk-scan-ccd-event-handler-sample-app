@@ -128,7 +128,7 @@ dependencyCheck {
   }
 }
 
-System.setProperty('pact.verifier.publishResults', true)
+System.setProperty('pact.verifier.publishResults', 'true')
 
 task runProviderPactVerification { }
 
