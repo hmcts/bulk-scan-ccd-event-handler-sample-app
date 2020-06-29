@@ -2,6 +2,7 @@
 
 @Library("Infrastructure")
 import uk.gov.hmcts.contino.GradleBuilder
+import uk.gov.hmcts.contino.AppPipelineDsl
 
 def type = "java"
 def product = "bulk-scan"
@@ -38,6 +39,7 @@ withPipeline(type, product, component) {
     sh "rm -rf infrastructure/"
   }
 
+  enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
   enableAksStagingDeployment()
   enableSlackNotifications(channel)
   loadVaultSecrets(secrets)
