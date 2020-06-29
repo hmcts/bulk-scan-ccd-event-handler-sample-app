@@ -130,7 +130,6 @@ dependencyCheck {
 
 task runProviderPactVerification {}
 
-runProviderPactVerification.setProperty("pact.verifier.publishResults", "true")
 runProviderPactVerification.finalizedBy pactVerify
 repositories {
   jcenter()
