@@ -128,13 +128,9 @@ dependencyCheck {
   }
 }
 
-task runProviderPactVerification {
-  properties {
-    property "pact.verifier.publishResults", "true"
-    property "pact.provider.version", "0.0.1"
-  }
-}
+task runProviderPactVerification {}
 
+runProviderPactVerification.setProperty("pact.verifier.publishResults", "true")
 runProviderPactVerification.finalizedBy pactVerify
 repositories {
   jcenter()
