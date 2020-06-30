@@ -32,7 +32,7 @@ public class OcrValidationContractTest {
     private AuthService authService;
 
     @BeforeEach
-    void setupTestTarget(PactVerificationContext context) {
+    public void setupTestTarget(PactVerificationContext context) {
         System.getProperties().setProperty("pact.verifier.publishResults", "true");
         context.setTarget(new HttpTestTarget("localhost", port, "/"));
         when(authService.authenticate(any())).thenReturn("bulk_scan_sample_app_test");
@@ -41,7 +41,7 @@ public class OcrValidationContractTest {
 
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
-    void pactVerificationTestTemplate(PactVerificationContext context) {
+    public void pactVerificationTestTemplate(PactVerificationContext context) {
         context.verifyInteraction();
     }
 }
