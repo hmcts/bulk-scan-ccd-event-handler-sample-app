@@ -8,6 +8,7 @@ import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvide
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -31,9 +32,12 @@ public class OcrValidationContractTest {
     @MockBean
     private AuthService authService;
 
+    @Value("${pact.verifier.publishResults}")
+    private String publishResults;
+
     @BeforeEach
     public void setupTestTarget(PactVerificationContext context) {
-        System.getProperties().setProperty("pact.verifier.publishResults", "true");
+        System.getProperties().setProperty("pact.verifier.publishResults", publishResults);
         context.setTarget(new HttpTestTarget("localhost", port, "/"));
         when(authService.authenticate(any())).thenReturn("bulk_scan_sample_app_test");
         doNothing().when(authService).assertIsAllowedService(any());
