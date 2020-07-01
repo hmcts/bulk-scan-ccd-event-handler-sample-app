@@ -39,7 +39,6 @@ withPipeline(type, product, component) {
   after('smoketest:aat') {
     sh "rm -rf infrastructure/"
   }
-  enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
 
   enableAksStagingDeployment()
   enableSlackNotifications(channel)
