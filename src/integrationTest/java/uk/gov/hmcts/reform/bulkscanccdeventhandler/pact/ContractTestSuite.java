@@ -35,4 +35,6 @@ abstract class ContractTestSuite {
         when(authService.authenticate(any())).thenReturn("bulk_scan_sample_app_test");
         doNothing().when(authService).assertIsAllowedService(any());
     }
+
+    public abstract void pactVerificationTestTemplate(PactVerificationContext context);
 }

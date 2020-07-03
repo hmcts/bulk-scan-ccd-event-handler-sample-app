@@ -11,6 +11,7 @@ class OcrValidationContractTest extends ContractTestSuite {
 
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
+    @Override
     public void pactVerificationTestTemplate(PactVerificationContext context) {
         context.verifyInteraction();
     }
