@@ -20,11 +20,11 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@Provider("sample_app_ocr_validation")
+@Provider("bulk_scan_sample_app")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @PactBroker(host = "pact-broker.platform.hmcts.net", port = "443", scheme = "https")
-public class OcrValidationContractTest {
+public class PactContractsTest {
 
     @LocalServerPort
     private int port;
