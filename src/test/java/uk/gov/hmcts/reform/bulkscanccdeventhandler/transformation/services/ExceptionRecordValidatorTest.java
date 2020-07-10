@@ -73,7 +73,11 @@ public class ExceptionRecordValidatorTest {
             now(),
             now(),
             emptyList(),
-            ocrData
+            ocrData,
+            null,
+            null,
+            null,
+            null
         );
     }
 }

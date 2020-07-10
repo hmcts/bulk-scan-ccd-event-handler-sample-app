@@ -72,7 +72,11 @@ public class ExceptionRecordToCaseTransformerTest {
             asList(
                 new OcrDataField(OcrFieldNames.FIRST_NAME, "John"),
                 new OcrDataField(OcrFieldNames.LAST_NAME, "Smith")
-            )
+            ),
+            null,
+            null,
+            null,
+            null
         );
 
         // and
