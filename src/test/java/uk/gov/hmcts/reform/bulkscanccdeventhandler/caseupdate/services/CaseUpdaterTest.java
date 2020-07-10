@@ -114,7 +114,11 @@ public class CaseUpdaterTest {
                     exScannedDate,
                     exDeliveryDate)
             ),
-            emptyList()
+            emptyList(),
+            null,
+            false,
+            null,
+            null
         );
 
         given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
@@ -124,7 +128,7 @@ public class CaseUpdaterTest {
             caseUpdater.update(
                 new CaseUpdate(
                     exceptionRecord,
-                    new CaseDetails("1234567890","some_type", originalCase)
+                    new CaseDetails("1234567890", "some_type", originalCase)
                 )
             );
 
@@ -253,7 +257,11 @@ public class CaseUpdaterTest {
             now(),
             now(),
             emptyList(),
-            emptyList()
+            emptyList(),
+            null,
+            false,
+            null,
+            null
         );
 
         // when

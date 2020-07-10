@@ -21,33 +21,14 @@ public class TransformationTest {
 
     private final TestHelper testHelper = new TestHelper();
 
-    @SuppressWarnings("unchecked")
     @Test
     public void should_transform_exception_record_successfully_without_any_warnings() {
-        Response response = testHelper.postWithBody(
-            "/transform-exception-record",
-            TestHelper.fileContentAsString("exception-records/valid.json")
-        );
+        trasnformExceptionRecordAndVerifyResponse("exception-records/valid.json");
+    }
 
-        assertThat(response.getStatusCode()).isEqualTo(OK.value());
-
-        JsonPath transformationResponse = response.getBody().jsonPath();
-
-        assertSoftly(softly -> {
-            softly.assertThat(transformationResponse.getList("warnings")).isEmpty();
-            softly.assertThat(transformationResponse.getMap("case_creation_details").get("case_type_id"))
-                .isEqualTo(ExceptionRecordToCaseTransformer.CASE_TYPE_ID);
-            softly.assertThat(transformationResponse.getMap("case_creation_details").get("event_id"))
-                .isEqualTo(ExceptionRecordToCaseTransformer.EVENT_ID);
-
-            Map<String, Object> caseData = (Map<String, Object>) transformationResponse
-                .getMap("case_creation_details")
-                .get("case_data");
-
-            softly.assertThat(caseData.get("email")).isEqualTo("hello@test.com");
-
-            softly.assertAll();
-        });
+    @Test
+    public void should_transform_exception_record_with_auto_case_creation_fields_without_any_warnings() {
+        trasnformExceptionRecordAndVerifyResponse("exception-records/valid-with-auto-case-creation-fields.json");
     }
 
     @Test
@@ -84,5 +65,33 @@ public class TransformationTest {
             .containsOnly("'last_name' is required");
         assertThat(errorResponse.getList("warnings")).isEmpty();
         assertThat(errorResponse.getMap("")).containsOnlyKeys("errors", "warnings");
+    }
+
+    @SuppressWarnings("unchecked")
+    private void trasnformExceptionRecordAndVerifyResponse(String fileName) {
+        Response response = testHelper.postWithBody(
+            "/transform-exception-record",
+            TestHelper.fileContentAsString(fileName)
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(OK.value());
+
+        JsonPath transformationResponse = response.getBody().jsonPath();
+
+        assertSoftly(softly -> {
+            softly.assertThat(transformationResponse.getList("warnings")).isEmpty();
+            softly.assertThat(transformationResponse.getMap("case_creation_details").get("case_type_id"))
+                .isEqualTo(ExceptionRecordToCaseTransformer.CASE_TYPE_ID);
+            softly.assertThat(transformationResponse.getMap("case_creation_details").get("event_id"))
+                .isEqualTo(ExceptionRecordToCaseTransformer.EVENT_ID);
+
+            Map<String, Object> caseData = (Map<String, Object>) transformationResponse
+                .getMap("case_creation_details")
+                .get("case_data");
+
+            softly.assertThat(caseData.get("email")).isEqualTo("hello@test.com");
+
+            softly.assertAll();
+        });
     }
 }

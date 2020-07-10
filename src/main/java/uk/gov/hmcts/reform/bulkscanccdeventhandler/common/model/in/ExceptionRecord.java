@@ -18,7 +18,26 @@ public class ExceptionRecord {
     public final LocalDateTime openingDate;
     public final List<InputScannedDoc> scannedDocuments;
     public final List<OcrDataField> ocrDataFields;
+    public final String envelopeId;
+    public final boolean isAutomatedProcess;
+    public final String exceptionRecordId;
+    public final String exceptionRecordCaseTypeId;
 
+    /**
+     * Used for 2 transformation endpoints:
+     * <ul>
+     *     <li>Exception record transformation</li>
+     *     <li>Auto case creation transformation</li>
+     * </ul>
+     * The following fields are added for Auto Case creation transformation request.
+     * <ul>
+     *     <li>envelope_id</li>
+     *     <li>is_automated_process</li>
+     *     <li>exception_record_id - replaces id in the Exception Record transformation request</li>
+     *     <li>exception_record_case_type_id - replaces case_type_id in the Exception Record transformation</li>
+     * </ul>
+     * id and case_type_id fields can be removed after moving to the Auto case creation transformation endpoint.
+     */
     public ExceptionRecord(
         @JsonProperty("id") String id,
         @JsonProperty("case_type_id") String caseTypeId,
@@ -29,7 +48,12 @@ public class ExceptionRecord {
         @JsonProperty("delivery_date") LocalDateTime deliveryDate,
         @JsonProperty("opening_date") LocalDateTime openingDate,
         @JsonProperty("scanned_documents") List<InputScannedDoc> scannedDocuments,
-        @JsonProperty("ocr_data_fields") List<OcrDataField> ocrDataFields
+        @JsonProperty("ocr_data_fields") List<OcrDataField> ocrDataFields,
+        // Auto Case creation request fields
+        @JsonProperty("envelope_id") String envelopeId,
+        @JsonProperty("is_automated_process") boolean isAutomatedProcess,
+        @JsonProperty("exception_record_id") String exceptionRecordId,
+        @JsonProperty("exception_record_case_type_id") String exceptionRecordCaseTypeId
     ) {
         this.id = id;
         this.caseTypeId = caseTypeId;
@@ -41,5 +65,9 @@ public class ExceptionRecord {
         this.openingDate = openingDate;
         this.scannedDocuments = scannedDocuments;
         this.ocrDataFields = ocrDataFields;
+        this.envelopeId = envelopeId;
+        this.isAutomatedProcess = isAutomatedProcess;
+        this.exceptionRecordId = exceptionRecordId;
+        this.exceptionRecordCaseTypeId = exceptionRecordCaseTypeId;
     }
 }
