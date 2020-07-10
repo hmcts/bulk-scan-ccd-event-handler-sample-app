@@ -74,7 +74,7 @@ public class ExceptionRecordToCaseTransformerTest {
                 new OcrDataField(OcrFieldNames.LAST_NAME, "Smith")
             ),
             null,
-            null,
+            false,
             null,
             null
         );

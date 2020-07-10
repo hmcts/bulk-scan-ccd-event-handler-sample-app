@@ -75,7 +75,7 @@ public class ExceptionRecordValidatorTest {
             emptyList(),
             ocrData,
             null,
-            null,
+            false,
             null,
             null
         );

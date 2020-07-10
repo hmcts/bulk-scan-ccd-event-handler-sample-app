@@ -116,7 +116,7 @@ public class CaseUpdaterTest {
             ),
             emptyList(),
             null,
-            null,
+            false,
             null,
             null
         );
@@ -259,7 +259,7 @@ public class CaseUpdaterTest {
             emptyList(),
             emptyList(),
             null,
-            null,
+            false,
             null,
             null
         );

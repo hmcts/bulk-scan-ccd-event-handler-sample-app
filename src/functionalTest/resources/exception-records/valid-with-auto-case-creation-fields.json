@@ -1,6 +1,6 @@
 {
   "envelope_id": "envelope_id",
-  "is_automated_process": "false",
+  "is_automated_process": false,
   "exception_record_id": "er_id",
   "exception_record_case_type_id": "exception_record_case_type_id",
   "id": "id",
