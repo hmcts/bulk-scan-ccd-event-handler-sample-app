@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
@@ -57,6 +58,9 @@ public class ExceptionRecordToCaseTransformer {
     }
 
     private SampleCase buildCase(ExceptionRecord er) {
+        // New transformation request contains exceptionRecordId
+        // Old transformation request contains id field, which is the exception record id
+        String exceptionRecordReference = StringUtils.isNotEmpty(er.exceptionRecordId) ? er.exceptionRecordId : er.id;
         return new SampleCase(
             get(er, LEGACY_ID),
             get(er, FIRST_NAME),
@@ -67,7 +71,7 @@ public class ExceptionRecordToCaseTransformer {
             addressExtractor.extractFrom(er.ocrDataFields),
             er.scannedDocuments
                 .stream()
-                .map(it -> documentMapper.toCaseDoc(it, er.id))
+                .map(it -> documentMapper.toCaseDoc(it, exceptionRecordReference, er.isAutomatedProcess))
                 .collect(toList()),
             er.id
         );
