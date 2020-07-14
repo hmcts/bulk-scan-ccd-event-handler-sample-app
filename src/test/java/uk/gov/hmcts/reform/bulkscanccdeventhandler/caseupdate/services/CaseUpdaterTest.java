@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdate;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateDetailsRequest;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
@@ -121,6 +122,38 @@ public class CaseUpdaterTest {
             null
         );
 
+        CaseUpdateDetailsRequest caseUpdateDetails = new CaseUpdateDetailsRequest(
+            "er-id",
+            "er-case-type",
+            "er-pobox",
+            "er-jurisdiction",
+            "er-form-type",
+            JourneyClassification.SUPPLEMENTARY_EVIDENCE_WITH_OCR,
+            now(),
+            now(),
+            Arrays.asList(
+                new InputScannedDoc(
+                    "Form_1",
+                    "subtype_1",
+                    new InputScannedDocUrl("file://file_1", "binary_url_1", "file_name_1"),
+                    "control_number_1",
+                    "file_name_11",
+                    exScannedDate,
+                    exDeliveryDate),
+                new InputScannedDoc(
+                    "Form_2",
+                    "subtype_2",
+                    new InputScannedDocUrl("file://file_2", "binary_url_2", "file_name_2"),
+                    "control_number_2",
+                    "file_name_22",
+                    exScannedDate,
+                    exDeliveryDate)
+            ),
+            emptyList(),
+            null,
+            false
+        );
+
         given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
 
         // when
@@ -128,6 +161,7 @@ public class CaseUpdaterTest {
             caseUpdater.update(
                 new CaseUpdate(
                     exceptionRecord,
+                    caseUpdateDetails,
                     new CaseDetails("1234567890", "some_type", originalCase)
                 )
             );
@@ -264,11 +298,27 @@ public class CaseUpdaterTest {
             null
         );
 
+        CaseUpdateDetailsRequest caseUpdateDetails = new CaseUpdateDetailsRequest(
+            "er-id",
+            "er-case-type",
+            "er-pobox",
+            "er-jurisdiction",
+            "er-form-type",
+            JourneyClassification.SUPPLEMENTARY_EVIDENCE_WITH_OCR,
+            now(),
+            now(),
+            emptyList(),
+            emptyList(),
+            null,
+            false
+        );
+
         // when
         IllegalArgumentException exception = catchThrowableOfType(() ->
             caseUpdater.update(
                 new CaseUpdate(
                     exceptionRecord,
+                    caseUpdateDetails,
                     new CaseDetails("1234567890","some_type", originalCase)
                 )
             ),

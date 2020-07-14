@@ -21,8 +21,17 @@ public class UpdateCaseTest {
 
     @Test
     public void should_update_case() throws JSONException {
+        updateCaseAndVerifyResponse("updatecase/valid-request.json");
+    }
+
+    @Test
+    public void should_update_case_by_exception_record_with_auto_update_fields_without_warnings() throws JSONException {
+        updateCaseAndVerifyResponse("updatecase/valid-request-with-auto-case-update-fields.json");
+    }
+
+    private void updateCaseAndVerifyResponse(String s) throws JSONException {
         // given
-        String request = TestHelper.fileContentAsString("updatecase/valid-request.json");
+        String request = TestHelper.fileContentAsString(s);
 
         // when
         Response response = testHelper.postWithBody("/update-case", request);
