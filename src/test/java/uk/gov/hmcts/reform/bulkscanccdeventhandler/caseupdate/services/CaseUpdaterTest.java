@@ -150,8 +150,7 @@ public class CaseUpdaterTest {
                     exDeliveryDate)
             ),
             emptyList(),
-            null,
-            false
+            null
         );
 
         given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
@@ -160,6 +159,7 @@ public class CaseUpdaterTest {
         SuccessfulUpdateResponse result =
             caseUpdater.update(
                 new CaseUpdate(
+                    false,
                     exceptionRecord,
                     caseUpdateDetails,
                     new CaseDetails("1234567890", "some_type", originalCase)
@@ -309,14 +309,14 @@ public class CaseUpdaterTest {
             now(),
             emptyList(),
             emptyList(),
-            null,
-            false
+            null
         );
 
         // when
         IllegalArgumentException exception = catchThrowableOfType(() ->
             caseUpdater.update(
                 new CaseUpdate(
+                    false,
                     exceptionRecord,
                     caseUpdateDetails,
                     new CaseDetails("1234567890","some_type", originalCase)

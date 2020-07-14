@@ -5,6 +5,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionReco
 
 public class CaseUpdate {
 
+    public final boolean isAutomatedProcess;
     public final ExceptionRecord exceptionRecord;
     public final CaseUpdateDetailsRequest caseUpdateDetails;
     public final CaseDetails caseDetails;
@@ -19,10 +20,12 @@ public class CaseUpdate {
      * <i>exception_record</i> element can be removed after moving to the Auto case update endpoint.
      */
     public CaseUpdate(
+        @JsonProperty("is_automated_process") boolean isAutomatedProcess,
         @JsonProperty("exception_record") ExceptionRecord exceptionRecord,
         @JsonProperty("case_update_details") CaseUpdateDetailsRequest caseUpdateDetails,
         @JsonProperty("case_details") CaseDetails caseDetails
     ) {
+        this.isAutomatedProcess = isAutomatedProcess;
         this.exceptionRecord = exceptionRecord;
         this.caseUpdateDetails = caseUpdateDetails;
         this.caseDetails = caseDetails;

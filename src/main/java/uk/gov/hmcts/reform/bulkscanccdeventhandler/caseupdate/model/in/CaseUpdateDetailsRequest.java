@@ -20,7 +20,6 @@ public class CaseUpdateDetailsRequest {
     public final List<InputScannedDoc> scannedDocuments;
     public final List<OcrDataField> ocrDataFields;
     public final String envelopeId;
-    public final boolean isAutomatedProcess;
 
     public CaseUpdateDetailsRequest(
         @JsonProperty("exception_record_id") String exceptionRecordId,
@@ -34,8 +33,7 @@ public class CaseUpdateDetailsRequest {
         @JsonProperty("scanned_documents") List<InputScannedDoc> scannedDocuments,
         @JsonProperty("ocr_data_fields") List<OcrDataField> ocrDataFields,
         // Auto Case creation request fields
-        @JsonProperty("envelope_id") String envelopeId,
-        @JsonProperty("is_automated_process") boolean isAutomatedProcess
+        @JsonProperty("envelope_id") String envelopeId
     ) {
         this.exceptionRecordId = exceptionRecordId;
         this.exceptionRecordCaseTypeId = exceptionRecordCaseTypeId;
@@ -48,6 +46,5 @@ public class CaseUpdateDetailsRequest {
         this.scannedDocuments = scannedDocuments;
         this.ocrDataFields = ocrDataFields;
         this.envelopeId = envelopeId;
-        this.isAutomatedProcess = isAutomatedProcess;
     }
 }
