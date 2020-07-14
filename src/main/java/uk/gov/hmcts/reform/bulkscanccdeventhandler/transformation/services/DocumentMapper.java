@@ -14,11 +14,9 @@ public class DocumentMapper {
      */
     public Item<ScannedDocument> toCaseDoc(
         InputScannedDoc exceptionRecordDoc,
-        String exceptionRecordReference,
-        boolean isAutomatedProcess
+        String exceptionRecordReference
     ) {
-        if (!isAutomatedProcess && exceptionRecordDoc == null) {
-            // When request is NOT auto case creation and exception record reference is null
+        if (exceptionRecordDoc == null) {
             return null;
         } else {
             return new Item<>(new ScannedDocument(
