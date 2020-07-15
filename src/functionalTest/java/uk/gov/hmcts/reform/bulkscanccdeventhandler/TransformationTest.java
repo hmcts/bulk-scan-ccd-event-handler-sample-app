@@ -19,17 +19,20 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 @TestPropertySource("classpath:application.conf")
 public class TransformationTest {
 
+    public static final String TRANSFORM_EXCEPTION_RECORD_REQUEST_PATH = "/transform-exception-record";
+    public static final String TRANSFORM_SCANNED_DATA_REQUEST_PATH = "/transform-scanned-data";
+
     private final TestHelper testHelper = new TestHelper();
 
     @Test
     public void should_transform_exception_record_successfully_without_any_warnings() {
-        trasnformExceptionRecordAndVerifyResponse("/transform-exception-record", "exception-records/valid.json");
+        trasnformExceptionRecordAndVerifyResponse(TRANSFORM_EXCEPTION_RECORD_REQUEST_PATH, "exception-records/valid.json");
     }
 
     @Test
     public void should_transform_exception_record_with_auto_case_creation_fields_without_any_warnings() {
         trasnformExceptionRecordAndVerifyResponse(
-            "/transform-exception-record",
+            TRANSFORM_EXCEPTION_RECORD_REQUEST_PATH,
             "exception-records/valid-with-auto-case-creation-fields.json"
         );
     }
@@ -37,7 +40,7 @@ public class TransformationTest {
     @Test
     public void should_transform_exception_record_successfully_with_warning() {
         Response response = testHelper.postWithBody(
-            "/transform-exception-record",
+            TRANSFORM_EXCEPTION_RECORD_REQUEST_PATH,
             TestHelper.fileContentAsString("exception-records/valid-missing-email.json")
         );
 
@@ -55,7 +58,7 @@ public class TransformationTest {
     @Test
     public void should_not_transform_exception_record_and_respond_with_422() {
         Response response = testHelper.postWithBody(
-            "/transform-exception-record",
+            TRANSFORM_EXCEPTION_RECORD_REQUEST_PATH,
             TestHelper.fileContentAsString("exception-records/invalid-missing-last-name.json")
         );
 
@@ -73,7 +76,7 @@ public class TransformationTest {
     @Test
     public void should_transform_auto_case_creation_request_data_successfully_without_any_warnings() {
         trasnformExceptionRecordAndVerifyResponse(
-            "/transform-scanned-data",
+            TRANSFORM_SCANNED_DATA_REQUEST_PATH,
             "exception-records/valid-auto-case-creation.json"
         );
     }
@@ -81,7 +84,7 @@ public class TransformationTest {
     @Test
     public void should_transform_exception_data_successfully_without_any_warnings() {
         trasnformExceptionRecordAndVerifyResponse(
-            "/transform-scanned-data",
+            TRANSFORM_SCANNED_DATA_REQUEST_PATH,
             "exception-records/valid-exception-record-request.json"
         );
     }
