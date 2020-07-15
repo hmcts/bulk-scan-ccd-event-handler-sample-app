@@ -102,7 +102,7 @@ sonarqube {
     // CaseUpdateDetails mostly duplicates ExceptionRecord.
     // Introducing inheritance to avoid this duplication would make these classes coupled
     // though they are intended for different purposes.
-    // Exclusion of CaseUpdateDetails will go after getting rid of ExceptionRecord.
+    // TODO: remove exclusion of CaseUpdateDetails after getting rid of ExceptionRecord
     property "sonar.exclusions", "**/config/**, **/CaseUpdateDetails.java"
   }
 }
