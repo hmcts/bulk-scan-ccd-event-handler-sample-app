@@ -8,7 +8,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDat
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class CaseUpdateDetailsRequest {
+public class CaseUpdateDetails {
     public final String exceptionRecordId;
     public final String exceptionRecordCaseTypeId;
     public final String poBox;
@@ -21,7 +21,7 @@ public class CaseUpdateDetailsRequest {
     public final List<OcrDataField> ocrDataFields;
     public final String envelopeId;
 
-    public CaseUpdateDetailsRequest(
+    public CaseUpdateDetails(
         @JsonProperty("exception_record_id") String exceptionRecordId,
         @JsonProperty("exception_record_case_type_id") String exceptionRecordCaseTypeId,
         @JsonProperty("po_box") String poBox,

@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdate;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateDetailsRequest;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
@@ -122,7 +122,7 @@ public class CaseUpdaterTest {
             null
         );
 
-        CaseUpdateDetailsRequest caseUpdateDetails = new CaseUpdateDetailsRequest(
+        CaseUpdateDetails caseUpdateDetails = new CaseUpdateDetails(
             "er-id",
             "er-case-type",
             "er-pobox",
@@ -298,7 +298,7 @@ public class CaseUpdaterTest {
             null
         );
 
-        CaseUpdateDetailsRequest caseUpdateDetails = new CaseUpdateDetailsRequest(
+        CaseUpdateDetails caseUpdateDetails = new CaseUpdateDetails(
             "er-id",
             "er-case-type",
             "er-pobox",

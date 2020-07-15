@@ -7,7 +7,7 @@ public class CaseUpdate {
 
     public final boolean isAutomatedProcess;
     public final ExceptionRecord exceptionRecord;
-    public final CaseUpdateDetailsRequest caseUpdateDetails;
+    public final CaseUpdateDetails caseUpdateDetails;
     public final CaseDetails caseDetails;
 
     /**
@@ -22,7 +22,7 @@ public class CaseUpdate {
     public CaseUpdate(
         @JsonProperty("is_automated_process") boolean isAutomatedProcess,
         @JsonProperty("exception_record") ExceptionRecord exceptionRecord,
-        @JsonProperty("case_update_details") CaseUpdateDetailsRequest caseUpdateDetails,
+        @JsonProperty("case_update_details") CaseUpdateDetails caseUpdateDetails,
         @JsonProperty("case_details") CaseDetails caseDetails
     ) {
         this.isAutomatedProcess = isAutomatedProcess;
