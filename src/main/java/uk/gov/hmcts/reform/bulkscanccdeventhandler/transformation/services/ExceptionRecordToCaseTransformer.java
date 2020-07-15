@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.CaseCreationDetails;
@@ -42,10 +42,10 @@ public class ExceptionRecordToCaseTransformer {
     }
     // endregion
 
-    public SuccessfulTransformationResponse toCase(ExceptionRecord exceptionRecord) {
-        exceptionRecordValidator.assertIsValid(exceptionRecord);
+    public SuccessfulTransformationResponse toCase(TransformationInput transformationInput) {
+        exceptionRecordValidator.assertIsValid(transformationInput);
 
-        SampleCase caseData = buildCase(exceptionRecord);
+        SampleCase caseData = buildCase(transformationInput);
 
         return new SuccessfulTransformationResponse(
             new CaseCreationDetails(
@@ -57,7 +57,7 @@ public class ExceptionRecordToCaseTransformer {
         );
     }
 
-    private SampleCase buildCase(ExceptionRecord er) {
+    private SampleCase buildCase(TransformationInput er) {
         // New transformation request contains exceptionRecordId
         // Old transformation request contains id field, which is the exception record id
         String exceptionRecordReference = StringUtils.isNotEmpty(er.exceptionRecordId) ? er.exceptionRecordId : er.id;

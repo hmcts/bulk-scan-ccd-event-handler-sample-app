@@ -35,11 +35,11 @@ public class CaseUpdater {
 
     public SuccessfulUpdateResponse update(CaseUpdate caseUpdate) {
         Assert.notEmpty(
-            caseUpdate.exceptionRecord.scannedDocuments,
+            caseUpdate.transformationInput.scannedDocuments,
             "Missing scanned documents in exception record"
         );
 
-        Address newAddress = addressExtractor.extractFrom(caseUpdate.exceptionRecord.ocrDataFields);
+        Address newAddress = addressExtractor.extractFrom(caseUpdate.transformationInput.ocrDataFields);
 
         LOG.info("Case update, case details id: {}",caseUpdate.caseDetails.id);
 
@@ -54,7 +54,7 @@ public class CaseUpdater {
             originalCase.contactNumber,
             originalCase.email,
             newAddress,
-            mergeScannedDocuments(originalCase.scannedDocuments, caseUpdate.exceptionRecord.scannedDocuments),
+            mergeScannedDocuments(originalCase.scannedDocuments, caseUpdate.transformationInput.scannedDocuments),
             originalCase.bulkScanCaseReference
         );
 

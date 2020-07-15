@@ -8,10 +8,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdate;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDocUrl;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.JourneyClassification;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Address;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.DocumentUrl;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
@@ -24,6 +24,7 @@ import java.util.Arrays;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.assertj.core.api.Assertions.tuple;
@@ -67,8 +68,8 @@ public class CaseUpdaterTest {
             "contact-number",
             "email",
             originalCaseAddress,
-            Arrays.asList(
-                new Item<ScannedDocument>(
+            singletonList(
+                new Item<>(
                     new ScannedDocument(
                         "type_A",
                         "subtype_A",
@@ -87,7 +88,7 @@ public class CaseUpdaterTest {
         LocalDateTime exScannedDate = now();
         LocalDateTime exDeliveryDate = now();
 
-        ExceptionRecord exceptionRecord = new ExceptionRecord(
+        TransformationInput transformationInput = new TransformationInput(
             "er-id",
             "er-case-type",
             "er-pobox",
@@ -127,7 +128,7 @@ public class CaseUpdaterTest {
         SuccessfulUpdateResponse result =
             caseUpdater.update(
                 new CaseUpdate(
-                    exceptionRecord,
+                    transformationInput,
                     new CaseDetails("1234567890", "some_type", originalCase)
                 )
             );
@@ -247,7 +248,7 @@ public class CaseUpdaterTest {
             "er-id"
         );
 
-        ExceptionRecord exceptionRecord = new ExceptionRecord(
+        TransformationInput transformationInput = new TransformationInput(
             "er-id",
             "er-case-type",
             "er-pobox",
@@ -268,7 +269,7 @@ public class CaseUpdaterTest {
         IllegalArgumentException exception = catchThrowableOfType(() ->
             caseUpdater.update(
                 new CaseUpdate(
-                    exceptionRecord,
+                    transformationInput,
                     new CaseDetails("1234567890","some_type", originalCase)
                 )
             ),

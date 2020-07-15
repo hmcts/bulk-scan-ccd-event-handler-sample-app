@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SuccessfulTransformationResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer;
 
@@ -33,26 +33,26 @@ public class TransformationController {
     @PostMapping("/transform-exception-record")
     public SuccessfulTransformationResponse transform(
         @RequestHeader(name = "ServiceAuthorization", required = false) String serviceAuthHeader,
-        @Valid @RequestBody ExceptionRecord exceptionRecord
+        @Valid @RequestBody TransformationInput transformationInput
     ) {
         String serviceName = authService.authenticate(serviceAuthHeader);
         LOGGER.info("Request received to transform from service {}", serviceName);
 
         authService.assertIsAllowedService(serviceName);
 
-        return transformer.toCase(exceptionRecord);
+        return transformer.toCase(transformationInput);
     }
 
     @PostMapping("/transform-scanned-data")
     public SuccessfulTransformationResponse transformScannedData(
         @RequestHeader(name = "ServiceAuthorization", required = false) String serviceAuthHeader,
-        @Valid @RequestBody ExceptionRecord exceptionRecord
+        @Valid @RequestBody TransformationInput transformationInput
     ) {
         String serviceName = authService.authenticate(serviceAuthHeader);
         LOGGER.info("Request received to transform scanned data from service {}", serviceName);
 
         authService.assertIsAllowedService(serviceName);
 
-        return transformer.toCase(exceptionRecord);
+        return transformer.toCase(transformationInput);
     }
 }
