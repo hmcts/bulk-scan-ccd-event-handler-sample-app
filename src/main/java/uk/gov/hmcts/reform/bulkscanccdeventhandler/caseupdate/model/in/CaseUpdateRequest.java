@@ -3,23 +3,19 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
 
-public class CaseUpdate {
+public class CaseUpdateRequest {
 
     public final boolean isAutomatedProcess;
+
+    // exception_record element will be removed after moving to the Auto case update endpoint.
+    // case_update_details will be used instead, exception_record is preserved
+    // for now in order to prevent breaking changes and offer smooth transition to services
     public final ExceptionRecord exceptionRecord;
+
     public final CaseUpdateDetails caseUpdateDetails;
     public final CaseDetails caseDetails;
 
-    /**
-     * Used for 2 case update endpoints:
-     * <ul>
-     *     <li>Exception record case update</li>
-     *     <li>Auto case update</li>
-     * </ul>
-     * <i>case_update_details</i> element is added for Auto Case update request.
-     * <i>exception_record</i> element can be removed after moving to the Auto case update endpoint.
-     */
-    public CaseUpdate(
+    public CaseUpdateRequest(
         @JsonProperty("is_automated_process") boolean isAutomatedProcess,
         @JsonProperty("exception_record") ExceptionRecord exceptionRecord,
         @JsonProperty("case_update_details") CaseUpdateDetails caseUpdateDetails,

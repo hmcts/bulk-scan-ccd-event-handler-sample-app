@@ -32,7 +32,6 @@ public class CaseUpdateDetails {
         @JsonProperty("opening_date") LocalDateTime openingDate,
         @JsonProperty("scanned_documents") List<InputScannedDoc> scannedDocuments,
         @JsonProperty("ocr_data_fields") List<OcrDataField> ocrDataFields,
-        // Auto Case creation request fields
         @JsonProperty("envelope_id") String envelopeId
     ) {
         this.exceptionRecordId = exceptionRecordId;

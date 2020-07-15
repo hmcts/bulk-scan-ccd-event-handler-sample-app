@@ -6,8 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseDetails;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdate;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateDetails;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateRequest;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
@@ -22,6 +22,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Collections.emptyList;
@@ -158,7 +159,7 @@ public class CaseUpdaterTest {
         // when
         SuccessfulUpdateResponse result =
             caseUpdater.update(
-                new CaseUpdate(
+                new CaseUpdateRequest(
                     false,
                     exceptionRecord,
                     caseUpdateDetails,
@@ -167,96 +168,17 @@ public class CaseUpdaterTest {
             );
 
         // then
-        assertThat(result.caseUpdateDetails.caseData.address.addressLine1).isEqualTo(exceptionRecordAddress.addressLine1);
-        assertThat(result.caseUpdateDetails.caseData.address.addressLine2).isEqualTo(exceptionRecordAddress.addressLine2);
-        assertThat(result.caseUpdateDetails.caseData.address.addressLine3).isEqualTo(exceptionRecordAddress.addressLine3);
-        assertThat(result.caseUpdateDetails.caseData.address.country).isEqualTo(exceptionRecordAddress.country);
-        assertThat(result.caseUpdateDetails.caseData.address.county).isEqualTo(exceptionRecordAddress.county);
-        assertThat(result.caseUpdateDetails.caseData.address.postCode).isEqualTo(exceptionRecordAddress.postCode);
-        assertThat(result.caseUpdateDetails.caseData.address.postTown).isEqualTo(exceptionRecordAddress.postTown);
-
-        assertThat(result.caseUpdateDetails.caseData)
-            .extracting(c -> tuple(
-                c.legacyId,
-                c.firstName,
-                c.lastName,
-                c.dateOfBirth,
-                c.bulkScanCaseReference
-            ))
-            .isEqualTo(tuple(
-                originalCase.legacyId,
-                originalCase.firstName,
-                originalCase.lastName,
-                originalCase.dateOfBirth,
-                originalCase.bulkScanCaseReference
-            ));
-
+        assertResultAddressIsCorrect(result.caseUpdateDetails.caseData.address, exceptionRecordAddress);
+        assertResultFieldsAreCorrect(result.caseUpdateDetails.caseData, originalCase);
+        assertResultScannedDocumentsAreCorrect(
+            result.caseUpdateDetails.caseData.scannedDocuments,
+            caseScannedDate,
+            caseDeliveryDate,
+            exScannedDate,
+            exDeliveryDate
+        );
         assertThat(result.warnings).isEmpty();
         assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(0).value.type)
-            .isEqualTo("type_A");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(0).value.subtype)
-            .isEqualTo("subtype_A");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(0).value.scannedDate)
-            .isEqualTo(caseScannedDate);
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(0).value.deliveryDate)
-            .isEqualTo(caseDeliveryDate);
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(0).value.fileName)
-            .isEqualTo("file_name_AA");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(0).value.exceptionRecordReference)
-            .isEqualTo("exceptionRecordReference");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(0).value.controlNumber)
-            .isEqualTo("control_number_A");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(0).value.document.url)
-            .isEqualTo("file://file_A");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(0).value.document.filename)
-            .isEqualTo("file_name_A");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(0).value.document.binaryUrl)
-            .isEqualTo("binary_url_A");
-
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(1).value.type)
-            .isEqualTo("Form_1");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(1).value.subtype)
-            .isEqualTo("subtype_1");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(1).value.scannedDate)
-            .isEqualTo(exScannedDate);
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(1).value.deliveryDate)
-            .isEqualTo(exDeliveryDate);
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(1).value.fileName)
-            .isEqualTo("file_name_11");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(1).value.exceptionRecordReference)
-            .isNull();
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(1).value.controlNumber)
-            .isEqualTo("control_number_1");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(1).value.document.url)
-            .isEqualTo("file://file_1");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(1).value.document.filename)
-            .isEqualTo("file_name_1");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(1).value.document.binaryUrl)
-            .isEqualTo("binary_url_1");
-
-
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(2).value.type)
-            .isEqualTo("Form_2");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(2).value.subtype)
-            .isEqualTo("subtype_2");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(2).value.scannedDate)
-            .isEqualTo(exScannedDate);
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(2).value.deliveryDate)
-            .isEqualTo(exDeliveryDate);
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(2).value.fileName)
-            .isEqualTo("file_name_22");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(2).value.exceptionRecordReference)
-            .isNull();
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(2).value.controlNumber)
-            .isEqualTo("control_number_2");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(2).value.document.url)
-            .isEqualTo("file://file_2");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(2).value.document.filename)
-            .isEqualTo("file_name_2");
-        assertThat(result.caseUpdateDetails.caseData.scannedDocuments.get(2).value.document.binaryUrl)
-            .isEqualTo("binary_url_2");
-
     }
 
     @Test
@@ -315,7 +237,7 @@ public class CaseUpdaterTest {
         // when
         IllegalArgumentException exception = catchThrowableOfType(() ->
             caseUpdater.update(
-                new CaseUpdate(
+                new CaseUpdateRequest(
                     false,
                     exceptionRecord,
                     caseUpdateDetails,
@@ -328,5 +250,74 @@ public class CaseUpdaterTest {
         // then
         assertThat(exception).hasMessage("Missing scanned documents in exception record");
         verifyNoInteractions(addressExtractor);
+    }
+
+    private void assertResultAddressIsCorrect(Address resultAddress, Address exceptionRecordAddress) {
+        assertThat(resultAddress.addressLine1).isEqualTo(exceptionRecordAddress.addressLine1);
+        assertThat(resultAddress.addressLine2).isEqualTo(exceptionRecordAddress.addressLine2);
+        assertThat(resultAddress.addressLine3).isEqualTo(exceptionRecordAddress.addressLine3);
+        assertThat(resultAddress.country).isEqualTo(exceptionRecordAddress.country);
+        assertThat(resultAddress.county).isEqualTo(exceptionRecordAddress.county);
+        assertThat(resultAddress.postCode).isEqualTo(exceptionRecordAddress.postCode);
+        assertThat(resultAddress.postTown).isEqualTo(exceptionRecordAddress.postTown);
+    }
+
+    private void assertResultFieldsAreCorrect(SampleCase resultCaseData, SampleCase originalCase) {
+        assertThat(resultCaseData)
+            .extracting(c -> tuple(
+                c.legacyId,
+                c.firstName,
+                c.lastName,
+                c.dateOfBirth,
+                c.bulkScanCaseReference
+            ))
+            .isEqualTo(tuple(
+                originalCase.legacyId,
+                originalCase.firstName,
+                originalCase.lastName,
+                originalCase.dateOfBirth,
+                originalCase.bulkScanCaseReference
+            ));
+    }
+
+    private void assertResultScannedDocumentsAreCorrect(
+        List<Item<ScannedDocument>> resultScannedDocuments,
+        LocalDateTime caseScannedDate,
+        LocalDateTime caseDeliveryDate,
+        LocalDateTime exScannedDate,
+        LocalDateTime exDeliveryDate
+    ) {
+        assertThat(resultScannedDocuments.get(0).value.type).isEqualTo("type_A");
+        assertThat(resultScannedDocuments.get(0).value.subtype).isEqualTo("subtype_A");
+        assertThat(resultScannedDocuments.get(0).value.scannedDate).isEqualTo(caseScannedDate);
+        assertThat(resultScannedDocuments.get(0).value.deliveryDate).isEqualTo(caseDeliveryDate);
+        assertThat(resultScannedDocuments.get(0).value.fileName).isEqualTo("file_name_AA");
+        assertThat(resultScannedDocuments.get(0).value.exceptionRecordReference).isEqualTo("exceptionRecordReference");
+        assertThat(resultScannedDocuments.get(0).value.controlNumber).isEqualTo("control_number_A");
+        assertThat(resultScannedDocuments.get(0).value.document.url).isEqualTo("file://file_A");
+        assertThat(resultScannedDocuments.get(0).value.document.filename).isEqualTo("file_name_A");
+        assertThat(resultScannedDocuments.get(0).value.document.binaryUrl).isEqualTo("binary_url_A");
+
+        assertThat(resultScannedDocuments.get(1).value.type).isEqualTo("Form_1");
+        assertThat(resultScannedDocuments.get(1).value.subtype).isEqualTo("subtype_1");
+        assertThat(resultScannedDocuments.get(1).value.scannedDate).isEqualTo(exScannedDate);
+        assertThat(resultScannedDocuments.get(1).value.deliveryDate).isEqualTo(exDeliveryDate);
+        assertThat(resultScannedDocuments.get(1).value.fileName).isEqualTo("file_name_11");
+        assertThat(resultScannedDocuments.get(1).value.exceptionRecordReference).isNull();
+        assertThat(resultScannedDocuments.get(1).value.controlNumber).isEqualTo("control_number_1");
+        assertThat(resultScannedDocuments.get(1).value.document.url).isEqualTo("file://file_1");
+        assertThat(resultScannedDocuments.get(1).value.document.filename).isEqualTo("file_name_1");
+        assertThat(resultScannedDocuments.get(1).value.document.binaryUrl).isEqualTo("binary_url_1");
+
+        assertThat(resultScannedDocuments.get(2).value.type).isEqualTo("Form_2");
+        assertThat(resultScannedDocuments.get(2).value.subtype).isEqualTo("subtype_2");
+        assertThat(resultScannedDocuments.get(2).value.scannedDate).isEqualTo(exScannedDate);
+        assertThat(resultScannedDocuments.get(2).value.deliveryDate).isEqualTo(exDeliveryDate);
+        assertThat(resultScannedDocuments.get(2).value.fileName).isEqualTo("file_name_22");
+        assertThat(resultScannedDocuments.get(2).value.exceptionRecordReference).isNull();
+        assertThat(resultScannedDocuments.get(2).value.controlNumber).isEqualTo("control_number_2");
+        assertThat(resultScannedDocuments.get(2).value.document.url).isEqualTo("file://file_2");
+        assertThat(resultScannedDocuments.get(2).value.document.filename).isEqualTo("file_name_2");
+        assertThat(resultScannedDocuments.get(2).value.document.binaryUrl).isEqualTo("binary_url_2");
     }
 }
