@@ -21,7 +21,7 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.g
 
 public class TransformationInputValidatorTest {
 
-    private final ExceptionRecordValidator validator = new ExceptionRecordValidator();
+    private final TransformationInputValidator validator = new TransformationInputValidator();
 
     @Test
     public void should_throw_exception_if_required_ocr_fields_are_missing() {

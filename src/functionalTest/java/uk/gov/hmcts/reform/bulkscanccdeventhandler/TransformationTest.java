@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.TransformationInputToCaseTransformer;
 
 import java.util.Map;
 
@@ -106,9 +106,9 @@ public class TransformationTest {
         assertSoftly(softly -> {
             softly.assertThat(transformationResponse.getList("warnings")).isEmpty();
             softly.assertThat(transformationResponse.getMap("case_creation_details").get("case_type_id"))
-                .isEqualTo(ExceptionRecordToCaseTransformer.CASE_TYPE_ID);
+                .isEqualTo(TransformationInputToCaseTransformer.CASE_TYPE_ID);
             softly.assertThat(transformationResponse.getMap("case_creation_details").get("event_id"))
-                .isEqualTo(ExceptionRecordToCaseTransformer.EVENT_ID);
+                .isEqualTo(TransformationInputToCaseTransformer.EVENT_ID);
 
             Map<String, Object> caseData = (Map<String, Object>) transformationResponse
                 .getMap("case_creation_details")

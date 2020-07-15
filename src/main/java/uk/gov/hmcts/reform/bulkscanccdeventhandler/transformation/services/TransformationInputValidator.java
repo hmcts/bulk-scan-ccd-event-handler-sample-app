@@ -11,7 +11,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 @Component
-public class ExceptionRecordValidator {
+public class TransformationInputValidator {
 
     public void assertIsValid(TransformationInput transformationInput) {
 

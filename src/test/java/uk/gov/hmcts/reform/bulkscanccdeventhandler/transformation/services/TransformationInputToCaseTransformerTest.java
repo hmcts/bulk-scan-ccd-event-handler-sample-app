@@ -25,8 +25,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.getSampleInputDocument;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer.CASE_TYPE_ID;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer.EVENT_ID;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.TransformationInputToCaseTransformer.CASE_TYPE_ID;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.TransformationInputToCaseTransformer.EVENT_ID;
 
 @ExtendWith(MockitoExtension.class)
 public class TransformationInputToCaseTransformerTest {
@@ -36,7 +36,7 @@ public class TransformationInputToCaseTransformerTest {
     @Mock
     private AddressExtractor addressExtractor;
     @Mock
-    private ExceptionRecordValidator exceptionRecordValidator;
+    private TransformationInputValidator transformationInputValidator;
     @Mock
     private CaseValidator caseValidator;
 
@@ -47,15 +47,15 @@ public class TransformationInputToCaseTransformerTest {
     @Mock
     private Address address;
 
-    private ExceptionRecordToCaseTransformer service;
+    private TransformationInputToCaseTransformer service;
 
     @BeforeEach
     public void setUp() {
         this.service =
-            new ExceptionRecordToCaseTransformer(
+            new TransformationInputToCaseTransformer(
                 documentMapper,
                 addressExtractor,
-                exceptionRecordValidator,
+                transformationInputValidator,
                 caseValidator
             );
     }
@@ -85,7 +85,7 @@ public class TransformationInputToCaseTransformerTest {
     public void should_validate_exception_record() {
         // given
         doThrow(new InvalidExceptionRecordException(asList("error1", "error2")))
-            .when(exceptionRecordValidator).assertIsValid(any());
+            .when(transformationInputValidator).assertIsValid(any());
 
         // when
         Throwable exc = catchThrowable(

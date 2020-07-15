@@ -25,8 +25,8 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.ScannedDocument;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.CaseCreationDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SuccessfulTransformationResponse;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.InvalidExceptionRecordException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.TransformationInputToCaseTransformer;
 
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
@@ -48,7 +48,7 @@ public class TransformationControllerTest {
 
     @Autowired private MockMvc mockMvc;
 
-    @MockBean private ExceptionRecordToCaseTransformer transformer;
+    @MockBean private TransformationInputToCaseTransformer transformer;
     @MockBean private AuthService authService;
 
     @BeforeEach

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SuccessfulTransformationResponse;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.TransformationInputToCaseTransformer;
 
 import javax.validation.Valid;
 
@@ -20,11 +20,11 @@ public class TransformationController {
     private static final Logger LOGGER = getLogger(TransformationController.class);
 
     private final AuthService authService;
-    private final ExceptionRecordToCaseTransformer transformer;
+    private final TransformationInputToCaseTransformer transformer;
 
     public TransformationController(
         AuthService authService,
-        ExceptionRecordToCaseTransformer transformer
+        TransformationInputToCaseTransformer transformer
     ) {
         this.authService = authService;
         this.transformer = transformer;
