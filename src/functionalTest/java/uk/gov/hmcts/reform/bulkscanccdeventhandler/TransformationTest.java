@@ -26,7 +26,10 @@ public class TransformationTest {
 
     @Test
     public void should_transform_exception_record_successfully_without_any_warnings() {
-        trasnformExceptionRecordAndVerifyResponse(TRANSFORM_EXCEPTION_RECORD_REQUEST_PATH, "exception-records/valid.json");
+        trasnformExceptionRecordAndVerifyResponse(
+            TRANSFORM_EXCEPTION_RECORD_REQUEST_PATH,
+            "exception-records/valid.json"
+        );
     }
 
     @Test
