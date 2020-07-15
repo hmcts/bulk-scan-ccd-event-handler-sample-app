@@ -1,10 +1,11 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.controllers;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -60,7 +61,19 @@ public class TransformationControllerTest {
     public void should_return_proper_status_codes_for_auth_exceptions(RuntimeException exc, HttpStatus status) throws Exception {
         given(authService.authenticate(any())).willThrow(exc);
 
-        sendRequest("{}")
+        sendRequest("/transform-exception-record", "{}")
+            .andExpect(status().is(status.value()));
+    }
+
+    @ParameterizedTest
+    @MethodSource("exceptionsAndStatuses")
+    public void should_return_proper_status_codes_for_auth_exceptions_when_transforming_scanned_data(
+        RuntimeException exc,
+        HttpStatus status
+    ) throws Exception {
+        given(authService.authenticate(any())).willThrow(exc);
+
+        sendRequest("/transform-scanned-data", "{}")
             .andExpect(status().is(status.value()));
     }
 
@@ -72,72 +85,14 @@ public class TransformationControllerTest {
         );
     }
 
-    @Test
-    void should_return_case_data_if_transformation_succeeded() throws Exception {
-        SuccessfulTransformationResponse transformationResult =
-            new SuccessfulTransformationResponse(
-                new CaseCreationDetails(
-                    "case-type-id",
-                    "event-id",
-                    new SampleCase(
-                        "legacy-id",
-                        "first-name",
-                        "last-name",
-                        "date-of-birth",
-                        "contact-number",
-                        "email",
-                        new Address(
-                            "address-line-1",
-                            "address-line-2",
-                            "address-line-3",
-                            "post-code",
-                            "post-town",
-                            "county",
-                            "country"
-                        ),
-                        asList(
-                            new Item<>(new ScannedDocument(
-                                "type-1",
-                                "subtype-1",
-                                new DocumentUrl(
-                                    "url-1",
-                                    "binary-url-1",
-                                    "file-name-1"
-                                ),
-                                "dcn-1",
-                                "file-name-1",
-                                LocalDateTime.parse("2011-12-03T10:15:30.123", ISO_DATE_TIME),
-                                LocalDateTime.parse("2011-12-04T10:15:30.123", ISO_DATE_TIME),
-                                "ref-1"
-                            )),
-                            new Item<>(new ScannedDocument(
-                                "type-2",
-                                "subtype-2",
-                                new DocumentUrl(
-                                    "url-2",
-                                    "binary-url-2",
-                                    "file-name-2"
-                                ),
-                                "dcn-2",
-                                "file-name-2",
-                                LocalDateTime.parse("2011-12-05T10:15:30.123", ISO_DATE_TIME),
-                                LocalDateTime.parse("2011-12-06T10:15:30.123", ISO_DATE_TIME),
-                                "ref-2"
-                            ))
-                        ),
-                        "er-id"
-                    )
-                ),
-                asList(
-                    "warning-1",
-                    "warning-2"
-                )
-            );
+    @ParameterizedTest
+    @ValueSource(strings = {"/transform-exception-record", "/transform-scanned-data"})
+    void should_return_case_data_if_transformation_succeeded(String requestPth) throws Exception {
+        var transformationResult = successfulTransformationResult();
 
-        given(transformer.toCase(any()))
-            .willReturn(transformationResult);
+        given(transformer.toCase(any())).willReturn(transformationResult);
 
-        sendRequest("{}")
+        sendRequest(requestPth, "{}")
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.case_creation_details.case_type_id").value("case-type-id"))
             .andExpect(jsonPath("$.case_creation_details.event_id").value("event-id"))
@@ -179,8 +134,9 @@ public class TransformationControllerTest {
             .andExpect(jsonPath("$.warnings[1]").value("warning-2"));
     }
 
-    @Test
-    void should_return_422_with_errors_if_transformation_failed() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = {"/transform-exception-record", "/transform-scanned-data"})
+    void should_return_422_with_errors_if_transformation_failed(String requestPath) throws Exception {
         given(transformer.toCase(any()))
             .willThrow(new InvalidExceptionRecordException(
                 asList(
@@ -189,20 +145,82 @@ public class TransformationControllerTest {
                 )
             ));
 
-        sendRequest("{}")
+        sendRequest(requestPath, "{}")
             .andDo(print())
             .andExpect(status().isUnprocessableEntity())
             .andExpect(jsonPath("$.errors[0]").value("error-1"))
             .andExpect(jsonPath("$.errors[1]").value("error-2"));
     }
 
-    private ResultActions sendRequest(String body) throws Exception {
+    private ResultActions sendRequest(String path, String body) throws Exception {
         return mockMvc
             .perform(
-                post("/transform-exception-record")
+                post(path)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(body)
             );
+    }
+
+    @NotNull
+    private SuccessfulTransformationResponse successfulTransformationResult() {
+        return new SuccessfulTransformationResponse(
+            new CaseCreationDetails(
+                "case-type-id",
+                "event-id",
+                new SampleCase(
+                    "legacy-id",
+                    "first-name",
+                    "last-name",
+                    "date-of-birth",
+                    "contact-number",
+                    "email",
+                    new Address(
+                        "address-line-1",
+                        "address-line-2",
+                        "address-line-3",
+                        "post-code",
+                        "post-town",
+                        "county",
+                        "country"
+                    ),
+                    asList(
+                        new Item<>(new ScannedDocument(
+                            "type-1",
+                            "subtype-1",
+                            new DocumentUrl(
+                                "url-1",
+                                "binary-url-1",
+                                "file-name-1"
+                            ),
+                            "dcn-1",
+                            "file-name-1",
+                            LocalDateTime.parse("2011-12-03T10:15:30.123", ISO_DATE_TIME),
+                            LocalDateTime.parse("2011-12-04T10:15:30.123", ISO_DATE_TIME),
+                            "ref-1"
+                        )),
+                        new Item<>(new ScannedDocument(
+                            "type-2",
+                            "subtype-2",
+                            new DocumentUrl(
+                                "url-2",
+                                "binary-url-2",
+                                "file-name-2"
+                            ),
+                            "dcn-2",
+                            "file-name-2",
+                            LocalDateTime.parse("2011-12-05T10:15:30.123", ISO_DATE_TIME),
+                            LocalDateTime.parse("2011-12-06T10:15:30.123", ISO_DATE_TIME),
+                            "ref-2"
+                        ))
+                    ),
+                    "er-id"
+                )
+            ),
+            asList(
+                "warning-1",
+                "warning-2"
+            )
+        );
     }
 
 }

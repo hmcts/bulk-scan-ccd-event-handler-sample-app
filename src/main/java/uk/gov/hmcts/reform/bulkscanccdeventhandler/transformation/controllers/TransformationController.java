@@ -42,4 +42,17 @@ public class TransformationController {
 
         return transformer.toCase(exceptionRecord);
     }
+
+    @PostMapping("/transform-scanned-data")
+    public SuccessfulTransformationResponse transformScannedData(
+        @RequestHeader(name = "ServiceAuthorization", required = false) String serviceAuthHeader,
+        @Valid @RequestBody ExceptionRecord exceptionRecord
+    ) {
+        String serviceName = authService.authenticate(serviceAuthHeader);
+        LOGGER.info("Request received to transform scanned data from service {}", serviceName);
+
+        authService.assertIsAllowedService(serviceName);
+
+        return transformer.toCase(exceptionRecord);
+    }
 }
