@@ -56,28 +56,7 @@ public class ExceptionRecordToCaseTransformerTest {
     @Test
     public void should_map_exception_record_to_a_case() {
         // given
-        ExceptionRecord er = new ExceptionRecord(
-            "er-id",
-            "er-case-type",
-            "er-pobox",
-            "er-jurisdiction",
-            "er-form-type",
-            JourneyClassification.NEW_APPLICATION,
-            now(),
-            now(),
-            asList(
-                getSampleInputDocument("1"),
-                getSampleInputDocument("2")
-            ),
-            asList(
-                new OcrDataField(OcrFieldNames.FIRST_NAME, "John"),
-                new OcrDataField(OcrFieldNames.LAST_NAME, "Smith")
-            ),
-            null,
-            false,
-            null,
-            null
-        );
+        ExceptionRecord er = exceptionRecord("er-id", "er-case-type", null, false, null, null);
 
         // and
         given(addressExtractor.extractFrom(er.ocrDataFields)).willReturn(address);
@@ -88,7 +67,67 @@ public class ExceptionRecordToCaseTransformerTest {
         SuccessfulTransformationResponse result = service.toCase(er);
 
         // then
+        assertTransformationResult(result);
+    }
 
+    @Test
+    public void should_validate_exception_record() {
+        // given
+        doThrow(new InvalidExceptionRecordException(asList("error1", "error2")))
+            .when(exceptionRecordValidator).assertIsValid(any());
+
+        // when
+        Throwable exc = catchThrowable(
+            () -> service.toCase(mock(ExceptionRecord.class))
+        );
+
+        // then
+        assertThat(exc)
+            .isInstanceOf(InvalidExceptionRecordException.class)
+            .hasMessageContaining("error1")
+            .hasMessageContaining("error2");
+    }
+
+    @Test
+    public void should_convert_to_case_data_with_new_fields_when_auto_case_creation_request_is_false() {
+        // given
+        ExceptionRecord er = exceptionRecord(null, null, "envelope-id", false, "er-id", "er-case-type");
+
+        // and
+        given(addressExtractor.extractFrom(er.ocrDataFields)).willReturn(address);
+        given(
+            documentMapper.toCaseDoc(er.scannedDocuments.get(0), er.exceptionRecordId)
+        ).willReturn(doc1);
+        given(
+            documentMapper.toCaseDoc(er.scannedDocuments.get(1), er.exceptionRecordId)
+        ).willReturn(doc2);
+        given(caseValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
+
+        // when
+        SuccessfulTransformationResponse result = service.toCase(er);
+
+        // then
+        assertTransformationResult(result);
+    }
+
+    @Test
+    public void should_convert_to_case_data_for_the_auto_case_creation_request() {
+        // given
+        ExceptionRecord er = exceptionRecord(null, null, "envelope-id", true, null, null);
+
+        // and
+        given(addressExtractor.extractFrom(er.ocrDataFields)).willReturn(address);
+        given(documentMapper.toCaseDoc(er.scannedDocuments.get(0), er.id)).willReturn(doc1);
+        given(documentMapper.toCaseDoc(er.scannedDocuments.get(1), er.id)).willReturn(doc2);
+        given(caseValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
+        // when
+        SuccessfulTransformationResponse result = service.toCase(er);
+
+        // then
+        assertTransformationResult(result);
+    }
+
+    private void assertTransformationResult(SuccessfulTransformationResponse result) {
         assertSoftly(softly -> {
             softly.assertThat(result.warnings).containsExactly("w1", "w2");
 
@@ -108,21 +147,35 @@ public class ExceptionRecordToCaseTransformerTest {
         });
     }
 
-    @Test
-    public void should_validate_exception_record() {
-        // given
-        doThrow(new InvalidExceptionRecordException(asList("error1", "error2")))
-            .when(exceptionRecordValidator).assertIsValid(any());
-
-        // when
-        Throwable exc = catchThrowable(
-            () -> service.toCase(mock(ExceptionRecord.class))
+    private ExceptionRecord exceptionRecord(
+        String id,
+        String caseTypeId,
+        String envelopeId,
+        boolean automateCaseRequest,
+        String exceptionRecordId,
+        String exceptionRecordCaseTypeId
+    ) {
+        return new ExceptionRecord(
+            id,
+            caseTypeId,
+            "er-pobox",
+            "er-jurisdiction",
+            "er-form-type",
+            JourneyClassification.NEW_APPLICATION,
+            now(),
+            now(),
+            asList(
+                getSampleInputDocument("1"),
+                getSampleInputDocument("2")
+            ),
+            asList(
+                new OcrDataField(OcrFieldNames.FIRST_NAME, "John"),
+                new OcrDataField(OcrFieldNames.LAST_NAME, "Smith")
+            ),
+            envelopeId,
+            automateCaseRequest,
+            exceptionRecordId,
+            exceptionRecordCaseTypeId
         );
-
-        // then
-        assertThat(exc)
-            .isInstanceOf(InvalidExceptionRecordException.class)
-            .hasMessageContaining("error1")
-            .hasMessageContaining("error2");
     }
 }
