@@ -99,8 +99,8 @@ sonarqube {
     property "sonar.projectName", "Reform :: bulk-scan-ccd-event-handler-sample-app"
     property "sonar.projectKey", "uk.gov.hmcts.reform:bulk-scan-ccd-event-handler-sample-app"
     property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.reports.xml.destination.path
-    // CaseUpdateDetailsRequest mostly duplicates ExceptionRecord.
-    // Introducing inheritance to avoid this would make these classes coupled
+    // CaseUpdateDetails mostly duplicates ExceptionRecord.
+    // Introducing inheritance to avoid this duplication would make these classes coupled
     // though they are intended for different purposes.
     property "sonar.exclusions", "**/config/**, **/CaseUpdateDetailsRequest.java"
   }
