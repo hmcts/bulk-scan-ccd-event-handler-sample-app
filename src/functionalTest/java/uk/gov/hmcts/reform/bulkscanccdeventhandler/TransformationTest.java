@@ -23,12 +23,15 @@ public class TransformationTest {
 
     @Test
     public void should_transform_exception_record_successfully_without_any_warnings() {
-        trasnformExceptionRecordAndVerifyResponse("exception-records/valid.json");
+        trasnformExceptionRecordAndVerifyResponse("/transform-exception-record", "exception-records/valid.json");
     }
 
     @Test
     public void should_transform_exception_record_with_auto_case_creation_fields_without_any_warnings() {
-        trasnformExceptionRecordAndVerifyResponse("exception-records/valid-with-auto-case-creation-fields.json");
+        trasnformExceptionRecordAndVerifyResponse(
+            "/transform-exception-record",
+            "exception-records/valid-with-auto-case-creation-fields.json"
+        );
     }
 
     @Test
@@ -67,10 +70,26 @@ public class TransformationTest {
         assertThat(errorResponse.getMap("")).containsOnlyKeys("errors", "warnings");
     }
 
+    @Test
+    public void should_transform_auto_case_creation_request_data_successfully_without_any_warnings() {
+        trasnformExceptionRecordAndVerifyResponse(
+            "/transform-scanned-data",
+            "exception-records/valid-auto-case-creation.json"
+        );
+    }
+
+    @Test
+    public void should_transform_exception_data_successfully_without_any_warnings() {
+        trasnformExceptionRecordAndVerifyResponse(
+            "/transform-scanned-data",
+            "exception-records/valid-exception-record-request.json"
+        );
+    }
+
     @SuppressWarnings("unchecked")
-    private void trasnformExceptionRecordAndVerifyResponse(String fileName) {
+    private void trasnformExceptionRecordAndVerifyResponse(String requestPath, String fileName) {
         Response response = testHelper.postWithBody(
-            "/transform-exception-record",
+            requestPath,
             TestHelper.fileContentAsString(fileName)
         );
 
