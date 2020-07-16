@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.JourneyClassification;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 
 import java.util.List;
@@ -19,15 +19,15 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.F
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.LAST_NAME;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.getRequiredFields;
 
-public class ExceptionRecordValidatorTest {
+public class TransformationInputValidatorTest {
 
-    private final ExceptionRecordValidator validator = new ExceptionRecordValidator();
+    private final TransformationInputValidator validator = new TransformationInputValidator();
 
     @Test
     public void should_throw_exception_if_required_ocr_fields_are_missing() {
         // given
-        ExceptionRecord er =
-            exceptionRecordWithOcr(
+        TransformationInput transformationInput =
+            transformationInputWithOcr(
                 asList(
                     new OcrDataField(CONTACT_NUMBER, "555-555-555"),
                     new OcrDataField(EMAIL, "test@example.com")
@@ -35,7 +35,7 @@ public class ExceptionRecordValidatorTest {
             );
 
         // when
-        Throwable exc = catchThrowable(() -> validator.assertIsValid(er));
+        Throwable exc = catchThrowable(() -> validator.assertIsValid(transformationInput));
 
         // then
         assertThat(exc)
@@ -47,8 +47,8 @@ public class ExceptionRecordValidatorTest {
     @Test
     public void should_not_throw_exception_if_exception_record_is_valid() {
         // given
-        ExceptionRecord er =
-            exceptionRecordWithOcr(
+        TransformationInput transformationInput =
+            transformationInputWithOcr(
                 getRequiredFields()
                     .stream()
                     .map(req -> new OcrDataField(req, "value"))
@@ -56,14 +56,14 @@ public class ExceptionRecordValidatorTest {
             );
 
         // when
-        Throwable exc = catchThrowable(() -> validator.assertIsValid(er));
+        Throwable exc = catchThrowable(() -> validator.assertIsValid(transformationInput));
 
         // then
         assertThat(exc).isNull();
     }
 
-    private ExceptionRecord exceptionRecordWithOcr(List<OcrDataField> ocrData) {
-        return new ExceptionRecord(
+    private TransformationInput transformationInputWithOcr(List<OcrDataField> ocrData) {
+        return new TransformationInput(
             "er-id",
             "er-case-type",
             "er-pobox",

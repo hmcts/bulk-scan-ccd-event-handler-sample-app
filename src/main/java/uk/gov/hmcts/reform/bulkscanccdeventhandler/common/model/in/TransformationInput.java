@@ -6,7 +6,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDat
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ExceptionRecord {
+public class TransformationInput {
 
     public final String id;
     public final String caseTypeId;
@@ -38,7 +38,7 @@ public class ExceptionRecord {
      * </ul>
      * id and case_type_id fields can be removed after moving to the Auto case creation transformation endpoint.
      */
-    public ExceptionRecord(
+    public TransformationInput(
         @JsonProperty("id") String id,
         @JsonProperty("case_type_id") String caseTypeId,
         @JsonProperty("po_box") String poBox,
