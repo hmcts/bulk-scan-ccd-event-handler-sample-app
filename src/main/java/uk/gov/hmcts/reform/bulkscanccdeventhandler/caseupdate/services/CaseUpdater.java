@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdate;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateRequest;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
@@ -33,17 +33,17 @@ public class CaseUpdater {
         this.addressExtractor = addressExtractor;
     }
 
-    public SuccessfulUpdateResponse update(CaseUpdate caseUpdate) {
+    public SuccessfulUpdateResponse update(CaseUpdateRequest caseUpdateRequest) {
         Assert.notEmpty(
-            caseUpdate.exceptionRecord.scannedDocuments,
+            caseUpdateRequest.exceptionRecord.scannedDocuments,
             "Missing scanned documents in exception record"
         );
 
-        Address newAddress = addressExtractor.extractFrom(caseUpdate.exceptionRecord.ocrDataFields);
+        Address newAddress = addressExtractor.extractFrom(caseUpdateRequest.exceptionRecord.ocrDataFields);
 
-        LOG.info("Case update, case details id: {}", caseUpdate.caseDetails.id);
+        LOG.info("Case update, case details id: {}", caseUpdateRequest.caseDetails.id);
 
-        SampleCase originalCase = caseUpdate.caseDetails.caseData;
+        SampleCase originalCase = caseUpdateRequest.caseDetails.caseData;
         // This is just a sample implementation, we only overwrite the address here.
         // You'll probably update other fields and add new documents in your service case.
         SampleCase newCase = new SampleCase(
@@ -54,7 +54,7 @@ public class CaseUpdater {
             originalCase.contactNumber,
             originalCase.email,
             newAddress,
-            mergeScannedDocuments(originalCase.scannedDocuments, caseUpdate.exceptionRecord.scannedDocuments),
+            mergeScannedDocuments(originalCase.scannedDocuments, caseUpdateRequest.exceptionRecord.scannedDocuments),
             originalCase.bulkScanCaseReference
         );
 
