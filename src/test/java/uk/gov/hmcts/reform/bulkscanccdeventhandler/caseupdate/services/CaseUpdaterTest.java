@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateDetails;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateRequest;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdate;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
@@ -158,7 +158,7 @@ public class CaseUpdaterTest {
         // when
         SuccessfulUpdateResponse result =
             caseUpdater.update(
-                new CaseUpdateRequest(
+                new CaseUpdate(
                     false,
                     exceptionRecord,
                     caseUpdateDetails,
@@ -315,7 +315,7 @@ public class CaseUpdaterTest {
         // when
         IllegalArgumentException exception = catchThrowableOfType(() ->
                 caseUpdater.update(
-                    new CaseUpdateRequest(
+                    new CaseUpdate(
                         false,
                         exceptionRecord,
                         caseUpdateDetails,

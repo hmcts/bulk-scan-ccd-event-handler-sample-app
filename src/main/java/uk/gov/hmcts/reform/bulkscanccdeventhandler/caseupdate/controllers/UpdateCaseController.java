@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateRequest;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdate;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services.CaseUpdater;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
@@ -35,7 +35,7 @@ public class UpdateCaseController {
     @PostMapping("/update-case")
     public SuccessfulUpdateResponse updateCase(
         @RequestHeader(name = "ServiceAuthorization", required = false) String serviceAuthHeader,
-        @Valid @RequestBody CaseUpdateRequest req
+        @Valid @RequestBody CaseUpdate req
     ) {
         String serviceName = authService.authenticate(serviceAuthHeader);
         LOG.info("Request received to update case with OCR from service {}", serviceName);
