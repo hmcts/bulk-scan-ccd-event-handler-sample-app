@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.CaseCreationDetails;
@@ -18,34 +18,34 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.L
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.OcrFieldExtractor.get;
 
 @Service
-public class ExceptionRecordToCaseTransformer {
+public class TransformationInputToCaseTransformer {
 
     public static final String EVENT_ID = "createCase";
     public static final String CASE_TYPE_ID = "Bulk_Scanned";
 
     private final DocumentMapper documentMapper;
     private final AddressExtractor addressExtractor;
-    private final ExceptionRecordValidator exceptionRecordValidator;
+    private final TransformationInputValidator transformationInputValidator;
     private final CaseValidator caseValidator;
 
     // region constructor
-    public ExceptionRecordToCaseTransformer(
+    public TransformationInputToCaseTransformer(
         DocumentMapper documentMapper,
         AddressExtractor addressExtractor,
-        ExceptionRecordValidator exceptionRecordValidator,
+        TransformationInputValidator transformationInputValidator,
         CaseValidator caseValidator
     ) {
         this.documentMapper = documentMapper;
         this.addressExtractor = addressExtractor;
-        this.exceptionRecordValidator = exceptionRecordValidator;
+        this.transformationInputValidator = transformationInputValidator;
         this.caseValidator = caseValidator;
     }
     // endregion
 
-    public SuccessfulTransformationResponse toCase(ExceptionRecord exceptionRecord) {
-        exceptionRecordValidator.assertIsValid(exceptionRecord);
+    public SuccessfulTransformationResponse toCase(TransformationInput transformationInput) {
+        transformationInputValidator.assertIsValid(transformationInput);
 
-        SampleCase caseData = buildCase(exceptionRecord);
+        SampleCase caseData = buildCase(transformationInput);
 
         return new SuccessfulTransformationResponse(
             new CaseCreationDetails(
@@ -57,7 +57,7 @@ public class ExceptionRecordToCaseTransformer {
         );
     }
 
-    private SampleCase buildCase(ExceptionRecord er) {
+    private SampleCase buildCase(TransformationInput er) {
         // New transformation request contains exceptionRecordId
         // Old transformation request contains id field, which is the exception record id
         String exceptionRecordReference = StringUtils.isNotEmpty(er.exceptionRecordId) ? er.exceptionRecordId : er.id;

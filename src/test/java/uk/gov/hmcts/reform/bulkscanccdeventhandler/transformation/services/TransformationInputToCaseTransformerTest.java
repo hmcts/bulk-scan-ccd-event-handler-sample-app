@@ -6,8 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.JourneyClassification;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Address;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.ScannedDocument;
@@ -25,30 +25,37 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.getSampleInputDocument;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer.CASE_TYPE_ID;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer.EVENT_ID;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.TransformationInputToCaseTransformer.CASE_TYPE_ID;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.TransformationInputToCaseTransformer.EVENT_ID;
 
 @ExtendWith(MockitoExtension.class)
-public class ExceptionRecordToCaseTransformerTest {
+public class TransformationInputToCaseTransformerTest {
 
-    @Mock private DocumentMapper documentMapper;
-    @Mock private AddressExtractor addressExtractor;
-    @Mock private ExceptionRecordValidator exceptionRecordValidator;
-    @Mock private CaseValidator caseValidator;
+    @Mock
+    private DocumentMapper documentMapper;
+    @Mock
+    private AddressExtractor addressExtractor;
+    @Mock
+    private TransformationInputValidator transformationInputValidator;
+    @Mock
+    private CaseValidator caseValidator;
 
-    @Mock private Item<ScannedDocument> doc1;
-    @Mock private Item<ScannedDocument> doc2;
-    @Mock private Address address;
+    @Mock
+    private Item<ScannedDocument> doc1;
+    @Mock
+    private Item<ScannedDocument> doc2;
+    @Mock
+    private Address address;
 
-    private ExceptionRecordToCaseTransformer service;
+    private TransformationInputToCaseTransformer service;
 
     @BeforeEach
     public void setUp() {
         this.service =
-            new ExceptionRecordToCaseTransformer(
+            new TransformationInputToCaseTransformer(
                 documentMapper,
                 addressExtractor,
-                exceptionRecordValidator,
+                transformationInputValidator,
                 caseValidator
             );
     }
@@ -56,15 +63,19 @@ public class ExceptionRecordToCaseTransformerTest {
     @Test
     public void should_map_exception_record_to_a_case() {
         // given
-        ExceptionRecord er = exceptionRecord("er-id", "er-case-type", null, false, null, null);
+        TransformationInput transformationInput = transformationInput(
+            "er-id", "er-case-type", null, false, null, null
+        );
 
         // and
-        given(addressExtractor.extractFrom(er.ocrDataFields)).willReturn(address);
-        given(documentMapper.toCaseDoc(er.scannedDocuments.get(0), er.id)).willReturn(doc1);
-        given(documentMapper.toCaseDoc(er.scannedDocuments.get(1), er.id)).willReturn(doc2);
+        given(addressExtractor.extractFrom(transformationInput.ocrDataFields)).willReturn(address);
+        given(documentMapper.toCaseDoc(transformationInput.scannedDocuments.get(0), transformationInput.id))
+            .willReturn(doc1);
+        given(documentMapper.toCaseDoc(transformationInput.scannedDocuments.get(1), transformationInput.id))
+            .willReturn(doc2);
         given(caseValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
         // when
-        SuccessfulTransformationResponse result = service.toCase(er);
+        SuccessfulTransformationResponse result = service.toCase(transformationInput);
 
         // then
         assertTransformationResult(result);
@@ -74,11 +85,11 @@ public class ExceptionRecordToCaseTransformerTest {
     public void should_validate_exception_record() {
         // given
         doThrow(new InvalidExceptionRecordException(asList("error1", "error2")))
-            .when(exceptionRecordValidator).assertIsValid(any());
+            .when(transformationInputValidator).assertIsValid(any());
 
         // when
         Throwable exc = catchThrowable(
-            () -> service.toCase(mock(ExceptionRecord.class))
+            () -> service.toCase(mock(TransformationInput.class))
         );
 
         // then
@@ -91,7 +102,9 @@ public class ExceptionRecordToCaseTransformerTest {
     @Test
     public void should_convert_to_case_data_with_new_fields_when_auto_case_creation_request_is_false() {
         // given
-        ExceptionRecord er = exceptionRecord(null, null, "envelope-id", false, "er-id", "er-case-type");
+        TransformationInput er = transformationInput(
+            null, null, "envelope-id", false, "er-id", "er-case-type"
+        );
 
         // and
         given(addressExtractor.extractFrom(er.ocrDataFields)).willReturn(address);
@@ -113,15 +126,19 @@ public class ExceptionRecordToCaseTransformerTest {
     @Test
     public void should_convert_to_case_data_for_the_auto_case_creation_request() {
         // given
-        ExceptionRecord er = exceptionRecord(null, null, "envelope-id", true, null, null);
+        TransformationInput transformationInput = transformationInput(
+            null, null, "envelope-id", true, null, null
+        );
 
         // and
-        given(addressExtractor.extractFrom(er.ocrDataFields)).willReturn(address);
-        given(documentMapper.toCaseDoc(er.scannedDocuments.get(0), er.id)).willReturn(doc1);
-        given(documentMapper.toCaseDoc(er.scannedDocuments.get(1), er.id)).willReturn(doc2);
+        given(addressExtractor.extractFrom(transformationInput.ocrDataFields)).willReturn(address);
+        given(documentMapper.toCaseDoc(transformationInput.scannedDocuments.get(0), transformationInput.id))
+            .willReturn(doc1);
+        given(documentMapper.toCaseDoc(transformationInput.scannedDocuments.get(1), transformationInput.id))
+            .willReturn(doc2);
         given(caseValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
         // when
-        SuccessfulTransformationResponse result = service.toCase(er);
+        SuccessfulTransformationResponse result = service.toCase(transformationInput);
 
         // then
         assertTransformationResult(result);
@@ -147,7 +164,7 @@ public class ExceptionRecordToCaseTransformerTest {
         });
     }
 
-    private ExceptionRecord exceptionRecord(
+    private TransformationInput transformationInput(
         String id,
         String caseTypeId,
         String envelopeId,
@@ -155,7 +172,7 @@ public class ExceptionRecordToCaseTransformerTest {
         String exceptionRecordId,
         String exceptionRecordCaseTypeId
     ) {
-        return new ExceptionRecord(
+        return new TransformationInput(
             id,
             caseTypeId,
             "er-pobox",

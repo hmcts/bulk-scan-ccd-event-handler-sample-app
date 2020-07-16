@@ -1,13 +1,13 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils;
 
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.ExceptionRecord;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 
 import java.util.List;
 
 public final class OcrFieldExtractor {
 
-    public static String get(ExceptionRecord er, String name) {
+    public static String get(TransformationInput er, String name) {
         return get(er.ocrDataFields, name);
     }
 
