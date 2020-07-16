@@ -158,7 +158,7 @@ public class CaseUpdaterTest {
         // when
         SuccessfulUpdateResponse result =
             caseUpdater.update(
-                new CaseUpdate(
+                new CaseUpdateRequest(
                     false,
                     exceptionRecord,
                     caseUpdateDetails,
