@@ -20,7 +20,7 @@ public class UpdateCaseTest {
     private final TestHelper testHelper = new TestHelper();
 
     @Test
-    public void should_update_case() throws JSONException {
+    public void should_update_case_by_exception_record_without_auto_update_fields() throws JSONException {
         updateCaseAndVerifyResponse(
             "updatecase/valid-request.json",
             "updatecase/valid-response.json"
@@ -28,7 +28,7 @@ public class UpdateCaseTest {
     }
 
     @Test
-    public void should_update_case_by_exception_record_with_auto_update_fields_without_warnings() throws JSONException {
+    public void should_update_case_by_exception_record_with_auto_update_fields() throws JSONException {
         updateCaseAndVerifyResponse(
             "updatecase/valid-request-with-auto-case-update-fields.json",
             "updatecase/valid-response.json"
