@@ -20,9 +20,27 @@ public class UpdateCaseTest {
     private final TestHelper testHelper = new TestHelper();
 
     @Test
-    public void should_update_case() throws JSONException {
+    public void should_update_case_by_exception_record_without_auto_update_fields() throws JSONException {
+        updateCaseAndVerifyResponse(
+            "updatecase/valid-request.json",
+            "updatecase/valid-response.json"
+        );
+    }
+
+    @Test
+    public void should_update_case_by_exception_record_with_auto_update_fields() throws JSONException {
+        updateCaseAndVerifyResponse(
+            "updatecase/valid-request-with-auto-case-update-fields.json",
+            "updatecase/valid-response.json"
+        );
+    }
+
+    private void updateCaseAndVerifyResponse(
+        String requestFilePath,
+        String responseFilePath
+    ) throws JSONException {
         // given
-        String request = TestHelper.fileContentAsString("updatecase/valid-request.json");
+        String request = TestHelper.fileContentAsString(requestFilePath);
 
         // when
         Response response = testHelper.postWithBody("/update-case", request);
@@ -32,7 +50,7 @@ public class UpdateCaseTest {
         JsonPath json = response.getBody().jsonPath();
         assertThat(json.getList("warnings")).isEmpty();
         assertThat(json.getMap("case_update_details").get("event_id")).isEqualTo(CaseUpdater.EVENT_ID);
-        String expectedJson = TestHelper.fileContentAsString("updatecase/valid-response.json");
+        String expectedJson = TestHelper.fileContentAsString(responseFilePath);
         JSONAssert.assertEquals(expectedJson, response.getBody().asString(), false);
     }
 }
