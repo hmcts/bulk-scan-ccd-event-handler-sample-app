@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 
-public class CaseUpdate {
+public class CaseUpdateRequest {
 
     public final boolean isAutomatedProcess;
 
@@ -15,7 +15,7 @@ public class CaseUpdate {
     public final CaseUpdateDetails caseUpdateDetails;
     public final CaseDetails caseDetails;
 
-    public CaseUpdate(
+    public CaseUpdateRequest(
         @JsonProperty("is_automated_process") boolean isAutomatedProcess,
         @JsonProperty("exception_record") TransformationInput transformationInput,
         @JsonProperty("case_update_details") CaseUpdateDetails caseUpdateDetails,
