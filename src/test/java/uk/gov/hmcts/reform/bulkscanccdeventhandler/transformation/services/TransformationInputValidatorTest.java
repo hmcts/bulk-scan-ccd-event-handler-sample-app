@@ -6,6 +6,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.Transformatio
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Arrays.asList;
@@ -24,7 +25,7 @@ public class TransformationInputValidatorTest {
     private final TransformationInputValidator validator = new TransformationInputValidator();
 
     @Test
-    public void should_throw_exception_if_required_ocr_fields_are_missing() {
+    public void should_return_errors_if_required_ocr_fields_are_missing() {
         // given
         TransformationInput transformationInput =
             transformationInputWithOcr(
@@ -35,13 +36,12 @@ public class TransformationInputValidatorTest {
             );
 
         // when
-        Throwable exc = catchThrowable(() -> validator.assertIsValid(transformationInput));
+        List<String> errors = validator.getErrors(transformationInput);
 
         // then
-        assertThat(exc)
-            .isInstanceOf(InvalidExceptionRecordException.class)
-            .hasMessageContaining(FIRST_NAME)
-            .hasMessageContaining(LAST_NAME);
+        String[] errorMessages =
+            Stream.of(FIRST_NAME, LAST_NAME).map(msg -> "'" + msg + "' is required").toArray(String[]::new);
+        assertThat(errors).containsExactlyInAnyOrder(errorMessages);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class TransformationInputValidatorTest {
             );
 
         // when
-        Throwable exc = catchThrowable(() -> validator.assertIsValid(transformationInput));
+        Throwable exc = catchThrowable(() -> validator.getErrors(transformationInput));
 
         // then
         assertThat(exc).isNull();

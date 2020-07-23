@@ -19,6 +19,7 @@ import static java.time.LocalDateTime.now;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -85,7 +86,7 @@ public class TransformationInputToCaseTransformerTest {
     public void should_validate_exception_record() {
         // given
         doThrow(new InvalidExceptionRecordException(asList("error1", "error2")))
-            .when(transformationInputValidator).assertIsValid(any());
+            .when(transformationInputValidator).getErrors(any());
 
         // when
         Throwable exc = catchThrowable(
@@ -124,7 +125,7 @@ public class TransformationInputToCaseTransformerTest {
     }
 
     @Test
-    public void should_convert_to_case_data_for_the_auto_case_creation_request() {
+    public void should_throw_for_the_auto_case_creation_request_and_warnings() {
         // given
         TransformationInput transformationInput = transformationInput(
             null, null, "envelope-id", true, null, null
@@ -137,11 +138,47 @@ public class TransformationInputToCaseTransformerTest {
         given(documentMapper.toCaseDoc(transformationInput.scannedDocuments.get(1), transformationInput.id))
             .willReturn(doc2);
         given(caseValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
+
         // when
-        SuccessfulTransformationResponse result = service.toCase(transformationInput);
+        InvalidExceptionRecordException exc = catchThrowableOfType(
+            () -> service.toCase(transformationInput),
+            InvalidExceptionRecordException.class
+        );
 
         // then
-        assertTransformationResult(result);
+        assertThat(exc)
+            .hasMessageContaining("w1")
+            .hasMessageContaining("w2");
+    }
+
+    @Test
+    public void should_throw_for_the_auto_case_creation_request_and_errors_and_warnings() {
+        // given
+        TransformationInput transformationInput = transformationInput(
+            null, null, "envelope-id", true, null, null
+        );
+
+        // and
+        given(transformationInputValidator.getErrors(any())).willReturn(asList("error1", "error2"));
+        given(addressExtractor.extractFrom(transformationInput.ocrDataFields)).willReturn(address);
+        given(documentMapper.toCaseDoc(transformationInput.scannedDocuments.get(0), transformationInput.id))
+            .willReturn(doc1);
+        given(documentMapper.toCaseDoc(transformationInput.scannedDocuments.get(1), transformationInput.id))
+            .willReturn(doc2);
+        given(caseValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
+
+        // when
+        InvalidExceptionRecordException exc = catchThrowableOfType(
+            () -> service.toCase(transformationInput),
+            InvalidExceptionRecordException.class
+        );
+
+        // then
+        assertThat(exc)
+            .hasMessageContaining("error1")
+            .hasMessageContaining("error2")
+            .hasMessageContaining("w1")
+            .hasMessageContaining("w2");
     }
 
     private void assertTransformationResult(SuccessfulTransformationResponse result) {

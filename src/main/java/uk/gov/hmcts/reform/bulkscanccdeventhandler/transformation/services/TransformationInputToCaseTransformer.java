@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
@@ -7,6 +9,8 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.CaseCreationDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SuccessfulTransformationResponse;
+
+import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.CONTACT_NUMBER;
@@ -43,9 +47,22 @@ public class TransformationInputToCaseTransformer {
     // endregion
 
     public SuccessfulTransformationResponse toCase(TransformationInput transformationInput) {
-        transformationInputValidator.assertIsValid(transformationInput);
+        List<String> errors = transformationInputValidator.getErrors(transformationInput);
 
         SampleCase caseData = buildCase(transformationInput);
+
+        final List<String> warnings = caseValidator.getWarnings(caseData);
+
+        List<String> allErrors;
+        if (transformationInput.isAutomatedProcess && !warnings.isEmpty()) {
+            allErrors = Lists.newArrayList(Iterables.concat(errors, warnings));
+        } else {
+            allErrors = errors;
+        }
+
+        if (!allErrors.isEmpty()) {
+            throw new InvalidExceptionRecordException(allErrors);
+        }
 
         return new SuccessfulTransformationResponse(
             new CaseCreationDetails(
@@ -53,7 +70,7 @@ public class TransformationInputToCaseTransformer {
                 EVENT_ID,
                 caseData
             ),
-            caseValidator.getWarnings(caseData)
+            warnings
         );
     }
 
