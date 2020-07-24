@@ -1,12 +1,16 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.CaseCreationDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SuccessfulTransformationResponse;
+
+import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.CONTACT_NUMBER;
@@ -47,13 +51,27 @@ public class TransformationInputToCaseTransformer {
 
         SampleCase caseData = buildCase(transformationInput);
 
+        final List<String> warnings = caseValidator.getWarnings(caseData);
+
+        if (transformationInput.isAutomatedProcess && !warnings.isEmpty()) {
+            final HttpClientErrorException unprocessableEntity =
+                HttpClientErrorException.create(
+                    HttpStatus.UNPROCESSABLE_ENTITY,
+                    "unprocessable entity message",
+                    null,
+                    String.join(",", warnings).getBytes(),
+                    null
+                );
+            throw unprocessableEntity;
+        }
+
         return new SuccessfulTransformationResponse(
             new CaseCreationDetails(
                 CASE_TYPE_ID,
                 EVENT_ID,
                 caseData
             ),
-            caseValidator.getWarnings(caseData)
+            warnings
         );
     }
 
