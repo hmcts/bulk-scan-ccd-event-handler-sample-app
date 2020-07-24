@@ -126,7 +126,7 @@ public class TransformationInputToCaseTransformerTest {
     }
 
     @Test
-    public void should_throw_for_the_auto_case_creation_request_and_warnings() {
+    public void should_throw_422_for_auto_case_creation_request_when_validation_warnings() {
         // given
         TransformationInput transformationInput = transformationInput(
             null, null, "envelope-id", true, null, null
