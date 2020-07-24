@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
@@ -47,21 +47,22 @@ public class TransformationInputToCaseTransformer {
     // endregion
 
     public SuccessfulTransformationResponse toCase(TransformationInput transformationInput) {
-        List<String> errors = transformationInputValidator.getErrors(transformationInput);
+        transformationInputValidator.assertIsValid(transformationInput);
 
         SampleCase caseData = buildCase(transformationInput);
 
         final List<String> warnings = caseValidator.getWarnings(caseData);
 
-        List<String> allErrors;
         if (transformationInput.isAutomatedProcess && !warnings.isEmpty()) {
-            allErrors = Lists.newArrayList(Iterables.concat(errors, warnings));
-        } else {
-            allErrors = errors;
-        }
-
-        if (!allErrors.isEmpty()) {
-            throw new InvalidExceptionRecordException(allErrors);
+            final HttpClientErrorException unprocessableEntity =
+                HttpClientErrorException.create(
+                    HttpStatus.UNPROCESSABLE_ENTITY,
+                    "unprocessable entity message",
+                    null,
+                    String.join(",", warnings).getBytes(),
+                    null
+                );
+            throw unprocessableEntity;
         }
 
         return new SuccessfulTransformationResponse(
