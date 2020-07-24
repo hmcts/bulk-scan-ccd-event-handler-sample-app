@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.client.HttpClientErrorException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.JourneyClassification;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
@@ -19,6 +20,7 @@ import static java.time.LocalDateTime.now;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -100,7 +102,7 @@ public class TransformationInputToCaseTransformerTest {
     }
 
     @Test
-    public void should_convert_to_case_data_with_new_fields_when_auto_case_creation_request_is_false() {
+    public void should_convert_to_case_data_with_new_fields_when_auto_case_creation_request_is_false_and_warnings() {
         // given
         TransformationInput er = transformationInput(
             null, null, "envelope-id", false, "er-id", "er-case-type"
@@ -124,7 +126,7 @@ public class TransformationInputToCaseTransformerTest {
     }
 
     @Test
-    public void should_convert_to_case_data_for_the_auto_case_creation_request() {
+    public void should_throw_422_for_auto_case_creation_request_when_validation_warnings() {
         // given
         TransformationInput transformationInput = transformationInput(
             null, null, "envelope-id", true, null, null
@@ -137,11 +139,15 @@ public class TransformationInputToCaseTransformerTest {
         given(documentMapper.toCaseDoc(transformationInput.scannedDocuments.get(1), transformationInput.id))
             .willReturn(doc2);
         given(caseValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
+
         // when
-        SuccessfulTransformationResponse result = service.toCase(transformationInput);
+        HttpClientErrorException.UnprocessableEntity exc = catchThrowableOfType(
+            () -> service.toCase(transformationInput),
+            HttpClientErrorException.UnprocessableEntity.class
+        );
 
         // then
-        assertTransformationResult(result);
+        assertThat(exc.getResponseBodyAsString()).isEqualTo("w1,w2");
     }
 
     private void assertTransformationResult(SuccessfulTransformationResponse result) {
