@@ -43,7 +43,7 @@ public class CaseUpdaterTest {
 
     @BeforeEach
     public void setUp() {
-        this.caseUpdater = new CaseUpdater(addressExtractor);
+        this.caseUpdater = new CaseUpdater(caseUpdateDetailsValidator, addressExtractor);
     }
 
     /**
@@ -314,7 +314,7 @@ public class CaseUpdaterTest {
         );
 
         // when
-        IllegalArgumentException exception = catchThrowableOfType(() -> 
+        IllegalArgumentException exception = catchThrowableOfType(() ->
                 caseUpdater.update(
                     new CaseUpdateRequest(
                         false,
