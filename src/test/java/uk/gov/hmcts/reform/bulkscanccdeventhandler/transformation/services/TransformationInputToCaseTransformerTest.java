@@ -102,7 +102,7 @@ public class TransformationInputToCaseTransformerTest {
     }
 
     @Test
-    public void should_convert_to_case_data_with_new_fields_when_auto_case_creation_request_is_false() {
+    public void should_convert_to_case_data_with_new_fields_when_auto_case_creation_request_is_false_and_warnings() {
         // given
         TransformationInput er = transformationInput(
             null, null, "envelope-id", false, "er-id", "er-case-type"
