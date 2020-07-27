@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateRequest;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
@@ -17,16 +16,15 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.ScannedDocument;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import static java.time.LocalDateTime.now;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.caseDetails;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.caseUpdateDetails;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.inputScannedDocuments;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.sampleCase;
@@ -56,19 +54,10 @@ public class CaseUpdaterTest {
         // given
         Address exceptionRecordAddress = new Address("0", "1", "2", "3", "4", "5", "6");
 
-        LocalDateTime caseScannedDate = now();
-        LocalDateTime caseDeliveryDate = now();
-
-        List<Item<ScannedDocument>> caseScannedDocuments = scannedDocuments(
-            caseScannedDate,
-            caseDeliveryDate
-        );
+        List<Item<ScannedDocument>> caseScannedDocuments = scannedDocuments();
         SampleCase originalCase = sampleCase(caseScannedDocuments);
 
-        LocalDateTime exceptionRecordScannedDate = now();
-        LocalDateTime exceptionRecordDeliveryDate = now();
-        List<InputScannedDoc> exceptionRecordScannedDocuments =
-            inputScannedDocuments(exceptionRecordScannedDate, exceptionRecordDeliveryDate);
+        List<InputScannedDoc> exceptionRecordScannedDocuments = inputScannedDocuments();
         TransformationInput transformationInput = transformationInput(exceptionRecordScannedDocuments);
 
         CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(
@@ -85,7 +74,7 @@ public class CaseUpdaterTest {
                     false,
                     transformationInput,
                     caseUpdateDetails,
-                    new CaseDetails("1234567890", "some_type", originalCase)
+                    caseDetails(originalCase)
                 )
             );
 
@@ -118,7 +107,7 @@ public class CaseUpdaterTest {
                         false,
                         transformationInput,
                         caseUpdateDetails,
-                        new CaseDetails("1234567890","some_type", originalCase)
+                        caseDetails(originalCase)
                     )
                 ),
             IllegalArgumentException.class

@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler;
 
 import org.jetbrains.annotations.NotNull;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDocUrl;
@@ -13,7 +14,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.ScannedDocument;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.time.LocalDateTime.now;
@@ -47,9 +47,11 @@ public final class InputHelper {
         return getSampleInputDocument("");
     }
 
-    public static SampleCase sampleCase(List<Item<ScannedDocument>> scannedDocuments) {
-        Address originalCaseAddress = new Address("a", "b", "c", "d", "e", "f", "g");
+    public static CaseDetails caseDetails(SampleCase originalCase) {
+        return new CaseDetails("1234567890", "some_type", originalCase);
+    }
 
+    public static SampleCase sampleCase(List<Item<ScannedDocument>> scannedDocuments) {
         return new SampleCase(
             "legacy-id",
             "first-name",
@@ -57,17 +59,14 @@ public final class InputHelper {
             "date-of-birth",
             "contact-number",
             "email",
-            originalCaseAddress,
+            new Address("a", "b", "c", "d", "e", "f", "g"),
             scannedDocuments,
             "er-id"
         );
     }
 
     @NotNull
-    public static List<Item<ScannedDocument>> scannedDocuments(
-        LocalDateTime caseScannedDate,
-        LocalDateTime caseDeliveryDate
-    ) {
+    public static List<Item<ScannedDocument>> scannedDocuments() {
         return singletonList(
             new Item<>(
                 new ScannedDocument(
@@ -76,18 +75,15 @@ public final class InputHelper {
                     new DocumentUrl("file://file_A", "binary_url_A", "file_name_A"),
                     "control_number_A",
                     "file_name_AA",
-                    caseScannedDate,
-                    caseDeliveryDate,
+                    now(),
+                    now(),
                     "exceptionRecordReference"
                 )
             )
         );
     }
 
-    public static List<InputScannedDoc> inputScannedDocuments(
-        LocalDateTime exScannedDate,
-        LocalDateTime exDeliveryDate
-    ) {
+    public static List<InputScannedDoc> inputScannedDocuments() {
         return asList(
             new InputScannedDoc(
                 "Form_1",
@@ -95,8 +91,8 @@ public final class InputHelper {
                 new InputScannedDocUrl("file://file_1", "binary_url_1", "file_name_1"),
                 "control_number_1",
                 "file_name_11",
-                exScannedDate,
-                exDeliveryDate
+                now(),
+                now()
             ),
             new InputScannedDoc(
                 "Form_2",
@@ -104,8 +100,8 @@ public final class InputHelper {
                 new InputScannedDocUrl("file://file_2", "binary_url_2", "file_name_2"),
                 "control_number_2",
                 "file_name_22",
-                exScannedDate,
-                exDeliveryDate
+                now(),
+                now()
             )
         );
     }
