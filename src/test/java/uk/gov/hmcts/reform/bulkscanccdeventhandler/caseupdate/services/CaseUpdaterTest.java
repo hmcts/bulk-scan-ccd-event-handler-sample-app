@@ -24,7 +24,6 @@ import static java.time.LocalDateTime.now;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
-import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -60,20 +59,20 @@ public class CaseUpdaterTest {
         LocalDateTime caseScannedDate = now();
         LocalDateTime caseDeliveryDate = now();
 
-        List<Item<ScannedDocument>> scannedDocuments = scannedDocuments(
+        List<Item<ScannedDocument>> caseScannedDocuments = scannedDocuments(
             caseScannedDate,
             caseDeliveryDate
         );
-        SampleCase originalCase = sampleCase(scannedDocuments);
+        SampleCase originalCase = sampleCase(caseScannedDocuments);
 
-        LocalDateTime exScannedDate = now();
-        LocalDateTime exDeliveryDate = now();
-        List<InputScannedDoc> inputScannedDocuments =
-            inputScannedDocuments(exScannedDate, exDeliveryDate);
-        TransformationInput transformationInput = transformationInput(inputScannedDocuments);
+        LocalDateTime exceptionRecordScannedDate = now();
+        LocalDateTime exceptionRecordDeliveryDate = now();
+        List<InputScannedDoc> exceptionRecordScannedDocuments =
+            inputScannedDocuments(exceptionRecordScannedDate, exceptionRecordDeliveryDate);
+        TransformationInput transformationInput = transformationInput(exceptionRecordScannedDocuments);
 
         CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(
-            inputScannedDocuments,
+            exceptionRecordScannedDocuments,
             emptyList()
         );
 
@@ -91,16 +90,15 @@ public class CaseUpdaterTest {
             );
 
         // then
-        assertAddress(result.caseUpdateDetails.caseData.address, exceptionRecordAddress);
+        assertThat(result.caseUpdateDetails.caseData.address)
+            .isEqualToComparingFieldByField(exceptionRecordAddress);
         assertCaseData(result.caseUpdateDetails.caseData, originalCase);
         assertThat(result.warnings).isEmpty();
         assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
         assertScannedDocuments(
             result.caseUpdateDetails.caseData.scannedDocuments,
-            caseScannedDate,
-            caseDeliveryDate,
-            exScannedDate,
-            exDeliveryDate
+            caseScannedDocuments,
+            exceptionRecordScannedDocuments
         );
     }
 
@@ -131,73 +129,59 @@ public class CaseUpdaterTest {
         verifyNoInteractions(addressExtractor);
     }
 
-    private void assertAddress(Address resultCaseAddress, Address exceptionRecordAddress) {
-        assertThat(resultCaseAddress.addressLine1).isEqualTo(exceptionRecordAddress.addressLine1);
-        assertThat(resultCaseAddress.addressLine2).isEqualTo(exceptionRecordAddress.addressLine2);
-        assertThat(resultCaseAddress.addressLine3).isEqualTo(exceptionRecordAddress.addressLine3);
-        assertThat(resultCaseAddress.country).isEqualTo(exceptionRecordAddress.country);
-        assertThat(resultCaseAddress.county).isEqualTo(exceptionRecordAddress.county);
-        assertThat(resultCaseAddress.postCode).isEqualTo(exceptionRecordAddress.postCode);
-        assertThat(resultCaseAddress.postTown).isEqualTo(exceptionRecordAddress.postTown);
-    }
-
-    private void assertCaseData(SampleCase resultCaseData, SampleCase originalCase) {
-        assertThat(resultCaseData)
-            .extracting(c -> tuple(
-                c.legacyId,
-                c.firstName,
-                c.lastName,
-                c.dateOfBirth,
-                c.bulkScanCaseReference
-            ))
-            .isEqualTo(tuple(
-                originalCase.legacyId,
-                originalCase.firstName,
-                originalCase.lastName,
-                originalCase.dateOfBirth,
-                originalCase.bulkScanCaseReference
-            ));
+    private void assertCaseData(SampleCase actualCaseData, SampleCase expectedCaseData) {
+        assertThat(actualCaseData)
+            .isEqualToComparingOnlyGivenFields(expectedCaseData,
+                "legacyId",
+                "firstName",
+                "lastName",
+                "dateOfBirth",
+                "bulkScanCaseReference"
+            );
     }
 
     private void assertScannedDocuments(
-        List<Item<ScannedDocument>> resultScannedDocuments,
-        LocalDateTime caseScannedDate,
-        LocalDateTime caseDeliveryDate,
-        LocalDateTime exScannedDate,
-        LocalDateTime exDeliveryDate
+        List<Item<ScannedDocument>> actualScannedDocuments,
+        List<Item<ScannedDocument>> caseScannedDocuments,
+        List<InputScannedDoc> exceptionRecordScannedDocuments
     ) {
-        assertThat(resultScannedDocuments.get(0).value.type).isEqualTo("type_A");
-        assertThat(resultScannedDocuments.get(0).value.subtype).isEqualTo("subtype_A");
-        assertThat(resultScannedDocuments.get(0).value.scannedDate).isEqualTo(caseScannedDate);
-        assertThat(resultScannedDocuments.get(0).value.deliveryDate).isEqualTo(caseDeliveryDate);
-        assertThat(resultScannedDocuments.get(0).value.fileName).isEqualTo("file_name_AA");
-        assertThat(resultScannedDocuments.get(0).value.exceptionRecordReference).isEqualTo("exceptionRecordReference");
-        assertThat(resultScannedDocuments.get(0).value.controlNumber).isEqualTo("control_number_A");
-        assertThat(resultScannedDocuments.get(0).value.document.url).isEqualTo("file://file_A");
-        assertThat(resultScannedDocuments.get(0).value.document.filename).isEqualTo("file_name_A");
-        assertThat(resultScannedDocuments.get(0).value.document.binaryUrl).isEqualTo("binary_url_A");
+        assertThat(actualScannedDocuments.get(0).value)
+            .isEqualToComparingOnlyGivenFields(caseScannedDocuments.get(0).value,
+                "type",
+                "scannedDate",
+                "deliveryDate",
+                "fileName",
+                "exceptionRecordReference",
+                "controlNumber"
+            );
+        assertThat(actualScannedDocuments.get(0).value.document)
+            .isEqualToComparingFieldByField(
+                caseScannedDocuments.get(0).value.document
+            );
 
-        assertThat(resultScannedDocuments.get(1).value.type).isEqualTo("Form_1");
-        assertThat(resultScannedDocuments.get(1).value.subtype).isEqualTo("subtype_1");
-        assertThat(resultScannedDocuments.get(1).value.scannedDate).isEqualTo(exScannedDate);
-        assertThat(resultScannedDocuments.get(1).value.deliveryDate).isEqualTo(exDeliveryDate);
-        assertThat(resultScannedDocuments.get(1).value.fileName).isEqualTo("file_name_11");
-        assertThat(resultScannedDocuments.get(1).value.exceptionRecordReference).isNull();
-        assertThat(resultScannedDocuments.get(1).value.controlNumber).isEqualTo("control_number_1");
-        assertThat(resultScannedDocuments.get(1).value.document.url).isEqualTo("file://file_1");
-        assertThat(resultScannedDocuments.get(1).value.document.filename).isEqualTo("file_name_1");
-        assertThat(resultScannedDocuments.get(1).value.document.binaryUrl).isEqualTo("binary_url_1");
+        assertExceptionRecordScannedDocument(
+            actualScannedDocuments.get(1).value,
+            exceptionRecordScannedDocuments.get(0)
+        );
+        assertExceptionRecordScannedDocument(
+            actualScannedDocuments.get(2).value,
+            exceptionRecordScannedDocuments.get(1)
+        );
+    }
 
-
-        assertThat(resultScannedDocuments.get(2).value.type).isEqualTo("Form_2");
-        assertThat(resultScannedDocuments.get(2).value.subtype).isEqualTo("subtype_2");
-        assertThat(resultScannedDocuments.get(2).value.scannedDate).isEqualTo(exScannedDate);
-        assertThat(resultScannedDocuments.get(2).value.deliveryDate).isEqualTo(exDeliveryDate);
-        assertThat(resultScannedDocuments.get(2).value.fileName).isEqualTo("file_name_22");
-        assertThat(resultScannedDocuments.get(2).value.exceptionRecordReference).isNull();
-        assertThat(resultScannedDocuments.get(2).value.controlNumber).isEqualTo("control_number_2");
-        assertThat(resultScannedDocuments.get(2).value.document.url).isEqualTo("file://file_2");
-        assertThat(resultScannedDocuments.get(2).value.document.filename).isEqualTo("file_name_2");
-        assertThat(resultScannedDocuments.get(2).value.document.binaryUrl).isEqualTo("binary_url_2");
+    private void assertExceptionRecordScannedDocument(ScannedDocument actualScannedDocument, InputScannedDoc exceptionRecordScannedDocument) {
+        assertThat(actualScannedDocument)
+            .isEqualToComparingOnlyGivenFields(exceptionRecordScannedDocument,
+                "type",
+                "scannedDate",
+                "deliveryDate",
+                "fileName",
+                "controlNumber"
+            );
+        assertThat(actualScannedDocument.exceptionRecordReference).isNull();
+        assertThat(actualScannedDocument.document)
+            .isEqualToComparingFieldByField(
+                exceptionRecordScannedDocument.document
+            );
     }
 }

@@ -96,7 +96,8 @@ public final class InputHelper {
                 "control_number_1",
                 "file_name_11",
                 exScannedDate,
-                exDeliveryDate),
+                exDeliveryDate
+            ),
             new InputScannedDoc(
                 "Form_2",
                 "subtype_2",
@@ -104,7 +105,8 @@ public final class InputHelper {
                 "control_number_2",
                 "file_name_22",
                 exScannedDate,
-                exDeliveryDate)
+                exDeliveryDate
+            )
         );
     }
 
