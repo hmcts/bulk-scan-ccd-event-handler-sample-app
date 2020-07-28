@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateRequest;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
@@ -12,6 +11,7 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.caseDetails;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.caseUpdateDetails;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.getSampleInputDocument;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.sampleCase;
@@ -34,7 +34,7 @@ public class CaseUpdateRequestValidatorTest {
             false,
             transformationInput,
             caseUpdateDetails,
-            new CaseDetails("1234567890", "some_type", originalCase)
+            caseDetails(originalCase)
         );
 
         // when
@@ -48,6 +48,25 @@ public class CaseUpdateRequestValidatorTest {
         assertThat(exc)
             .isInstanceOf(InvalidCaseUpdateRequestException.class)
             .hasMessageContaining("Scanned documents cannot be empty");
+    }
+
+    @Test
+    public void should_not_throw_exception_if_case_update_details_not_present() {
+        // given
+        final SampleCase originalCase = sampleCase(emptyList());
+
+        final TransformationInput transformationInput = transformationInput(emptyList());
+
+        final CaseUpdateRequest caseUpdateRequest = new CaseUpdateRequest(
+            false,
+            transformationInput,
+            null,
+            caseDetails(originalCase)
+        );
+
+        // when
+        // then
+        assertThatCode(() -> validator.assertIsValid(caseUpdateRequest)).doesNotThrowAnyException();
     }
 
     @Test
@@ -66,7 +85,7 @@ public class CaseUpdateRequestValidatorTest {
             false,
             transformationInput,
             caseUpdateDetails,
-            new CaseDetails("1234567890", "some_type", originalCase)
+            caseDetails(originalCase)
         );
 
         // when
