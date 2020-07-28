@@ -142,18 +142,7 @@ public class CaseUpdaterTest {
         // the scanned document at index 0 in the updated case should match
         // this scanned document in the existing case
         assertThat(actualScannedDocuments.get(0).value)
-            .isEqualToComparingOnlyGivenFields(caseScannedDocuments.get(0).value,
-                "type",
-                "scannedDate",
-                "deliveryDate",
-                "fileName",
-                "exceptionRecordReference",
-                "controlNumber"
-            );
-        assertThat(actualScannedDocuments.get(0).value.document)
-            .isEqualToComparingFieldByField(
-                caseScannedDocuments.get(0).value.document
-            );
+            .isEqualToComparingFieldByField(caseScannedDocuments.get(0).value);
     }
 
     private void assertScannedDocumentsFromExceptionRecord(
