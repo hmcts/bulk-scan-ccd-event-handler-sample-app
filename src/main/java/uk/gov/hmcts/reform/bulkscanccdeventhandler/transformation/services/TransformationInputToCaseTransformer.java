@@ -54,15 +54,13 @@ public class TransformationInputToCaseTransformer {
         final List<String> warnings = caseValidator.getWarnings(caseData);
 
         if (transformationInput.isAutomatedProcess && !warnings.isEmpty()) {
-            final HttpClientErrorException unprocessableEntity =
-                HttpClientErrorException.create(
+            throw HttpClientErrorException.create(
                     HttpStatus.UNPROCESSABLE_ENTITY,
                     "unprocessable entity message",
                     null,
                     String.join(",", warnings).getBytes(),
                     null
                 );
-            throw unprocessableEntity;
         }
 
         return new SuccessfulTransformationResponse(
