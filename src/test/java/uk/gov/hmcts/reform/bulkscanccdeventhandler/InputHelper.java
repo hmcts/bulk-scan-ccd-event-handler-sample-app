@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler;
 
+import org.jetbrains.annotations.NotNull;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
@@ -58,17 +59,22 @@ public final class InputHelper {
             "date-of-birth",
             "contact-number",
             "email",
-            new Address(
-                "addr-line-1",
-                "addr-line-2",
-                "addr-line-3",
-                "post-code",
-                "post-town",
-                "county",
-                "country"
-            ),
+            address(""),
             scannedDocuments,
             "er-id"
+        );
+    }
+
+    @NotNull
+    public static Address address(String suffix) {
+        return new Address(
+            "addr-line-1" + suffix,
+            "addr-line-2" + suffix,
+            "addr-line-3" + suffix,
+            "post-code" + suffix,
+            "post-town" + suffix,
+            "county" + suffix,
+            "country" + suffix
         );
     }
 
