@@ -167,15 +167,14 @@ public class CaseUpdaterTest {
         );
     }
 
-    private void assertExceptionRecordScannedDocument(ScannedDocument actualScannedDocument, InputScannedDoc exceptionRecordScannedDocument) {
+    private void assertExceptionRecordScannedDocument(
+        ScannedDocument actualScannedDocument,
+        InputScannedDoc exceptionRecordScannedDocument
+    ) {
         assertThat(actualScannedDocument)
-            .isEqualToComparingOnlyGivenFields(exceptionRecordScannedDocument,
-                "type",
-                "scannedDate",
-                "deliveryDate",
-                "fileName",
-                "controlNumber"
-            );
+            .isEqualToIgnoringGivenFields(exceptionRecordScannedDocument,
+                "exceptionRecordReference",
+                "document");
         assertThat(actualScannedDocument.exceptionRecordReference).isNull();
         assertThat(actualScannedDocument.document)
             .isEqualToComparingFieldByField(
