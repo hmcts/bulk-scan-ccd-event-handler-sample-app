@@ -1,8 +1,10 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services;
 
 import org.slf4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.web.client.HttpClientErrorException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateRequest;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
@@ -16,7 +18,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Collections.emptyList;
 import static org.slf4j.LoggerFactory.getLogger;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.ScannedDocumentMapper.mapToScannedDocument;
 
@@ -27,17 +28,28 @@ public class CaseUpdater {
 
     private static final Logger LOG = getLogger(CaseUpdater.class);
 
+    private final CaseUpdateRequestValidator caseUpdateRequestValidator;
+    private final UpdatedCaseValidator updatedCaseValidator;
     private final AddressExtractor addressExtractor;
 
-    public CaseUpdater(AddressExtractor addressExtractor) {
+    public CaseUpdater(
+        CaseUpdateRequestValidator caseUpdateRequestValidator,
+        UpdatedCaseValidator updatedCaseValidator,
+        AddressExtractor addressExtractor
+    ) {
+        this.caseUpdateRequestValidator = caseUpdateRequestValidator;
+        this.updatedCaseValidator = updatedCaseValidator;
         this.addressExtractor = addressExtractor;
     }
 
     public SuccessfulUpdateResponse update(CaseUpdateRequest caseUpdateRequest) {
+        // TODO remove this check after eliminating exception_record element from CaseUpdateRequest
         Assert.notEmpty(
             caseUpdateRequest.transformationInput.scannedDocuments,
             "Missing scanned documents in exception record"
         );
+
+        caseUpdateRequestValidator.assertIsValid(caseUpdateRequest);
 
         Address newAddress = addressExtractor.extractFrom(caseUpdateRequest.transformationInput.ocrDataFields);
 
@@ -61,16 +73,27 @@ public class CaseUpdater {
             originalCase.bulkScanCaseReference
         );
 
-        return new SuccessfulUpdateResponse(
-            new CaseUpdateDetails(
-                // This is just a sample implementation.
-                // You can use different event IDs based on the changes made to a case...
-                EVENT_ID,
-                newCase
-            ),
-            // ... and put any warnings here.
-            emptyList()
-        );
+        final List<String> warnings = updatedCaseValidator.getWarnings(newCase);
+
+        if (caseUpdateRequest.isAutomatedProcess && !warnings.isEmpty()) {
+            throw HttpClientErrorException.create(
+                HttpStatus.UNPROCESSABLE_ENTITY,
+                "unprocessable entity message",
+                null,
+                String.join(",", warnings).getBytes(),
+                null
+            );
+        } else {
+            return new SuccessfulUpdateResponse(
+                new CaseUpdateDetails(
+                    // This is just a sample implementation.
+                    // You can use different event IDs based on the changes made to a case...
+                    EVENT_ID,
+                    newCase
+                ),
+                warnings
+            );
+        }
     }
 
     private List<Item<ScannedDocument>> mergeScannedDocuments(
