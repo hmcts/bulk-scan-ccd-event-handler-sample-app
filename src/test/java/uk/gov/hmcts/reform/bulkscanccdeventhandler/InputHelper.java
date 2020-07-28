@@ -58,17 +58,21 @@ public final class InputHelper {
             "date-of-birth",
             "contact-number",
             "email",
-            new Address(
-                "addr-line-1",
-                "addr-line-2",
-                "addr-line-3",
-                "post-code",
-                "post-town",
-                "county",
-                "country"
-            ),
+            address(""),
             scannedDocuments,
             "er-id"
+        );
+    }
+
+    public static Address address(String suffix) {
+        return new Address(
+            "addr-line-1" + suffix,
+            "addr-line-2" + suffix,
+            "addr-line-3" + suffix,
+            "post-code" + suffix,
+            "post-town" + suffix,
+            "county" + suffix,
+            "country" + suffix
         );
     }
 

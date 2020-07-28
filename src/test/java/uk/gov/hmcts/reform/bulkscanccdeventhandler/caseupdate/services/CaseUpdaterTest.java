@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.address;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.caseDetails;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.caseUpdateDetails;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.inputScannedDocuments;
@@ -51,7 +52,7 @@ public class CaseUpdaterTest {
     @Test
     public void should_update_case_data_with_exception_record_if_no_warnings() {
         // given
-        Address exceptionRecordAddress = new Address("0", "1", "2", "3", "4", "5", "6");
+        Address exceptionRecordAddress = address("-er");
 
         List<Item<ScannedDocument>> caseScannedDocuments = scannedDocuments();
         SampleCase originalCase = sampleCase(caseScannedDocuments);
