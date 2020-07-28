@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler;
 
-import org.jetbrains.annotations.NotNull;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
@@ -65,7 +64,6 @@ public final class InputHelper {
         );
     }
 
-    @NotNull
     public static Address address(String suffix) {
         return new Address(
             "addr-line-1" + suffix,
