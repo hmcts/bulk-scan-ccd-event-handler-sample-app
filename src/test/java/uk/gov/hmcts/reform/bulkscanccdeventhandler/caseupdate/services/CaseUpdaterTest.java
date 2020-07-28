@@ -31,7 +31,6 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.sampleCase
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.scannedDocuments;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.transformationInput;
 
-@SuppressWarnings("checkstyle:lineLength")
 @ExtendWith(MockitoExtension.class)
 public class CaseUpdaterTest {
 
