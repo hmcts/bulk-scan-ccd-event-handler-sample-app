@@ -84,9 +84,12 @@ public class CaseUpdaterTest {
         assertCaseData(result.caseUpdateDetails.caseData, originalCase);
         assertThat(result.warnings).isEmpty();
         assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
-        assertScannedDocuments(
+        assertScannedDocumentsFromExistingCase(
             result.caseUpdateDetails.caseData.scannedDocuments,
-            caseScannedDocuments,
+            caseScannedDocuments
+        );
+        assertScannedDocumentsFromExceptionRecord(
+            result.caseUpdateDetails.caseData.scannedDocuments,
             exceptionRecordScannedDocuments
         );
     }
@@ -129,11 +132,15 @@ public class CaseUpdaterTest {
             );
     }
 
-    private void assertScannedDocuments(
+    private void assertScannedDocumentsFromExistingCase(
         List<Item<ScannedDocument>> actualScannedDocuments,
-        List<Item<ScannedDocument>> caseScannedDocuments,
-        List<InputScannedDoc> exceptionRecordScannedDocuments
+        List<Item<ScannedDocument>> caseScannedDocuments
     ) {
+        // Scanned documents in the updated case should contain scanned documents
+        // from the existing case and scanned documents from the exception record.
+        // Because there is 1 scanned document in the existing case
+        // the scanned document at index 0 in the updated case should match
+        // this scanned document in the existing case
         assertThat(actualScannedDocuments.get(0).value)
             .isEqualToComparingOnlyGivenFields(caseScannedDocuments.get(0).value,
                 "type",
@@ -147,7 +154,20 @@ public class CaseUpdaterTest {
             .isEqualToComparingFieldByField(
                 caseScannedDocuments.get(0).value.document
             );
+    }
 
+    private void assertScannedDocumentsFromExceptionRecord(
+        List<Item<ScannedDocument>> actualScannedDocuments,
+        List<InputScannedDoc> exceptionRecordScannedDocuments
+    ) {
+        // Scanned documents in the updated case should contain scanned documents
+        // from the existing case and scanned documents from the exception record.
+        // Because there is 1 scanned document in the existing case
+        // and 2 scanned documents in the exception record
+        // the scanned document at index 1 in the updated case should match
+        // the scanned document at index 0 in the exception record and
+        // the scanned document at index 2 in the updated case should match
+        // the scanned document at index 1 in the exception record
         assertExceptionRecordScannedDocument(
             actualScannedDocuments.get(1).value,
             exceptionRecordScannedDocuments.get(0)
