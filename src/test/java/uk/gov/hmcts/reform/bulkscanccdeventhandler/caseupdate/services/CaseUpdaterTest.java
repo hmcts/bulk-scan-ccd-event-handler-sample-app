@@ -35,13 +35,17 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.transforma
 @ExtendWith(MockitoExtension.class)
 public class CaseUpdaterTest {
 
+    @Mock private UpdatedCaseValidator updatedCaseValidator;
     @Mock private AddressExtractor addressExtractor;
 
     private CaseUpdater caseUpdater;
 
     @BeforeEach
     public void setUp() {
-        this.caseUpdater = new CaseUpdater(addressExtractor);
+        this.caseUpdater = new CaseUpdater(
+            updatedCaseValidator,
+            addressExtractor
+        );
     }
 
     /**
@@ -66,6 +70,7 @@ public class CaseUpdaterTest {
         );
 
         given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
+        given(updatedCaseValidator.getWarnings(any(SampleCase.class))).willReturn(emptyList());
 
         // when
         SuccessfulUpdateResponse result =

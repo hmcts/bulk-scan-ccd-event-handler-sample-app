@@ -16,7 +16,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Collections.emptyList;
 import static org.slf4j.LoggerFactory.getLogger;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.ScannedDocumentMapper.mapToScannedDocument;
 
@@ -27,13 +26,19 @@ public class CaseUpdater {
 
     private static final Logger LOG = getLogger(CaseUpdater.class);
 
+    private final UpdatedCaseValidator updatedCaseValidator;
     private final AddressExtractor addressExtractor;
 
-    public CaseUpdater(AddressExtractor addressExtractor) {
+    public CaseUpdater(
+        UpdatedCaseValidator updatedCaseValidator,
+        AddressExtractor addressExtractor
+    ) {
+        this.updatedCaseValidator = updatedCaseValidator;
         this.addressExtractor = addressExtractor;
     }
 
     public SuccessfulUpdateResponse update(CaseUpdateRequest caseUpdateRequest) {
+        // TODO remove this check after eliminating exception_record element from CaseUpdateRequest
         Assert.notEmpty(
             caseUpdateRequest.transformationInput.scannedDocuments,
             "Missing scanned documents in exception record"
@@ -61,6 +66,8 @@ public class CaseUpdater {
             originalCase.bulkScanCaseReference
         );
 
+        final List<String> warnings = updatedCaseValidator.getWarnings(newCase);
+
         return new SuccessfulUpdateResponse(
             new CaseUpdateDetails(
                 // This is just a sample implementation.
@@ -68,8 +75,7 @@ public class CaseUpdater {
                 EVENT_ID,
                 newCase
             ),
-            // ... and put any warnings here.
-            emptyList()
+            warnings
         );
     }
 
