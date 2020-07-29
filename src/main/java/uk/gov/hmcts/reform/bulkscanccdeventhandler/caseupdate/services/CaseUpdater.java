@@ -26,16 +26,13 @@ public class CaseUpdater {
 
     private static final Logger LOG = getLogger(CaseUpdater.class);
 
-    private final CaseUpdateRequestValidator caseUpdateRequestValidator;
     private final UpdatedCaseValidator updatedCaseValidator;
     private final AddressExtractor addressExtractor;
 
     public CaseUpdater(
-        CaseUpdateRequestValidator caseUpdateRequestValidator,
         UpdatedCaseValidator updatedCaseValidator,
         AddressExtractor addressExtractor
     ) {
-        this.caseUpdateRequestValidator = caseUpdateRequestValidator;
         this.updatedCaseValidator = updatedCaseValidator;
         this.addressExtractor = addressExtractor;
     }
@@ -47,7 +44,12 @@ public class CaseUpdater {
             "Missing scanned documents in exception record"
         );
 
-        caseUpdateRequestValidator.assertIsValid(caseUpdateRequest);
+        if (caseUpdateRequest.caseUpdateDetails != null) {
+            Assert.notEmpty(
+                caseUpdateRequest.caseUpdateDetails.scannedDocuments,
+                "Missing scanned documents in case update details"
+            );
+        }
 
         Address newAddress = addressExtractor.extractFrom(caseUpdateRequest.transformationInput.ocrDataFields);
 

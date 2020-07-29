@@ -35,7 +35,6 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.transforma
 @ExtendWith(MockitoExtension.class)
 public class CaseUpdaterTest {
 
-    @Mock private CaseUpdateRequestValidator caseUpdateRequestValidator;
     @Mock private UpdatedCaseValidator updatedCaseValidator;
     @Mock private AddressExtractor addressExtractor;
 
@@ -44,7 +43,6 @@ public class CaseUpdaterTest {
     @BeforeEach
     public void setUp() {
         this.caseUpdater = new CaseUpdater(
-            caseUpdateRequestValidator,
             updatedCaseValidator,
             addressExtractor
         );
