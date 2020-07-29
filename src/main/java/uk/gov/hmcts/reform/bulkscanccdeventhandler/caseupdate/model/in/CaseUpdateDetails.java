@@ -30,7 +30,7 @@ public class CaseUpdateDetails {
         @JsonProperty("journey_classification") JourneyClassification journeyClassification,
         @JsonProperty("delivery_date") LocalDateTime deliveryDate,
         @JsonProperty("opening_date") LocalDateTime openingDate,
-        @JsonProperty(value = "scanned_documents", required = true) List<InputScannedDoc> scannedDocuments,
+        @JsonProperty("scanned_documents") List<InputScannedDoc> scannedDocuments,
         @JsonProperty("ocr_data_fields") List<OcrDataField> ocrDataFields,
         @JsonProperty("envelope_id") String envelopeId
     ) {
