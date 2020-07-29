@@ -3,3 +3,5 @@ java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   devApplicationInsightsInstrumentKey: "6a512449-6a07-4994-b08d-059b9146bbe9"
+bulk-scan:
+  enabled: false
