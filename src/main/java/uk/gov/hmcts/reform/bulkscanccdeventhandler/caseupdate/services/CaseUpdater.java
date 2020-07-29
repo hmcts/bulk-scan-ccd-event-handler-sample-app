@@ -44,13 +44,6 @@ public class CaseUpdater {
             "Missing scanned documents in exception record"
         );
 
-        if (caseUpdateRequest.caseUpdateDetails != null) {
-            Assert.notEmpty(
-                caseUpdateRequest.caseUpdateDetails.scannedDocuments,
-                "Missing scanned documents in case update details"
-            );
-        }
-
         Address newAddress = addressExtractor.extractFrom(caseUpdateRequest.transformationInput.ocrDataFields);
 
         LOG.info("Case update, case details id: {}", caseUpdateRequest.caseDetails.id);

@@ -38,22 +38,4 @@ class UpdateCaseControllerTest {
             jsonPath("$.error").value("Missing scanned documents in exception record")
         );
     }
-
-    @Test
-    void should_respond_400_when_required_scanned_documents_in_case_update_details_are_missing() throws Exception {
-        String body = Resources.toString(
-            getResource("caseupdate/invalid-no-documents-in-case-update-details.json"), UTF_8
-        );
-
-        mvc.perform(
-            post("/update-case")
-                .header("ServiceAuthorization", "auth-header-value")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .content(body)
-        ).andExpect(
-            status().is(BAD_REQUEST.value())
-        ).andExpect(
-            jsonPath("$.error").value("Missing scanned documents in case update details")
-        );
-    }
 }
