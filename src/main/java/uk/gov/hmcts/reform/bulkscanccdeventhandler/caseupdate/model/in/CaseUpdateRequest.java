@@ -19,7 +19,7 @@ public class CaseUpdateRequest {
         @JsonProperty("is_automated_process") boolean isAutomatedProcess,
         @JsonProperty("exception_record") TransformationInput transformationInput,
         @JsonProperty("case_update_details") CaseUpdateDetails caseUpdateDetails,
-        @JsonProperty(value = "case_details", required = true) CaseDetails caseDetails
+        @JsonProperty("case_details") CaseDetails caseDetails
     ) {
         this.isAutomatedProcess = isAutomatedProcess;
         this.transformationInput = transformationInput;
