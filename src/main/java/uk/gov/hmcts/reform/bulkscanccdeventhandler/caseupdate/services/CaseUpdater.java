@@ -46,6 +46,7 @@ public class CaseUpdater {
         );
 
         final List<String> warnings =
+            // TODO fix functional test to make it possible to remove check caseUpdateDetails for null
             caseUpdateRequest.caseUpdateDetails == null
                 ? emptyList()
                 : caseUpdateDetailsValidator.getWarnings(caseUpdateRequest.caseUpdateDetails);
