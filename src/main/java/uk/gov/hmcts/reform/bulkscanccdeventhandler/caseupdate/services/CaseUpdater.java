@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services;
 
-import com.google.common.collect.Iterables;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -17,7 +16,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyList;
 import static org.slf4j.LoggerFactory.getLogger;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.ScannedDocumentMapper.mapToScannedDocument;
@@ -30,16 +28,13 @@ public class CaseUpdater {
     private static final Logger LOG = getLogger(CaseUpdater.class);
 
     private final CaseUpdateDetailsValidator caseUpdateDetailsValidator;
-    private final UpdatedCaseValidator updatedCaseValidator;
     private final AddressExtractor addressExtractor;
 
     public CaseUpdater(
         CaseUpdateDetailsValidator caseUpdateDetailsValidator,
-        UpdatedCaseValidator updatedCaseValidator,
         AddressExtractor addressExtractor
     ) {
         this.caseUpdateDetailsValidator = caseUpdateDetailsValidator;
-        this.updatedCaseValidator = updatedCaseValidator;
         this.addressExtractor = addressExtractor;
     }
 
@@ -77,11 +72,8 @@ public class CaseUpdater {
             originalCase.bulkScanCaseReference
         );
 
-        final List<String> resultWarnings =
-            newArrayList(Iterables.concat(warnings, updatedCaseValidator.getWarnings(newCase)));
-
-        if (caseUpdateRequest.isAutomatedProcess && !resultWarnings.isEmpty()) {
-            throw new InvalidCaseUpdateDetailsException(resultWarnings);
+        if (caseUpdateRequest.isAutomatedProcess && !warnings.isEmpty()) {
+            throw new InvalidCaseUpdateDetailsException(warnings);
         } else {
             return new SuccessfulUpdateResponse(
                 new CaseUpdateDetails(
@@ -90,7 +82,7 @@ public class CaseUpdater {
                     EVENT_ID,
                     newCase
                 ),
-                resultWarnings
+                warnings
             );
         }
     }

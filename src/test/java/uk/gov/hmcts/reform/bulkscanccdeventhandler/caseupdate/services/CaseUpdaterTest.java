@@ -37,7 +37,6 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.transforma
 public class CaseUpdaterTest {
 
     @Mock private CaseUpdateDetailsValidator caseUpdateDetailsValidator;
-    @Mock private UpdatedCaseValidator updatedCaseValidator;
     @Mock private AddressExtractor addressExtractor;
 
     private CaseUpdater caseUpdater;
@@ -46,7 +45,6 @@ public class CaseUpdaterTest {
     public void setUp() {
         this.caseUpdater = new CaseUpdater(
             caseUpdateDetailsValidator,
-            updatedCaseValidator,
             addressExtractor
         );
     }
@@ -74,7 +72,6 @@ public class CaseUpdaterTest {
 
         given(caseUpdateDetailsValidator.getWarnings(caseUpdateDetails)).willReturn(emptyList());
         given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
-        given(updatedCaseValidator.getWarnings(any(SampleCase.class))).willReturn(emptyList());
 
         // when
         SuccessfulUpdateResponse result =
@@ -115,7 +112,6 @@ public class CaseUpdaterTest {
         TransformationInput transformationInput = transformationInput(exceptionRecordScannedDocuments);
 
         given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
-        given(updatedCaseValidator.getWarnings(any(SampleCase.class))).willReturn(emptyList());
 
         // when
         SuccessfulUpdateResponse result =
@@ -162,7 +158,6 @@ public class CaseUpdaterTest {
 
         given(caseUpdateDetailsValidator.getWarnings(caseUpdateDetails)).willReturn(asList("w1", "w2"));
         given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
-        given(updatedCaseValidator.getWarnings(any(SampleCase.class))).willReturn(emptyList());
 
         // when
         SuccessfulUpdateResponse result =
@@ -192,100 +187,6 @@ public class CaseUpdaterTest {
     }
 
     @Test
-    public void should_update_case_if_auto_process_is_false_and_case_validation_warnings() {
-        // given
-        Address exceptionRecordAddress = address("-er");
-
-        List<Item<ScannedDocument>> caseScannedDocuments = scannedDocuments();
-        SampleCase originalCase = sampleCase(caseScannedDocuments);
-
-        List<InputScannedDoc> exceptionRecordScannedDocuments = inputScannedDocuments();
-        TransformationInput transformationInput = transformationInput(exceptionRecordScannedDocuments);
-
-        CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(
-            exceptionRecordScannedDocuments,
-            emptyList()
-        );
-
-        given(caseUpdateDetailsValidator.getWarnings(caseUpdateDetails)).willReturn(emptyList());
-        given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
-        given(updatedCaseValidator.getWarnings(any(SampleCase.class))).willReturn(asList("w3", "w4"));
-
-        // when
-        SuccessfulUpdateResponse result =
-            caseUpdater.update(
-                new CaseUpdateRequest(
-                    false,
-                    transformationInput,
-                    caseUpdateDetails,
-                    caseDetails(originalCase)
-                )
-            );
-
-        // then
-        assertThat(result.caseUpdateDetails.caseData.address)
-            .isEqualToComparingFieldByField(exceptionRecordAddress);
-        assertCaseData(result.caseUpdateDetails.caseData, originalCase);
-        assertThat(result.warnings).containsExactlyInAnyOrder("w3", "w4");
-        assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
-        assertScannedDocumentsFromExistingCase(
-            result.caseUpdateDetails.caseData.scannedDocuments,
-            caseScannedDocuments
-        );
-        assertScannedDocumentsFromExceptionRecord(
-            result.caseUpdateDetails.caseData.scannedDocuments,
-            exceptionRecordScannedDocuments
-        );
-    }
-
-    @Test
-    public void should_update_case_if_auto_process_is_false_and_update_details_and_case_validation_warnings() {
-        // given
-        Address exceptionRecordAddress = address("-er");
-
-        List<Item<ScannedDocument>> caseScannedDocuments = scannedDocuments();
-        SampleCase originalCase = sampleCase(caseScannedDocuments);
-
-        List<InputScannedDoc> exceptionRecordScannedDocuments = inputScannedDocuments();
-        TransformationInput transformationInput = transformationInput(exceptionRecordScannedDocuments);
-
-        CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(
-            exceptionRecordScannedDocuments,
-            emptyList()
-        );
-
-        given(caseUpdateDetailsValidator.getWarnings(caseUpdateDetails)).willReturn(asList("w1", "w2"));
-        given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
-        given(updatedCaseValidator.getWarnings(any(SampleCase.class))).willReturn(asList("w3", "w4"));
-
-        // when
-        SuccessfulUpdateResponse result =
-            caseUpdater.update(
-                new CaseUpdateRequest(
-                    false,
-                    transformationInput,
-                    caseUpdateDetails,
-                    caseDetails(originalCase)
-                )
-            );
-
-        // then
-        assertThat(result.caseUpdateDetails.caseData.address)
-            .isEqualToComparingFieldByField(exceptionRecordAddress);
-        assertCaseData(result.caseUpdateDetails.caseData, originalCase);
-        assertThat(result.warnings).containsExactlyInAnyOrder("w1", "w2", "w3", "w4");
-        assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
-        assertScannedDocumentsFromExistingCase(
-            result.caseUpdateDetails.caseData.scannedDocuments,
-            caseScannedDocuments
-        );
-        assertScannedDocumentsFromExceptionRecord(
-            result.caseUpdateDetails.caseData.scannedDocuments,
-            exceptionRecordScannedDocuments
-        );
-    }
-
-    @Test
     public void should_throw_422_for_auto_process_is_true_when_update_details_validation_warnings() {
         // given
         Address exceptionRecordAddress = address("-er");
@@ -303,7 +204,6 @@ public class CaseUpdaterTest {
 
         given(caseUpdateDetailsValidator.getWarnings(caseUpdateDetails)).willReturn(asList("w1", "w2"));
         given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
-        given(updatedCaseValidator.getWarnings(any(SampleCase.class))).willReturn(emptyList());
 
         // when
         InvalidCaseUpdateDetailsException exc = catchThrowableOfType(
@@ -320,80 +220,6 @@ public class CaseUpdaterTest {
 
         // then
         assertThat(exc.getErrors()).containsExactlyInAnyOrder("w1", "w2");
-    }
-
-    @Test
-    public void should_throw_422_for_auto_process_is_true_when_case_validation_warnings() {
-        // given
-        Address exceptionRecordAddress = address("-er");
-
-        List<Item<ScannedDocument>> scannedDocuments = scannedDocuments();
-        SampleCase originalCase = sampleCase(scannedDocuments);
-
-        List<InputScannedDoc> inputScannedDocuments = inputScannedDocuments();
-        TransformationInput transformationInput = transformationInput(inputScannedDocuments);
-
-        CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(
-            inputScannedDocuments,
-            emptyList()
-        );
-
-        given(caseUpdateDetailsValidator.getWarnings(caseUpdateDetails)).willReturn(emptyList());
-        given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
-        given(updatedCaseValidator.getWarnings(any(SampleCase.class))).willReturn(asList("w3", "w4"));
-
-        // when
-        InvalidCaseUpdateDetailsException exc = catchThrowableOfType(
-            () -> caseUpdater.update(
-                new CaseUpdateRequest(
-                    true,
-                    transformationInput,
-                    caseUpdateDetails,
-                    caseDetails(originalCase)
-                )
-            ),
-            InvalidCaseUpdateDetailsException.class
-        );
-
-        // then
-        assertThat(exc.getErrors()).containsExactlyInAnyOrder("w3", "w4");
-    }
-
-    @Test
-    public void should_throw_422_for_auto_process_is_true_when_update_details_and_case_validation_warnings() {
-        // given
-        Address exceptionRecordAddress = address("-er");
-
-        List<Item<ScannedDocument>> scannedDocuments = scannedDocuments();
-        SampleCase originalCase = sampleCase(scannedDocuments);
-
-        List<InputScannedDoc> inputScannedDocuments = inputScannedDocuments();
-        TransformationInput transformationInput = transformationInput(inputScannedDocuments);
-
-        CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(
-            inputScannedDocuments,
-            emptyList()
-        );
-
-        given(caseUpdateDetailsValidator.getWarnings(caseUpdateDetails)).willReturn(asList("w1", "w2"));
-        given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
-        given(updatedCaseValidator.getWarnings(any(SampleCase.class))).willReturn(asList("w3", "w4"));
-
-        // when
-        InvalidCaseUpdateDetailsException exc = catchThrowableOfType(
-            () -> caseUpdater.update(
-                new CaseUpdateRequest(
-                    true,
-                    transformationInput,
-                    caseUpdateDetails,
-                    caseDetails(originalCase)
-                )
-            ),
-            InvalidCaseUpdateDetailsException.class
-        );
-
-        // then
-        assertThat(exc.getErrors()).containsExactlyInAnyOrder("w1", "w2", "w3", "w4");
     }
 
     @Test
