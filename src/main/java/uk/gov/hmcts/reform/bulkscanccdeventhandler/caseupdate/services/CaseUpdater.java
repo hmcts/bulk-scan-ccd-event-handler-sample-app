@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Collections.emptyList;
 import static org.slf4j.LoggerFactory.getLogger;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.ScannedDocumentMapper.mapToScannedDocument;
 
@@ -51,7 +52,10 @@ public class CaseUpdater {
             "Missing scanned documents in exception record"
         );
 
-        final List<String> warnings = caseUpdateDetailsValidator.getWarnings(caseUpdateRequest.caseUpdateDetails);
+        final List<String> warnings =
+            caseUpdateRequest.caseUpdateDetails == null
+                ? emptyList()
+                : caseUpdateDetailsValidator.getWarnings(caseUpdateRequest.caseUpdateDetails);
 
         Address newAddress = addressExtractor.extractFrom(caseUpdateRequest.transformationInput.ocrDataFields);
 

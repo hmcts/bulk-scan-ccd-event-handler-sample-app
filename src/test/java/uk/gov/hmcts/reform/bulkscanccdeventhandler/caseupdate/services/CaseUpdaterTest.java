@@ -105,6 +105,52 @@ public class CaseUpdaterTest {
     }
 
     @Test
+    public void should_update_case_data_with_exception_record_if_null_case_update_details_no_warnings() {
+        // given
+        Address exceptionRecordAddress = address("-er");
+
+        List<Item<ScannedDocument>> caseScannedDocuments = scannedDocuments();
+        SampleCase originalCase = sampleCase(caseScannedDocuments);
+
+        List<InputScannedDoc> exceptionRecordScannedDocuments = inputScannedDocuments();
+        TransformationInput transformationInput = transformationInput(exceptionRecordScannedDocuments);
+
+        CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(
+            exceptionRecordScannedDocuments,
+            emptyList()
+        );
+
+        given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
+        given(updatedCaseValidator.getWarnings(any(SampleCase.class))).willReturn(emptyList());
+
+        // when
+        SuccessfulUpdateResponse result =
+            caseUpdater.update(
+                new CaseUpdateRequest(
+                    false,
+                    transformationInput,
+                    null,
+                    caseDetails(originalCase)
+                )
+            );
+
+        // then
+        assertThat(result.caseUpdateDetails.caseData.address)
+            .isEqualToComparingFieldByField(exceptionRecordAddress);
+        assertCaseData(result.caseUpdateDetails.caseData, originalCase);
+        assertThat(result.warnings).isEmpty();
+        assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
+        assertScannedDocumentsFromExistingCase(
+            result.caseUpdateDetails.caseData.scannedDocuments,
+            caseScannedDocuments
+        );
+        assertScannedDocumentsFromExceptionRecord(
+            result.caseUpdateDetails.caseData.scannedDocuments,
+            exceptionRecordScannedDocuments
+        );
+    }
+
+    @Test
     public void should_update_case_if_auto_process_is_false_and_update_details_warnings() {
         // given
         Address exceptionRecordAddress = address("-er");
