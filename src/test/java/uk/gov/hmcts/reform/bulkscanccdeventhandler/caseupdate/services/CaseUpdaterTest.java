@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.client.HttpClientErrorException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateRequest;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
@@ -114,11 +113,6 @@ public class CaseUpdaterTest {
 
         List<InputScannedDoc> exceptionRecordScannedDocuments = inputScannedDocuments();
         TransformationInput transformationInput = transformationInput(exceptionRecordScannedDocuments);
-
-        CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(
-            exceptionRecordScannedDocuments,
-            emptyList()
-        );
 
         given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
         given(updatedCaseValidator.getWarnings(any(SampleCase.class))).willReturn(emptyList());
@@ -312,7 +306,7 @@ public class CaseUpdaterTest {
         given(updatedCaseValidator.getWarnings(any(SampleCase.class))).willReturn(emptyList());
 
         // when
-        HttpClientErrorException.UnprocessableEntity exc = catchThrowableOfType(
+        InvalidCaseUpdateDetailsException exc = catchThrowableOfType(
             () -> caseUpdater.update(
                 new CaseUpdateRequest(
                     true,
@@ -321,11 +315,11 @@ public class CaseUpdaterTest {
                     caseDetails(originalCase)
                 )
             ),
-            HttpClientErrorException.UnprocessableEntity.class
+            InvalidCaseUpdateDetailsException.class
         );
 
         // then
-        assertThat(exc.getResponseBodyAsString()).isEqualTo("w1,w2");
+        assertThat(exc.getErrors()).containsExactlyInAnyOrder("w1", "w2");
     }
 
     @Test
@@ -349,7 +343,7 @@ public class CaseUpdaterTest {
         given(updatedCaseValidator.getWarnings(any(SampleCase.class))).willReturn(asList("w3", "w4"));
 
         // when
-        HttpClientErrorException.UnprocessableEntity exc = catchThrowableOfType(
+        InvalidCaseUpdateDetailsException exc = catchThrowableOfType(
             () -> caseUpdater.update(
                 new CaseUpdateRequest(
                     true,
@@ -358,11 +352,11 @@ public class CaseUpdaterTest {
                     caseDetails(originalCase)
                 )
             ),
-            HttpClientErrorException.UnprocessableEntity.class
+            InvalidCaseUpdateDetailsException.class
         );
 
         // then
-        assertThat(exc.getResponseBodyAsString()).isEqualTo("w3,w4");
+        assertThat(exc.getErrors()).containsExactlyInAnyOrder("w3", "w4");
     }
 
     @Test
@@ -386,7 +380,7 @@ public class CaseUpdaterTest {
         given(updatedCaseValidator.getWarnings(any(SampleCase.class))).willReturn(asList("w3", "w4"));
 
         // when
-        HttpClientErrorException.UnprocessableEntity exc = catchThrowableOfType(
+        InvalidCaseUpdateDetailsException exc = catchThrowableOfType(
             () -> caseUpdater.update(
                 new CaseUpdateRequest(
                     true,
@@ -395,11 +389,11 @@ public class CaseUpdaterTest {
                     caseDetails(originalCase)
                 )
             ),
-            HttpClientErrorException.UnprocessableEntity.class
+            InvalidCaseUpdateDetailsException.class
         );
 
         // then
-        assertThat(exc.getResponseBodyAsString()).isEqualTo("w1,w2,w3,w4");
+        assertThat(exc.getErrors()).containsExactlyInAnyOrder("w1", "w2", "w3", "w4");
     }
 
     @Test

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services.InvalidCaseUpdateDetailsException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.ForbiddenException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.UnauthenticatedException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ApiError;
@@ -43,6 +44,11 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<ApiError> handleForbiddenException(ForbiddenException exc) {
         log.warn(exc.getMessage(), exc);
         return status(FORBIDDEN).body(API_ERROR_FORBIDDEN);
+    }
+
+    @ExceptionHandler(InvalidCaseUpdateDetailsException.class)
+    protected ResponseEntity<ErrorResponse> handleInvalidCaseUpdateDetails(InvalidExceptionRecordException exc) {
+        return status(UNPROCESSABLE_ENTITY).body(new ErrorResponse(exc.getErrors(), emptyList()));
     }
 
     @ExceptionHandler(InvalidExceptionRecordException.class)

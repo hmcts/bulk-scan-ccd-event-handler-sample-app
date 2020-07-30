@@ -2,10 +2,8 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services;
 
 import com.google.common.collect.Iterables;
 import org.slf4j.Logger;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.web.client.HttpClientErrorException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateRequest;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
@@ -83,13 +81,7 @@ public class CaseUpdater {
             newArrayList(Iterables.concat(warnings, updatedCaseValidator.getWarnings(newCase)));
 
         if (caseUpdateRequest.isAutomatedProcess && !resultWarnings.isEmpty()) {
-            throw HttpClientErrorException.create(
-                HttpStatus.UNPROCESSABLE_ENTITY,
-                "unprocessable entity message",
-                null,
-                String.join(",", resultWarnings).getBytes(),
-                null
-            );
+            throw new InvalidCaseUpdateDetailsException(resultWarnings);
         } else {
             return new SuccessfulUpdateResponse(
                 new CaseUpdateDetails(
