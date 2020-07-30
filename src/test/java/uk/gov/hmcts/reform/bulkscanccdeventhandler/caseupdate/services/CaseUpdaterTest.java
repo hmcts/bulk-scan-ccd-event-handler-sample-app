@@ -101,7 +101,7 @@ public class CaseUpdaterTest {
     }
 
     @Test
-    public void should_update_case_data_with_exception_record_if_null_case_update_details_no_warnings() {
+    public void should_update_case_with_exception_record_with_no_warnings_if_null_case_update_details_no_warnings() {
         // given
         Address exceptionRecordAddress = address("-er");
 
@@ -187,7 +187,7 @@ public class CaseUpdaterTest {
     }
 
     @Test
-    public void should_throw_422_for_auto_process_is_true_when_update_details_validation_warnings() {
+    public void should_throw_for_auto_process_is_true_when_update_details_validation_warnings() {
         // given
         Address exceptionRecordAddress = address("-er");
 
