@@ -21,7 +21,7 @@ public class CaseUpdateDetailsValidator {
         } else {
             return isValidEmailAddress(email)
                 ? emptyList()
-                : singletonList("'email' is invalid " + email);
+                : singletonList("invalid email '" + email + "'");
         }
     }
 }
