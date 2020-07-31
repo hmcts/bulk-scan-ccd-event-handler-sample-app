@@ -19,13 +19,13 @@ class CaseUpdateDetailsValidatorTest {
     }
 
     @Test
-    public void should_return_warning_when_email_is_blank() {
+    void should_return_warning_when_email_is_blank() {
         assertThat(validator.getWarnings(detailsWithEmail("")))
             .containsExactly("invalid email ''");
     }
 
     @Test
-    public void should_return_warning_when_email_is_invalid() {
+    void should_return_warning_when_email_is_invalid() {
         assertThat(validator.getWarnings(detailsWithEmail("invalidemail")))
             .containsExactly("invalid email 'invalidemail'");
     }
