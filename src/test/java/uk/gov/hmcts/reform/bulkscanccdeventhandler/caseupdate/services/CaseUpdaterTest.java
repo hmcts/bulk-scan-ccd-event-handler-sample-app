@@ -36,7 +36,7 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.scannedDoc
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.transformationInput;
 
 @ExtendWith(MockitoExtension.class)
-public class CaseUpdaterTest {
+class CaseUpdaterTest {
 
     @Mock private CaseUpdateDetailsValidator caseUpdateDetailsValidator;
     @Mock private AddressExtractor addressExtractor;
@@ -44,7 +44,7 @@ public class CaseUpdaterTest {
     private CaseUpdater caseUpdater;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.caseUpdater = new CaseUpdater(
             caseUpdateDetailsValidator,
             addressExtractor
@@ -57,7 +57,7 @@ public class CaseUpdaterTest {
      *
      */
     @Test
-    public void should_update_case_data_with_exception_record_if_no_warnings() {
+    void should_update_case_data_with_exception_record_if_no_warnings() {
         // given
         Address exceptionRecordAddress = address("-er");
 
@@ -103,7 +103,7 @@ public class CaseUpdaterTest {
     }
 
     @Test
-    public void should_update_case_with_exception_record_with_no_warnings_if_null_case_update_details_no_warnings() {
+    void should_update_case_with_exception_record_with_no_warnings_if_null_case_update_details_no_warnings() {
         // given
         Address exceptionRecordAddress = address("-er");
 
@@ -143,7 +143,7 @@ public class CaseUpdaterTest {
     }
 
     @Test
-    public void should_update_case_if_auto_process_is_false_and_update_details_warnings() {
+    void should_update_case_if_auto_process_is_false_and_update_details_warnings() {
         // given
         Address exceptionRecordAddress = address("-er");
 
@@ -189,7 +189,7 @@ public class CaseUpdaterTest {
     }
 
     @Test
-    public void should_throw_for_auto_process_is_true_when_update_details_validation_warnings() {
+    void should_throw_for_auto_process_is_true_when_update_details_validation_warnings() {
         // given
         Address exceptionRecordAddress = address("-er");
 
@@ -225,7 +225,7 @@ public class CaseUpdaterTest {
     }
 
     @Test
-    public void should_not_update_case_data_without_any_documents() {
+    void should_not_update_case_data_without_any_documents() {
         // given
         SampleCase originalCase = sampleCase(emptyList());
 
@@ -252,7 +252,7 @@ public class CaseUpdaterTest {
     }
 
     @Test
-    public void should_throw_for_auto_process_is_true_when_case_update_details_null() {
+    void should_throw_for_auto_process_is_true_when_case_update_details_null() {
         // given
         List<Item<ScannedDocument>> scannedDocuments = scannedDocuments();
         SampleCase originalCase = sampleCase(scannedDocuments);
@@ -279,7 +279,7 @@ public class CaseUpdaterTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
-    public void should_throw_when_scanned_documents_empty(boolean isAutomatedProcess) {
+    void should_throw_when_scanned_documents_empty(boolean isAutomatedProcess) {
         // given
         SampleCase originalCase = sampleCase(scannedDocuments());
 
