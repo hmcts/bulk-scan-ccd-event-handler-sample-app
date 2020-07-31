@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateDetails;
@@ -247,6 +249,59 @@ public class CaseUpdaterTest {
         // then
         assertThat(exception).hasMessage("Missing scanned documents in exception record");
         verifyNoInteractions(addressExtractor);
+    }
+
+    @Test
+    public void should_throw_for_auto_process_is_true_when_case_update_details_null() {
+        // given
+        List<Item<ScannedDocument>> scannedDocuments = scannedDocuments();
+        SampleCase originalCase = sampleCase(scannedDocuments);
+
+        List<InputScannedDoc> inputScannedDocuments = inputScannedDocuments();
+        TransformationInput transformationInput = transformationInput(inputScannedDocuments);
+
+        // when
+        IllegalArgumentException exc = catchThrowableOfType(
+            () -> caseUpdater.update(
+                new CaseUpdateRequest(
+                    true,
+                    transformationInput,
+                    null,
+                    caseDetails(originalCase)
+                )
+            ),
+            IllegalArgumentException.class
+        );
+
+        // then
+        assertThat(exc.getMessage()).isEqualTo("Missing case update details when process is automated");
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    public void should_throw_when_scanned_documents_empty(boolean isAutomatedProcess) {
+        // given
+        SampleCase originalCase = sampleCase(scannedDocuments());
+
+        TransformationInput transformationInput = transformationInput((emptyList()));
+
+        CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(emptyList(), emptyList());
+
+        // when
+        IllegalArgumentException exc = catchThrowableOfType(
+            () -> caseUpdater.update(
+                new CaseUpdateRequest(
+                    isAutomatedProcess,
+                    transformationInput,
+                    caseUpdateDetails,
+                    caseDetails(originalCase)
+                )
+            ),
+            IllegalArgumentException.class
+        );
+
+        // then
+        assertThat(exc.getMessage()).isEqualTo("Missing scanned documents in exception record");
     }
 
     private void assertCaseData(SampleCase actualCaseData, SampleCase expectedCaseData) {

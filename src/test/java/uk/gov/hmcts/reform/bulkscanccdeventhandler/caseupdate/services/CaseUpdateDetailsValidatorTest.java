@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateDetails;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,7 +37,7 @@ class CaseUpdateDetailsValidatorTest {
 
     @Test
     void should_return_empty_array_if_email_is_null() {
-        assertThat(validator.getWarnings(detailsWithEmail("hello@test.com"))).isEmpty();
+        assertThat(validator.getWarnings(detailsWithEmail(null))).isEmpty();
     }
 
     private CaseUpdateDetails detailsWithEmail(String email) {
@@ -50,7 +51,7 @@ class CaseUpdateDetailsValidatorTest {
             null,
             null,
             null,
-            email == null ? null : singletonList(new OcrDataField("email", email)),
+            email == null ? emptyList() : singletonList(new OcrDataField("email", email)),
             null
         );
     }

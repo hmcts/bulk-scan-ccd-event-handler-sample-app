@@ -47,7 +47,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(InvalidCaseUpdateDetailsException.class)
-    protected ResponseEntity<ErrorResponse> handleInvalidCaseUpdateDetails(InvalidExceptionRecordException exc) {
+    protected ResponseEntity<ErrorResponse> handleInvalidCaseUpdateDetails(InvalidCaseUpdateDetailsException exc) {
         return status(UNPROCESSABLE_ENTITY).body(new ErrorResponse(exc.getErrors(), emptyList()));
     }
 

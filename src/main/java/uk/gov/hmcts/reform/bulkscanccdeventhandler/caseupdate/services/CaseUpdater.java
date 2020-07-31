@@ -45,8 +45,15 @@ public class CaseUpdater {
             "Missing scanned documents in exception record"
         );
 
+        if (caseUpdateRequest.isAutomatedProcess) {
+            Assert.notNull(
+                caseUpdateRequest.caseUpdateDetails,
+                "Missing case update details when process is automated"
+            );
+        }
+
         final List<String> warnings =
-            // TODO fix functional test to make it possible to remove check caseUpdateDetails for null
+            // TODO fix functional test to make it possible to remove check if caseUpdateDetails is null
             caseUpdateRequest.caseUpdateDetails == null
                 ? emptyList()
                 : caseUpdateDetailsValidator.getWarnings(caseUpdateRequest.caseUpdateDetails);
