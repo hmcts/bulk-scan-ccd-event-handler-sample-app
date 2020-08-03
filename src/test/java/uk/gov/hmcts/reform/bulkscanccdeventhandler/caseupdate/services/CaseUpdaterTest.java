@@ -283,7 +283,7 @@ class CaseUpdaterTest {
         // given
         SampleCase originalCase = sampleCase(scannedDocuments());
 
-        TransformationInput transformationInput = transformationInput((emptyList()));
+        TransformationInput transformationInput = transformationInput(emptyList());
 
         CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(emptyList(), emptyList());
 
