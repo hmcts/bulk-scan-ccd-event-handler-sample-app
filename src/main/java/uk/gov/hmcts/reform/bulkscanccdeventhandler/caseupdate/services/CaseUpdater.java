@@ -60,6 +60,10 @@ public class CaseUpdater {
 
         Address newAddress = addressExtractor.extractFrom(caseUpdateRequest.transformationInput.ocrDataFields);
 
+        if (caseUpdateRequest.isAutomatedProcess && !warnings.isEmpty()) {
+            throw new InvalidCaseUpdateDetailsException(warnings);
+        }
+
         LOG.info("Case update, case details id: {}", caseUpdateRequest.caseDetails.id);
 
         SampleCase originalCase = caseUpdateRequest.caseDetails.caseData;
@@ -80,19 +84,15 @@ public class CaseUpdater {
             originalCase.bulkScanCaseReference
         );
 
-        if (caseUpdateRequest.isAutomatedProcess && !warnings.isEmpty()) {
-            throw new InvalidCaseUpdateDetailsException(warnings);
-        } else {
-            return new SuccessfulUpdateResponse(
-                new CaseUpdateDetails(
-                    // This is just a sample implementation.
-                    // You can use different event IDs based on the changes made to a case...
-                    EVENT_ID,
-                    newCase
-                ),
-                warnings
-            );
-        }
+        return new SuccessfulUpdateResponse(
+            new CaseUpdateDetails(
+                // This is just a sample implementation.
+                // You can use different event IDs based on the changes made to a case...
+                EVENT_ID,
+                newCase
+            ),
+            warnings
+        );
     }
 
     private List<Item<ScannedDocument>> mergeScannedDocuments(
