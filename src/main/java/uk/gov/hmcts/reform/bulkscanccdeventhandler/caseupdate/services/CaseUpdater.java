@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static org.slf4j.LoggerFactory.getLogger;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.ScannedDocumentMapper.mapToScannedDocument;
 
@@ -26,14 +27,14 @@ public class CaseUpdater {
 
     private static final Logger LOG = getLogger(CaseUpdater.class);
 
-    private final UpdatedCaseValidator updatedCaseValidator;
+    private final CaseUpdateDetailsValidator caseUpdateDetailsValidator;
     private final AddressExtractor addressExtractor;
 
     public CaseUpdater(
-        UpdatedCaseValidator updatedCaseValidator,
+        CaseUpdateDetailsValidator caseUpdateDetailsValidator,
         AddressExtractor addressExtractor
     ) {
-        this.updatedCaseValidator = updatedCaseValidator;
+        this.caseUpdateDetailsValidator = caseUpdateDetailsValidator;
         this.addressExtractor = addressExtractor;
     }
 
@@ -44,7 +45,24 @@ public class CaseUpdater {
             "Missing scanned documents in exception record"
         );
 
+        if (caseUpdateRequest.isAutomatedProcess) {
+            Assert.notNull(
+                caseUpdateRequest.caseUpdateDetails,
+                "Case update details is required for automated process"
+            );
+        }
+
+        final List<String> warnings =
+            // TODO fix functional test to make it possible to remove check if caseUpdateDetails is null
+            caseUpdateRequest.caseUpdateDetails == null
+                ? emptyList()
+                : caseUpdateDetailsValidator.getWarnings(caseUpdateRequest.caseUpdateDetails);
+
         Address newAddress = addressExtractor.extractFrom(caseUpdateRequest.transformationInput.ocrDataFields);
+
+        if (caseUpdateRequest.isAutomatedProcess && !warnings.isEmpty()) {
+            throw new InvalidCaseUpdateDetailsException(warnings);
+        }
 
         LOG.info("Case update, case details id: {}", caseUpdateRequest.caseDetails.id);
 
@@ -65,8 +83,6 @@ public class CaseUpdater {
             ),
             originalCase.bulkScanCaseReference
         );
-
-        final List<String> warnings = updatedCaseValidator.getWarnings(newCase);
 
         return new SuccessfulUpdateResponse(
             new CaseUpdateDetails(
