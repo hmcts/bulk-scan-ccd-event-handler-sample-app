@@ -48,7 +48,7 @@ public class CaseUpdater {
         if (caseUpdateRequest.isAutomatedProcess) {
             Assert.notNull(
                 caseUpdateRequest.caseUpdateDetails,
-                "Missing case update details when process is automated"
+                "Case update details is required for automated process"
             );
         }
 

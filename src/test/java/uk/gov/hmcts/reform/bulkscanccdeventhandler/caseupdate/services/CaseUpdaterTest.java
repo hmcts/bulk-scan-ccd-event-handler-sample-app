@@ -274,7 +274,7 @@ class CaseUpdaterTest {
         );
 
         // then
-        assertThat(exc.getMessage()).isEqualTo("Missing case update details when process is automated");
+        assertThat(exc.getMessage()).isEqualTo("Case update details is required for automated process");
     }
 
     @ParameterizedTest
