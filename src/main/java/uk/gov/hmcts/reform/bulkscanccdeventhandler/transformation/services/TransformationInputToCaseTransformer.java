@@ -1,9 +1,7 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
@@ -54,25 +52,17 @@ public class TransformationInputToCaseTransformer {
         final List<String> warnings = caseValidator.getWarnings(caseData);
 
         if (transformationInput.isAutomatedProcess && !warnings.isEmpty()) {
-            final HttpClientErrorException unprocessableEntity =
-                HttpClientErrorException.create(
-                    HttpStatus.UNPROCESSABLE_ENTITY,
-                    "unprocessable entity message",
-                    null,
-                    String.join(",", warnings).getBytes(),
-                    null
-                );
-            throw unprocessableEntity;
+            throw new InvalidExceptionRecordException(warnings);
+        } else {
+            return new SuccessfulTransformationResponse(
+                new CaseCreationDetails(
+                    CASE_TYPE_ID,
+                    EVENT_ID,
+                    caseData
+                ),
+                warnings
+            );
         }
-
-        return new SuccessfulTransformationResponse(
-            new CaseCreationDetails(
-                CASE_TYPE_ID,
-                EVENT_ID,
-                caseData
-            ),
-            warnings
-        );
     }
 
     private SampleCase buildCase(TransformationInput er) {

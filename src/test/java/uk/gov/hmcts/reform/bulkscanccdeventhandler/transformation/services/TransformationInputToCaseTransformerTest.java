@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.client.HttpClientErrorException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.JourneyClassification;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
@@ -141,13 +140,13 @@ public class TransformationInputToCaseTransformerTest {
         given(caseValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
 
         // when
-        HttpClientErrorException.UnprocessableEntity exc = catchThrowableOfType(
+        InvalidExceptionRecordException exc = catchThrowableOfType(
             () -> service.toCase(transformationInput),
-            HttpClientErrorException.UnprocessableEntity.class
+            InvalidExceptionRecordException.class
         );
 
         // then
-        assertThat(exc.getResponseBodyAsString()).isEqualTo("w1,w2");
+        assertThat(exc.getErrors()).containsExactlyInAnyOrder("w1", "w2");
     }
 
     private void assertTransformationResult(SuccessfulTransformationResponse result) {
