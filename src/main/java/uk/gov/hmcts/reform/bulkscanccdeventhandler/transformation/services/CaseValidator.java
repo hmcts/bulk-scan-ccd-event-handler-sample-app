@@ -22,6 +22,6 @@ public class CaseValidator {
     private List<String> getEmailValidationResult(SampleCase theCase) {
         return isValidEmailAddress(theCase.email)
             ? emptyList()
-            : singletonList("'email' is invalid " + theCase.email);
+            : singletonList("invalid email '" + theCase.email + "'");
     }
 }
