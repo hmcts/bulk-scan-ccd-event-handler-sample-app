@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.controllers;
 
+import com.google.common.base.Enums;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.apache.commons.lang3.EnumUtils;
 import org.slf4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +64,7 @@ public class OcrValidationController {
         logger.info("Request received to validate ocr data from service {}", serviceName);
         authService.assertIsAllowedService(serviceName);
 
-        if (!EnumUtils.isValidEnum(FormType.class, formType)) {
+        if (!Enums.getIfPresent(FormType.class, formType).isPresent()) {
             return ok().body(new OcrValidationResponse(
                 emptyList(),
                 singletonList("Form type '" + formType + "' not found"),
