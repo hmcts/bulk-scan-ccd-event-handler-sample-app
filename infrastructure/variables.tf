@@ -1,19 +1,12 @@
-variable "product" {
-  type    = "string"
-}
+variable "product" {}
 
-variable "component" {
-  type = "string"
-}
+variable "component" {}
 
 variable "location_app" {
-  type    = "string"
   default = "UK South"
 }
 
-variable "env" {
-  type = "string"
-}
+variable "env" {}
 
 variable "ilbIp" {}
 
@@ -24,7 +17,7 @@ variable "capacity" {
 }
 
 variable "common_tags" {
-  type = "map"
+  type = map(string)
 }
 
 variable "test_s2s_name" {
