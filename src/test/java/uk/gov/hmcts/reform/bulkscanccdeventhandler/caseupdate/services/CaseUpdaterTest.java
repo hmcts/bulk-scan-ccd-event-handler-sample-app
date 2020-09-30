@@ -11,7 +11,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdat
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdateRequest;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Address;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
@@ -33,7 +32,6 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.caseUpdate
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.inputScannedDocuments;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.sampleCase;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.scannedDocuments;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.transformationInput;
 
 @ExtendWith(MockitoExtension.class)
 class CaseUpdaterTest {
@@ -53,34 +51,33 @@ class CaseUpdaterTest {
 
     /**
      * should override the address with exception record address data.
-     * should return total document list by merging the document list with exception and case
+     * should return total document list by merging the document list with input and existing case
      *
      */
     @Test
-    void should_update_case_data_with_exception_record_if_no_warnings() {
+    void should_update_case_data() {
         // given
-        Address exceptionRecordAddress = address("-er");
+        Address address = address("-er");
 
         List<Item<ScannedDocument>> caseScannedDocuments = scannedDocuments();
         SampleCase originalCase = sampleCase(caseScannedDocuments);
 
-        List<InputScannedDoc> exceptionRecordScannedDocuments = inputScannedDocuments();
-        TransformationInput transformationInput = transformationInput(exceptionRecordScannedDocuments);
+        List<InputScannedDoc> inputScannedDocs = inputScannedDocuments();
 
         CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(
-            exceptionRecordScannedDocuments,
+            inputScannedDocs,
             emptyList()
         );
 
         given(caseUpdateDetailsValidator.getWarnings(caseUpdateDetails)).willReturn(emptyList());
-        given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
+        given(addressExtractor.extractFrom(any())).willReturn(address);
 
         // when
         SuccessfulUpdateResponse result =
             caseUpdater.update(
                 new CaseUpdateRequest(
                     false,
-                    transformationInput,
+                    null,
                     caseUpdateDetails,
                     caseDetails(originalCase)
                 )
@@ -88,7 +85,7 @@ class CaseUpdaterTest {
 
         // then
         assertThat(result.caseUpdateDetails.caseData.address)
-            .isEqualToComparingFieldByField(exceptionRecordAddress);
+            .isEqualToComparingFieldByField(address);
         assertCaseData(result.caseUpdateDetails.caseData, originalCase);
         assertThat(result.warnings).isEmpty();
         assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
@@ -98,63 +95,22 @@ class CaseUpdaterTest {
         );
         assertScannedDocumentsFromExceptionRecord(
             result.caseUpdateDetails.caseData.scannedDocuments,
-            exceptionRecordScannedDocuments
+            inputScannedDocs
         );
     }
 
     @Test
-    void should_update_case_with_exception_record_with_no_warnings_if_null_case_update_details_no_warnings() {
+    void should_update_case_if_auto_process_is_false_and_there_are_update_details_warnings() {
         // given
         Address exceptionRecordAddress = address("-er");
 
         List<Item<ScannedDocument>> caseScannedDocuments = scannedDocuments();
         SampleCase originalCase = sampleCase(caseScannedDocuments);
 
-        List<InputScannedDoc> exceptionRecordScannedDocuments = inputScannedDocuments();
-        TransformationInput transformationInput = transformationInput(exceptionRecordScannedDocuments);
-
-        given(addressExtractor.extractFrom(any())).willReturn(exceptionRecordAddress);
-
-        // when
-        SuccessfulUpdateResponse result =
-            caseUpdater.update(
-                new CaseUpdateRequest(
-                    false,
-                    transformationInput,
-                    null,
-                    caseDetails(originalCase)
-                )
-            );
-
-        // then
-        assertThat(result.caseUpdateDetails.caseData.address)
-            .isEqualToComparingFieldByField(exceptionRecordAddress);
-        assertCaseData(result.caseUpdateDetails.caseData, originalCase);
-        assertThat(result.warnings).isEmpty();
-        assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
-        assertScannedDocumentsFromExistingCase(
-            result.caseUpdateDetails.caseData.scannedDocuments,
-            caseScannedDocuments
-        );
-        assertScannedDocumentsFromExceptionRecord(
-            result.caseUpdateDetails.caseData.scannedDocuments,
-            exceptionRecordScannedDocuments
-        );
-    }
-
-    @Test
-    void should_update_case_if_auto_process_is_false_and_update_details_warnings() {
-        // given
-        Address exceptionRecordAddress = address("-er");
-
-        List<Item<ScannedDocument>> caseScannedDocuments = scannedDocuments();
-        SampleCase originalCase = sampleCase(caseScannedDocuments);
-
-        List<InputScannedDoc> exceptionRecordScannedDocuments = inputScannedDocuments();
-        TransformationInput transformationInput = transformationInput(exceptionRecordScannedDocuments);
+        List<InputScannedDoc> inputScannedDocs = inputScannedDocuments();
 
         CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(
-            exceptionRecordScannedDocuments,
+            inputScannedDocs,
             emptyList()
         );
 
@@ -166,7 +122,7 @@ class CaseUpdaterTest {
             caseUpdater.update(
                 new CaseUpdateRequest(
                     false,
-                    transformationInput,
+                    null,
                     caseUpdateDetails,
                     caseDetails(originalCase)
                 )
@@ -184,12 +140,12 @@ class CaseUpdaterTest {
         );
         assertScannedDocumentsFromExceptionRecord(
             result.caseUpdateDetails.caseData.scannedDocuments,
-            exceptionRecordScannedDocuments
+            inputScannedDocs
         );
     }
 
     @Test
-    void should_throw_for_auto_process_is_true_when_update_details_validation_warnings() {
+    void should_throw_exception_for_auto_process_is_true_when_there_are_update_details_validation_warnings() {
         // given
         Address exceptionRecordAddress = address("-er");
 
@@ -197,7 +153,6 @@ class CaseUpdaterTest {
         SampleCase originalCase = sampleCase(scannedDocuments);
 
         List<InputScannedDoc> inputScannedDocuments = inputScannedDocuments();
-        TransformationInput transformationInput = transformationInput(inputScannedDocuments);
 
         CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(
             inputScannedDocuments,
@@ -212,7 +167,7 @@ class CaseUpdaterTest {
             () -> caseUpdater.update(
                 new CaseUpdateRequest(
                     true,
-                    transformationInput,
+                    null,
                     caseUpdateDetails,
                     caseDetails(originalCase)
                 )
@@ -229,8 +184,6 @@ class CaseUpdaterTest {
         // given
         SampleCase originalCase = sampleCase(emptyList());
 
-        TransformationInput transformationInput = transformationInput(emptyList());
-
         CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(emptyList(), emptyList());
 
         // when
@@ -238,7 +191,7 @@ class CaseUpdaterTest {
                 caseUpdater.update(
                     new CaseUpdateRequest(
                         false,
-                        transformationInput,
+                        null,
                         caseUpdateDetails,
                         caseDetails(originalCase)
                     )
@@ -247,7 +200,7 @@ class CaseUpdaterTest {
         );
 
         // then
-        assertThat(exception).hasMessage("Missing scanned documents in exception record");
+        assertThat(exception).hasMessage("Missing scanned documents");
         verifyNoInteractions(addressExtractor);
     }
 
@@ -258,14 +211,13 @@ class CaseUpdaterTest {
         SampleCase originalCase = sampleCase(scannedDocuments);
 
         List<InputScannedDoc> inputScannedDocuments = inputScannedDocuments();
-        TransformationInput transformationInput = transformationInput(inputScannedDocuments);
 
         // when
         IllegalArgumentException exc = catchThrowableOfType(
             () -> caseUpdater.update(
                 new CaseUpdateRequest(
                     true,
-                    transformationInput,
+                    null,
                     null,
                     caseDetails(originalCase)
                 )
@@ -274,7 +226,7 @@ class CaseUpdaterTest {
         );
 
         // then
-        assertThat(exc.getMessage()).isEqualTo("Case update details is required for automated process");
+        assertThat(exc.getMessage()).isEqualTo("Case update details is required");
     }
 
     @ParameterizedTest
@@ -283,8 +235,6 @@ class CaseUpdaterTest {
         // given
         SampleCase originalCase = sampleCase(scannedDocuments());
 
-        TransformationInput transformationInput = transformationInput(emptyList());
-
         CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(emptyList(), emptyList());
 
         // when
@@ -292,7 +242,7 @@ class CaseUpdaterTest {
             () -> caseUpdater.update(
                 new CaseUpdateRequest(
                     isAutomatedProcess,
-                    transformationInput,
+                    null,
                     caseUpdateDetails,
                     caseDetails(originalCase)
                 )
@@ -301,7 +251,7 @@ class CaseUpdaterTest {
         );
 
         // then
-        assertThat(exc.getMessage()).isEqualTo("Missing scanned documents in exception record");
+        assertThat(exc.getMessage()).isEqualTo("Missing scanned documents");
     }
 
     private void assertCaseData(SampleCase actualCaseData, SampleCase expectedCaseData) {

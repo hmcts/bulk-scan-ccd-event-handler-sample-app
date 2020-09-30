@@ -36,7 +36,7 @@ class UpdateCaseControllerTest {
         ).andExpect(
             status().is(BAD_REQUEST.value())
         ).andExpect(
-            jsonPath("$.error").value("Missing scanned documents in exception record")
+            jsonPath("$.error").value("Missing scanned documents")
         );
     }
 

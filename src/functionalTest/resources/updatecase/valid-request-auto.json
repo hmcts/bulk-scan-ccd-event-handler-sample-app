@@ -1,7 +1,9 @@
 {
-  "exception_record": {
-    "id": "id",
-    "case_type_id": "case_type_id",
+  "is_automated_process": true,
+  "case_update_details": {
+    "exception_record_id": "id",
+    "exception_record_case_type_id": "case_type_id",
+    "envelope_id": "envelope_id",
     "po_box": "po_box",
     "po_box_jurisdiction": "bulkscan",
     "form_type": "BULK1",
