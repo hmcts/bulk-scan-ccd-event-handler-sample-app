@@ -77,7 +77,6 @@ class CaseUpdaterTest {
             caseUpdater.update(
                 new CaseUpdateRequest(
                     false,
-                    null,
                     caseUpdateDetails,
                     caseDetails(originalCase)
                 )
@@ -122,7 +121,6 @@ class CaseUpdaterTest {
             caseUpdater.update(
                 new CaseUpdateRequest(
                     false,
-                    null,
                     caseUpdateDetails,
                     caseDetails(originalCase)
                 )
@@ -167,7 +165,6 @@ class CaseUpdaterTest {
             () -> caseUpdater.update(
                 new CaseUpdateRequest(
                     true,
-                    null,
                     caseUpdateDetails,
                     caseDetails(originalCase)
                 )
@@ -191,7 +188,6 @@ class CaseUpdaterTest {
                 caseUpdater.update(
                     new CaseUpdateRequest(
                         false,
-                        null,
                         caseUpdateDetails,
                         caseDetails(originalCase)
                     )
@@ -218,7 +214,6 @@ class CaseUpdaterTest {
                 new CaseUpdateRequest(
                     true,
                     null,
-                    null,
                     caseDetails(originalCase)
                 )
             ),
@@ -242,7 +237,6 @@ class CaseUpdaterTest {
             () -> caseUpdater.update(
                 new CaseUpdateRequest(
                     isAutomatedProcess,
-                    null,
                     caseUpdateDetails,
                     caseDetails(originalCase)
                 )
