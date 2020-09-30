@@ -48,13 +48,13 @@ public class CaseUpdater {
             "Missing scanned documents"
         );
 
+        Address newAddress = addressExtractor.extractFrom(caseUpdateRequest.caseUpdateDetails.ocrDataFields);
+
         final List<String> warnings = caseUpdateDetailsValidator.getWarnings(caseUpdateRequest.caseUpdateDetails);
 
         if (caseUpdateRequest.isAutomatedProcess && !warnings.isEmpty()) {
             throw new InvalidCaseUpdateDetailsException(warnings);
         }
-
-        Address newAddress = addressExtractor.extractFrom(caseUpdateRequest.caseUpdateDetails.ocrDataFields);
 
         LOG.info("Case update, case details id: {}", caseUpdateRequest.caseDetails.id);
 
