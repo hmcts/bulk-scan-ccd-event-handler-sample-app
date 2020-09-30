@@ -5,7 +5,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdat
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDoc;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.InputScannedDocUrl;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.JourneyClassification;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Address;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.DocumentUrl;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
@@ -17,7 +16,6 @@ import java.util.List;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 public final class InputHelper {
@@ -113,27 +111,6 @@ public final class InputHelper {
                 now(),
                 now()
             )
-        );
-    }
-
-    public static TransformationInput transformationInput(
-        List<InputScannedDoc> inputScannedDocuments
-    ) {
-        return new TransformationInput(
-            "er-id",
-            "er-case-type",
-            "er-pobox",
-            "er-jurisdiction",
-            "er-form-type",
-            JourneyClassification.SUPPLEMENTARY_EVIDENCE_WITH_OCR,
-            now(),
-            now(),
-            inputScannedDocuments,
-            emptyList(),
-            null,
-            false,
-            null,
-            null
         );
     }
 

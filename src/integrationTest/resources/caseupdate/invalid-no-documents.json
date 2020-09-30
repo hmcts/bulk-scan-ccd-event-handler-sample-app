@@ -1,6 +1,5 @@
 {
-  "exception_record": {
+  "case_update_details": {
     "scanned_documents": []
-  },
-  "case_details": {}
+  }
 }

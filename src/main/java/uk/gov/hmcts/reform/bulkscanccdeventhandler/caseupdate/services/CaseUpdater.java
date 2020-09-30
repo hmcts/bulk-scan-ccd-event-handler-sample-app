@@ -16,7 +16,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Collections.emptyList;
 import static org.slf4j.LoggerFactory.getLogger;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.ScannedDocumentMapper.mapToScannedDocument;
 
@@ -39,26 +38,19 @@ public class CaseUpdater {
     }
 
     public SuccessfulUpdateResponse update(CaseUpdateRequest caseUpdateRequest) {
-        // TODO remove this check after eliminating exception_record element from CaseUpdateRequest
-        Assert.notEmpty(
-            caseUpdateRequest.transformationInput.scannedDocuments,
-            "Missing scanned documents in exception record"
+        Assert.notNull(
+            caseUpdateRequest.caseUpdateDetails,
+            "Case update details is required"
         );
 
-        if (caseUpdateRequest.isAutomatedProcess) {
-            Assert.notNull(
-                caseUpdateRequest.caseUpdateDetails,
-                "Case update details is required for automated process"
-            );
-        }
+        Assert.notEmpty(
+            caseUpdateRequest.caseUpdateDetails.scannedDocuments,
+            "Missing scanned documents"
+        );
 
-        final List<String> warnings =
-            // TODO fix functional test to make it possible to remove check if caseUpdateDetails is null
-            caseUpdateRequest.caseUpdateDetails == null
-                ? emptyList()
-                : caseUpdateDetailsValidator.getWarnings(caseUpdateRequest.caseUpdateDetails);
+        final List<String> warnings = caseUpdateDetailsValidator.getWarnings(caseUpdateRequest.caseUpdateDetails);
 
-        Address newAddress = addressExtractor.extractFrom(caseUpdateRequest.transformationInput.ocrDataFields);
+        Address newAddress = addressExtractor.extractFrom(caseUpdateRequest.caseUpdateDetails.ocrDataFields);
 
         if (caseUpdateRequest.isAutomatedProcess && !warnings.isEmpty()) {
             throw new InvalidCaseUpdateDetailsException(warnings);
@@ -79,7 +71,7 @@ public class CaseUpdater {
             newAddress,
             mergeScannedDocuments(
                 originalCase.scannedDocuments,
-                caseUpdateRequest.transformationInput.scannedDocuments
+                caseUpdateRequest.caseUpdateDetails.scannedDocuments
             ),
             originalCase.bulkScanCaseReference
         );
@@ -107,7 +99,7 @@ public class CaseUpdater {
         }
 
         exceptionScannedDocuments.forEach(scannedDoc ->
-            newScannedDocuments.add(new Item<>(mapToScannedDocument(scannedDoc)))
+                                              newScannedDocuments.add(new Item<>(mapToScannedDocument(scannedDoc)))
         );
 
         return newScannedDocuments;
