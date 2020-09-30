@@ -50,11 +50,11 @@ public class CaseUpdater {
 
         final List<String> warnings = caseUpdateDetailsValidator.getWarnings(caseUpdateRequest.caseUpdateDetails);
 
-        Address newAddress = addressExtractor.extractFrom(caseUpdateRequest.caseUpdateDetails.ocrDataFields);
-
         if (caseUpdateRequest.isAutomatedProcess && !warnings.isEmpty()) {
             throw new InvalidCaseUpdateDetailsException(warnings);
         }
+
+        Address newAddress = addressExtractor.extractFrom(caseUpdateRequest.caseUpdateDetails.ocrDataFields);
 
         LOG.info("Case update, case details id: {}", caseUpdateRequest.caseDetails.id);
 
