@@ -99,7 +99,7 @@ public class CaseUpdater {
         }
 
         exceptionScannedDocuments.forEach(scannedDoc ->
-                                              newScannedDocuments.add(new Item<>(mapToScannedDocument(scannedDoc)))
+            newScannedDocuments.add(new Item<>(mapToScannedDocument(scannedDoc)))
         );
 
         return newScannedDocuments;

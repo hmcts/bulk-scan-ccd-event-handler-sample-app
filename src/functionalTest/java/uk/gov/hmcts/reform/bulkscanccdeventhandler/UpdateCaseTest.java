@@ -30,7 +30,7 @@ public class UpdateCaseTest {
     @Test
     public void should_update_case_for_automated_process() throws JSONException {
         updateCaseAndVerifyResponse(
-            "updatecase/valid-request-manual.json",
+            "updatecase/valid-request-auto.json",
             "updatecase/valid-response.json"
         );
     }
