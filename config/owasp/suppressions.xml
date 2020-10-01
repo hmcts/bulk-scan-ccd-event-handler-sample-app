@@ -7,11 +7,11 @@
     <cve>CVE-2018-10237</cve>
   </suppress>
 
-  <suppress>
+  <suppress until="2021-03-01">
     <notes><![CDATA[
      Suppressing as it seems a false positive
    ]]></notes>
-    <gav regex="true">^org\.springframework\.security:spring-security-crypto:5\.3\.3\.RELEASE$</gav>
+    <gav regex="true">^org\.springframework\.security:spring-security-crypto:5\.3\.4\.RELEASE$</gav>
     <cpe>cpe:/a:pivotal_software:spring_security</cpe>
     <cve>CVE-2018-1258</cve>
   </suppress>
@@ -22,13 +22,6 @@
    ]]></notes>
     <cpe>cpe:/a:jetbrains:kotlin</cpe>
     <cve>CVE-2020-15824</cve>
-  </suppress>
-
-  <suppress>
-    <notes><![CDATA[Nested dependency of adal4j. Microsoft needs to update strong relation of this library in ServiceBus]]></notes>
-    <gav regex="true">^org\.apache\.sling:org\.apache\.sling\.javax\.activation:0\.1\.0$</gav>
-    <cve>CVE-2016-5394</cve>
-    <cve>CVE-2016-6798</cve>
   </suppress>
 
   <suppress until="2020-11-01">
