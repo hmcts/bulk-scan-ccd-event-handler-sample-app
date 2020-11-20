@@ -12,11 +12,19 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.ScannedDocument;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.CONTACT_NUMBER;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.DATE_OF_BIRTH;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.EMAIL;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.FIRST_NAME;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.LAST_NAME;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.LEGACY_ID;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.OcrFieldExtractor.get;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.ScannedDocumentMapper.mapToScannedDocument;
 
 @Service
@@ -48,7 +56,9 @@ public class CaseUpdater {
             "Missing scanned documents"
         );
 
-        Address newAddress = addressExtractor.extractFrom(caseUpdateRequest.caseUpdateDetails.ocrDataFields);
+        final List<OcrDataField> ocrDataFields = caseUpdateRequest.caseUpdateDetails.ocrDataFields;
+
+        Address newAddress = addressExtractor.extractFrom(ocrDataFields);
 
         final List<String> warnings = caseUpdateDetailsValidator.getWarnings(caseUpdateRequest.caseUpdateDetails);
 
@@ -62,12 +72,12 @@ public class CaseUpdater {
         // This is just a sample implementation, we only overwrite the address here.
         // You'll probably update other fields and add new documents in your service case.
         SampleCase newCase = new SampleCase(
-            originalCase.legacyId,
-            originalCase.firstName,
-            originalCase.lastName,
-            originalCase.dateOfBirth,
-            originalCase.contactNumber,
-            originalCase.email,
+            getOcrDataField(ocrDataFields, LEGACY_ID, originalCase.legacyId),
+            getOcrDataField(ocrDataFields, FIRST_NAME, originalCase.firstName),
+            getOcrDataField(ocrDataFields, LAST_NAME, originalCase.lastName),
+            getOcrDataField(ocrDataFields, DATE_OF_BIRTH, originalCase.dateOfBirth),
+            getOcrDataField(ocrDataFields, CONTACT_NUMBER, originalCase.contactNumber),
+            getOcrDataField(ocrDataFields, EMAIL, originalCase.email),
             newAddress,
             mergeScannedDocuments(
                 originalCase.scannedDocuments,
@@ -85,6 +95,15 @@ public class CaseUpdater {
             ),
             warnings
         );
+    }
+
+    public String getOcrDataField(
+        List<OcrDataField> ocrDataFields,
+        String fieldName,
+        String existingValue
+    ) {
+        String newValue = get(ocrDataFields, fieldName);
+        return newValue == null ? existingValue : newValue;
     }
 
     private List<Item<ScannedDocument>> mergeScannedDocuments(
