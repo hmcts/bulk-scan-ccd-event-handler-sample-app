@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.Item;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.ScannedDocument;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.utils.AddressExtractor;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 
 import java.util.List;
 
@@ -32,6 +33,12 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.caseUpdate
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.inputScannedDocuments;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.sampleCase;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.InputHelper.scannedDocuments;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.CONTACT_NUMBER;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.DATE_OF_BIRTH;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.EMAIL;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.FIRST_NAME;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.LAST_NAME;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.LEGACY_ID;
 
 @ExtendWith(MockitoExtension.class)
 class CaseUpdaterTest {
@@ -86,6 +93,128 @@ class CaseUpdaterTest {
         assertThat(result.caseUpdateDetails.caseData.address)
             .isEqualToComparingFieldByField(address);
         assertCaseData(result.caseUpdateDetails.caseData, originalCase);
+        assertThat(result.warnings).isEmpty();
+        assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
+        assertScannedDocumentsFromExistingCase(
+            result.caseUpdateDetails.caseData.scannedDocuments,
+            caseScannedDocuments
+        );
+        assertScannedDocumentsFromExceptionRecord(
+            result.caseUpdateDetails.caseData.scannedDocuments,
+            inputScannedDocs
+        );
+    }
+
+    @Test
+    void should_override_existing_fields_with_new_values() {
+        // given
+        Address address = address("-er");
+
+        List<Item<ScannedDocument>> caseScannedDocuments = scannedDocuments();
+        SampleCase originalCase = sampleCase(caseScannedDocuments);
+
+        List<InputScannedDoc> inputScannedDocs = inputScannedDocuments();
+
+        CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(
+            inputScannedDocs,
+            List.of(
+                new OcrDataField(LEGACY_ID, "new-legacy-id"),
+                new OcrDataField(FIRST_NAME, "new-first-name"),
+                new OcrDataField(LAST_NAME, "new-last-name"),
+                new OcrDataField(DATE_OF_BIRTH, "new-date-of-birth"),
+                new OcrDataField(CONTACT_NUMBER, "new-contact-number"),
+                new OcrDataField(EMAIL, "new-email")
+            )
+        );
+
+        given(caseUpdateDetailsValidator.getWarnings(caseUpdateDetails)).willReturn(emptyList());
+        given(addressExtractor.extractFrom(any())).willReturn(address);
+
+        // when
+        SuccessfulUpdateResponse result =
+            caseUpdater.update(
+                new CaseUpdateRequest(
+                    false,
+                    caseUpdateDetails,
+                    caseDetails(originalCase)
+                )
+            );
+
+        // then
+        assertThat(result.caseUpdateDetails.caseData.address)
+            .isEqualToComparingFieldByField(address);
+        assertThat(result.caseUpdateDetails.caseData.legacyId).isEqualTo("new-legacy-id");
+        assertThat(result.caseUpdateDetails.caseData.firstName).isEqualTo("new-first-name");
+        assertThat(result.caseUpdateDetails.caseData.lastName).isEqualTo("new-last-name");
+        assertThat(result.caseUpdateDetails.caseData.dateOfBirth).isEqualTo("new-date-of-birth");
+        assertThat(result.caseUpdateDetails.caseData.contactNumber).isEqualTo("new-contact-number");
+        assertThat(result.caseUpdateDetails.caseData.email).isEqualTo("new-email");
+        assertThat(result.warnings).isEmpty();
+        assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
+        assertScannedDocumentsFromExistingCase(
+            result.caseUpdateDetails.caseData.scannedDocuments,
+            caseScannedDocuments
+        );
+        assertScannedDocumentsFromExceptionRecord(
+            result.caseUpdateDetails.caseData.scannedDocuments,
+            inputScannedDocs
+        );
+    }
+
+    @Test
+    void should_override_empty_fields_with_new_values() {
+        // given
+        Address address = address("-er");
+
+        List<Item<ScannedDocument>> caseScannedDocuments = scannedDocuments();
+        SampleCase originalCase = new SampleCase(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            address(""),
+            caseScannedDocuments,
+            "er-id"
+        );
+
+        List<InputScannedDoc> inputScannedDocs = inputScannedDocuments();
+
+        CaseUpdateDetails caseUpdateDetails = caseUpdateDetails(
+            inputScannedDocs,
+            List.of(
+                new OcrDataField(LEGACY_ID, "new-legacy-id"),
+                new OcrDataField(FIRST_NAME, "new-first-name"),
+                new OcrDataField(LAST_NAME, "new-last-name"),
+                new OcrDataField(DATE_OF_BIRTH, "new-date-of-birth"),
+                new OcrDataField(CONTACT_NUMBER, "new-contact-number"),
+                new OcrDataField(EMAIL, "new-email")
+            )
+        );
+
+        given(caseUpdateDetailsValidator.getWarnings(caseUpdateDetails)).willReturn(emptyList());
+        given(addressExtractor.extractFrom(any())).willReturn(address);
+
+        // when
+        SuccessfulUpdateResponse result =
+            caseUpdater.update(
+                new CaseUpdateRequest(
+                    false,
+                    caseUpdateDetails,
+                    caseDetails(originalCase)
+                )
+            );
+
+        // then
+        assertThat(result.caseUpdateDetails.caseData.address)
+            .isEqualToComparingFieldByField(address);
+        assertThat(result.caseUpdateDetails.caseData.legacyId).isEqualTo("new-legacy-id");
+        assertThat(result.caseUpdateDetails.caseData.firstName).isEqualTo("new-first-name");
+        assertThat(result.caseUpdateDetails.caseData.lastName).isEqualTo("new-last-name");
+        assertThat(result.caseUpdateDetails.caseData.dateOfBirth).isEqualTo("new-date-of-birth");
+        assertThat(result.caseUpdateDetails.caseData.contactNumber).isEqualTo("new-contact-number");
+        assertThat(result.caseUpdateDetails.caseData.email).isEqualTo("new-email");
         assertThat(result.warnings).isEmpty();
         assertThat(result.caseUpdateDetails.eventId).isEqualTo(CaseUpdater.EVENT_ID);
         assertScannedDocumentsFromExistingCase(
