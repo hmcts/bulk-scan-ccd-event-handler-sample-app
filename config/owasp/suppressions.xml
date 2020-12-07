@@ -7,11 +7,11 @@
     <cve>CVE-2018-10237</cve>
   </suppress>
 
-  <suppress until="2021-02-01">
+  <suppress until="2021-03-01">
     <notes><![CDATA[
      Suppressing as it seems a false positive
    ]]></notes>
-    <gav regex="true">^org\.springframework\.security:spring-security-crypto:5\.3\.3\.RELEASE$</gav>
+    <gav regex="true">^org\.springframework\.security:spring-security-crypto:5\.3\.4\.RELEASE$</gav>
     <cpe>cpe:/a:pivotal_software:spring_security</cpe>
     <cve>CVE-2018-1258</cve>
   </suppress>
