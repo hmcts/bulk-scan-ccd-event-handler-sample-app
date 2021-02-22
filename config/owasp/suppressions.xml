@@ -31,5 +31,11 @@
     <cpe>cpe:/a:jetbrains:kotlin</cpe>
     <cve>CVE-2020-15824</cve>
   </suppress>
-
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-security-crypto-5.4.5.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-crypto@.*$</packageUrl>
+    <cve>CVE-2018-1258</cve>
+  </suppress>
 </suppressions>
