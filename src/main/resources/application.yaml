@@ -12,6 +12,8 @@ management:
 spring:
   application:
     name: Bulk Scan CCD Event Handler Sample Application
+  config:
+    import: "optional:configtree:/mnt/secrets/bulk-scan/"
 
 idam:
   s2s-auth:
