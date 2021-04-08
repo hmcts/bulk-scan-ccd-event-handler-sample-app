@@ -10,7 +10,3 @@ dependencies:
   - name: java
     version: ~3.4.5
     repository: '@hmctspublic'
-  - name: bulk-scan
-    version: ~0.1.15
-    repository: '@hmctspublic'
-    condition: bulk-scan.enabled
