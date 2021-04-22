@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.out.SampleCase;

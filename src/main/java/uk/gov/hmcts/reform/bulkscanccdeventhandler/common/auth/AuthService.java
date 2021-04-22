@@ -6,7 +6,7 @@ import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 
 import java.util.List;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
 public class AuthService {
