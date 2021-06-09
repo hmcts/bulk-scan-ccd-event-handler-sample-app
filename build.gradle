@@ -170,7 +170,7 @@ dependencyManagement {
       entry 'commons-io'
     }
     // avoid CVE-2020-10693
-    dependencySet(group: 'org.hibernate', version: '7.0.0.Final') {
+    dependencySet(group: 'org.hibernate.validator', version: '7.0.0.Final') {
       entry 'hibernate-validator'
     }
   }
