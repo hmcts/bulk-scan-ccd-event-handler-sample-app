@@ -223,6 +223,14 @@ dependencies {
   smokeTestImplementation sourceSets.test.runtimeClasspath
 }
 
+processFunctionalTestResources {
+  duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+processIntegrationTestResources {
+  duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
 tasks.withType(Test) {
   useJUnitPlatform()
 
