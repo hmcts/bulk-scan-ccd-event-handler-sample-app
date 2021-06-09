@@ -234,6 +234,10 @@ processIntegrationTestResources {
   duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
+processSmokeTestResources {
+  duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
 tasks.withType(Test) {
   useJUnitPlatform()
 
