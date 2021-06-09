@@ -173,6 +173,9 @@ dependencyManagement {
     dependencySet(group: 'org.hibernate.validator', version: '7.0.0.Final') {
       entry 'hibernate-validator'
     }
+    dependencySet(group: 'org.springframework.cloud', version: '3.0.3') {
+      entry 'spring-cloud-starter-openfeign'
+    }
   }
 }
 
