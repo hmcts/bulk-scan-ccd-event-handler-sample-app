@@ -141,13 +141,13 @@ ext["rest-assured.version"] = '4.3.1'
 
 dependencyManagement {
   dependencies {
-    // CVE-2019-10086
-    dependencySet(group: 'commons-beanutils', version: '1.9.4') {
-      entry 'commons-beanutils'
-    }
-
     // avoid  CVE-2020-8908
     dependency group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
+    
+    // avoid CVE-2021-29425
+    dependencySet(group: 'commons-io', version: '2.11.0') {
+      entry 'commons-io'
+    }
   }
 }
 
