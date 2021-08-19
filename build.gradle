@@ -148,6 +148,10 @@ dependencyManagement {
     dependencySet(group: 'commons-io', version: '2.11.0') {
       entry 'commons-io'
     }
+    // for CompatibilityNotMetException
+    dependencySet(group: 'org.springframework.cloud', version: '3.0.3') {
+      entry 'spring-cloud-starter-openfeign'
+    }
   }
 }
 
