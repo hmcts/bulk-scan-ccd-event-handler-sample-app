@@ -7,18 +7,18 @@
     <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-crypto@.*$</packageUrl>
     <cve>CVE-2018-1258</cve>
   </suppress>
-  <suppress until="2021-09-30">
-   <notes><![CDATA[
-   file name: tomcat-embed-core-9.0.46.jar
+  <suppress until="2021-12-02">
+    <notes><![CDATA[
+   file name: tomcat-embed-core-9.0.52.jar
    ]]></notes>
-   <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat\-embed\-core@.*$</packageUrl>
-   <cve>CVE-2021-33037</cve>
-</suppress>
-  <suppress until="2021-09-30">
-   <notes><![CDATA[
-   file name: tomcat-embed-websocket-9.0.46.jar
+    <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat\-embed\-core@.*$</packageUrl>
+    <cve>CVE-2020-0822</cve>
+  </suppress>
+  <suppress until="2021-12-02">
+    <notes><![CDATA[
+   file name: tomcat-embed-websocket-9.0.52.jar
    ]]></notes>
-   <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat\-embed\-websocket@.*$</packageUrl>
-   <cve>CVE-2021-33037</cve>
-</suppress>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat\-embed\-websocket@.*$</packageUrl>
+    <cve>CVE-2020-0822</cve>
+  </suppress>
 </suppressions>
