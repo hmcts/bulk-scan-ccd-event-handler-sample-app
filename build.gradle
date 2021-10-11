@@ -126,7 +126,9 @@ dependencyCheck {
 }
 
 repositories {
-  jcenter()
+  mavenLocal()
+  mavenCentral()
+  maven { url 'https://jitpack.io' }
 }
 
 // it is important to specify logback classic and core packages explicitly as libraries like spring boot
@@ -134,7 +136,7 @@ repositories {
 def versions = [
   junit           : '5.8.1',
   junitPlatform   : '1.8.1',
-  reformLogging   : '5.1.7'
+  reformLogging   : '5.1.9'
 ]
 
 ext["rest-assured.version"] = '4.3.1'
