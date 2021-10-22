@@ -148,7 +148,7 @@ dependencyManagement {
       entry 'commons-io'
     }
     // for CompatibilityNotMetException
-    dependencySet(group: 'org.springframework.cloud', version: '3.0.4') {
+    dependencySet(group: 'org.springframework.cloud', version: '3.0.5') {
       entry 'spring-cloud-starter-openfeign'
     }
     // CVE-2021-42340
