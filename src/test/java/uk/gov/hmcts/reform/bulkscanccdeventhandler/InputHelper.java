@@ -30,6 +30,7 @@ public final class InputHelper {
             "subtype" + suffix,
             new InputScannedDocUrl(
                 "url" + suffix,
+                null,
                 "binary-url" + suffix,
                 "hello.pdf" + suffix
             ),
@@ -80,7 +81,7 @@ public final class InputHelper {
                 new ScannedDocument(
                     "type_A",
                     "subtype_A",
-                    new DocumentUrl("file://file_A", "binary_url_A", "file_name_A"),
+                    new DocumentUrl("file://file_A", null, "binary_url_A", "file_name_A"),
                     "control_number_A",
                     "file_name_AA",
                     now(),
@@ -96,7 +97,7 @@ public final class InputHelper {
             new InputScannedDoc(
                 "Form_1",
                 "subtype_1",
-                new InputScannedDocUrl("file://file_1", "binary_url_1", "file_name_1"),
+                new InputScannedDocUrl("file://file_1", null, "binary_url_1", "file_name_1"),
                 "control_number_1",
                 "file_name_11",
                 now(),
@@ -105,7 +106,7 @@ public final class InputHelper {
             new InputScannedDoc(
                 "Form_2",
                 "subtype_2",
-                new InputScannedDocUrl("file://file_2", "binary_url_2", "file_name_2"),
+                new InputScannedDocUrl("file://file_2", null, "binary_url_2", "file_name_2"),
                 "control_number_2",
                 "file_name_22",
                 now(),

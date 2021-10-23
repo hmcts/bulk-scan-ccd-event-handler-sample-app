@@ -19,6 +19,7 @@ public class ScannedDocumentMapperTest {
 
         InputScannedDocUrl document = new InputScannedDocUrl(
             "file://pathtofile/file",
+            null,
             "binaryurl",
             "filename"
         );

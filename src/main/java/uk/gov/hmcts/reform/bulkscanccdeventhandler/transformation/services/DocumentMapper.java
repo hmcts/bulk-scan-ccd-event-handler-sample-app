@@ -24,6 +24,7 @@ public class DocumentMapper {
                 exceptionRecordDoc.subtype,
                 new DocumentUrl(
                     exceptionRecordDoc.document.url,
+                    exceptionRecordDoc.document.hash,
                     exceptionRecordDoc.document.binaryUrl,
                     exceptionRecordDoc.document.filename
                 ),

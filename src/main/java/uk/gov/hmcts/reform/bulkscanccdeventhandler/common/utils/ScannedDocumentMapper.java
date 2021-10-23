@@ -13,6 +13,7 @@ public class ScannedDocumentMapper {
 
         DocumentUrl documentUrl = new DocumentUrl(
             inputScannedDoc.document.url,
+            inputScannedDoc.document.hash,
             inputScannedDoc.document.binaryUrl,
             inputScannedDoc.document.filename
         );

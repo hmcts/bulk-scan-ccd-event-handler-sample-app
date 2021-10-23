@@ -189,6 +189,7 @@ public class TransformationControllerTest {
                             "subtype-1",
                             new DocumentUrl(
                                 "url-1",
+                                null,
                                 "binary-url-1",
                                 "file-name-1"
                             ),
@@ -203,6 +204,7 @@ public class TransformationControllerTest {
                             "subtype-2",
                             new DocumentUrl(
                                 "url-2",
+                                null,
                                 "binary-url-2",
                                 "file-name-2"
                             ),
