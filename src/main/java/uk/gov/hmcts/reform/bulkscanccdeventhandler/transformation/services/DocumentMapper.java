@@ -19,6 +19,10 @@ public class DocumentMapper {
         if (exceptionRecordDoc == null) {
             return null;
         } else {
+            if (exceptionRecordDoc.document.documentHash != null) {
+                throw new IllegalArgumentException("document_hash must be null");
+            }
+
             return new Item<>(new ScannedDocument(
                 exceptionRecordDoc.type,
                 exceptionRecordDoc.subtype,
