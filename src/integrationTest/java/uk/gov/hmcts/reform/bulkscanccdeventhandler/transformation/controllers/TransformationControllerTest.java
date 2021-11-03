@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static com.google.common.io.Resources.getResource;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -39,6 +40,25 @@ class TransformationControllerTest {
             status().is(UNPROCESSABLE_ENTITY.value())
         ).andExpect(
             jsonPath("$.errors").value("invalid email 'invalid'")
+        );
+    }
+
+    @Test
+    void should_respond_400_when_transformation_details_contain_document_hash() throws Exception {
+        String body = Resources.toString(
+            getResource("transformation/document_hash_in_document_url.json"),
+            UTF_8
+        );
+
+        mvc.perform(
+            post("/transform-exception-record")
+                .header("ServiceAuthorization", "auth-header-value")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .content(body)
+        ).andExpect(
+            status().is(BAD_REQUEST.value())
+        ).andExpect(
+            jsonPath("$.error").value("document_hash must be null")
         );
     }
 }
