@@ -1,14 +1,14 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 import javax.validation.constraints.NotEmpty;
 
 public class OcrDataValidationRequest {
 
-    @ApiModelProperty(value = "List of ocr data fields to be validated.", required = true)
+    @Schema(title = "List of ocr data fields to be validated.", required = true)
     @NotEmpty
     public final List<OcrDataField> ocrDataFields;
 
