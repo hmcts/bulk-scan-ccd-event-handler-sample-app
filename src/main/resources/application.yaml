@@ -22,3 +22,7 @@ idam:
     url:    ${S2S_URL:http://localhost:4552}
 
 allowed-services: bulk_scan_processor,bulk_scan_orchestrator,bulk_scan_sample_app_tests
+
+springdoc:
+  packagesToScan: uk.gov.hmcts.reform.bulkscanccdeventhandler
+  pathsToMatch: /**
