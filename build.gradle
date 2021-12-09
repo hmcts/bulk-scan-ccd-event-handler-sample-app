@@ -151,11 +151,6 @@ dependencyManagement {
     dependencySet(group: 'org.springframework.cloud', version: '3.1.0') {
       entry 'spring-cloud-starter-openfeign'
     }
-    // CVE-2021-42340
-    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.54') {
-      entry 'tomcat-embed-websocket'
-      entry 'tomcat-embed-core'
-    }
   }
 }
 
