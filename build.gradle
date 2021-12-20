@@ -151,7 +151,7 @@ dependencyManagement {
     dependencySet(group: 'org.springframework.cloud', version: '3.1.0') {
       entry 'spring-cloud-starter-openfeign'
     }
-    dependencySet(group: 'org.apache.logging.log4j', version: '2.16.0') {
+    dependencySet(group: 'org.apache.logging.log4j', version: '2.17.0') {
       entry 'log4j-api'
       entry 'log4j-to-slf4j'
     }
@@ -169,7 +169,7 @@ dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
-  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.1'
+  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.2'
 
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
   implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
