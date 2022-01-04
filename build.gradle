@@ -187,7 +187,7 @@ dependencies {
 
   testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '4.2.0'
   testImplementation group: 'com.typesafe', name: 'config', version: '1.4.1'
-  testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.21.0'
+  testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.22.0'
   testImplementation group: 'io.rest-assured', name: 'rest-assured'
 
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
