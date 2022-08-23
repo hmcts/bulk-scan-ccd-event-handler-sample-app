@@ -38,8 +38,6 @@ public class TransformationInputToCaseTransformerTest {
     private AddressExtractor addressExtractor;
     @Mock
     private TransformationInputValidator transformationInputValidator;
-    @Mock
-    private CaseValidator caseValidator;
 
     @Mock
     private Item<ScannedDocument> doc1;
@@ -56,8 +54,7 @@ public class TransformationInputToCaseTransformerTest {
             new TransformationInputToCaseTransformer(
                 documentMapper,
                 addressExtractor,
-                transformationInputValidator,
-                caseValidator
+                transformationInputValidator
             );
     }
 
