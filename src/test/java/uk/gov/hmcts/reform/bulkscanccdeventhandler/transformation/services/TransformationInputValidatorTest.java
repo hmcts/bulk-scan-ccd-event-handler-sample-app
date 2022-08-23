@@ -22,8 +22,6 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.g
 
 public class TransformationInputValidatorTest {
 
-    // TODO: Add tests
-
     private final TransformationInputValidator validator = new TransformationInputValidator();
 
     @Test
@@ -65,7 +63,7 @@ public class TransformationInputValidatorTest {
         TransformationInput transformationInput = transformationInputWithOcr(ocrDataWithRequiredFields());
 
         // when
-        assertThat(validator.getWarnings(transformationInput)).containsExactly("invalid email 'null'");
+        assertThat(validator.getWarnings(transformationInput)).containsExactly("'email' is empty");
     }
 
     @Test
@@ -76,7 +74,29 @@ public class TransformationInputValidatorTest {
         TransformationInput transformationInput = transformationInputWithOcr(ocrData);
 
         // when
-        assertThat(validator.getWarnings(transformationInput)).containsExactly("invalid email ''");
+        assertThat(validator.getWarnings(transformationInput)).containsExactly("'email' is empty");
+    }
+
+    @Test
+    public void should_return_warning_when_email_is_invalid_format() {
+        // given
+        List<OcrDataField> ocrData = ocrDataWithRequiredFields();
+        ocrData.add(new OcrDataField("email", "invalid_email"));
+        TransformationInput transformationInput = transformationInputWithOcr(ocrData);
+
+        // when
+        assertThat(validator.getWarnings(transformationInput)).containsExactly("invalid email 'invalid_email'");
+    }
+
+    @Test
+    public void should_not_return_warnings_when_email_is_valid() {
+        // given
+        List<OcrDataField> ocrData = ocrDataWithRequiredFields();
+        ocrData.add(new OcrDataField("email", "test@test.com"));
+        TransformationInput transformationInput = transformationInputWithOcr(ocrData);
+
+        // when
+        assertThat(validator.getWarnings(transformationInput)).isEmpty();
     }
 
     @NotNull

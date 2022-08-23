@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames;
@@ -35,6 +36,12 @@ public class TransformationInputValidator {
 
     public List<String> getWarnings(TransformationInput transformationInput) {
         String email = OcrFieldExtractor.get(transformationInput.ocrDataFields, "email");
+        return Strings.isNullOrEmpty(email)
+            ? singletonList("'email' is empty")
+            : getEmailValidationResult(email);
+    }
+
+    private List<String> getEmailValidationResult(String email) {
         return isValidEmailAddress(email)
             ? emptyList()
             : singletonList("invalid email '" + email + "'");
