@@ -74,7 +74,7 @@ public class TransformationInputToCaseTransformerTest {
             .willReturn(doc1);
         given(documentMapper.toCaseDoc(transformationInput.scannedDocuments.get(1), transformationInput.id))
             .willReturn(doc2);
-        given(caseValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
+        given(transformationInputValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
         // when
         SuccessfulTransformationResponse result = service.toCase(transformationInput);
 
@@ -115,7 +115,7 @@ public class TransformationInputToCaseTransformerTest {
         given(
             documentMapper.toCaseDoc(er.scannedDocuments.get(1), er.exceptionRecordId)
         ).willReturn(doc2);
-        given(caseValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
+        given(transformationInputValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
 
         // when
         SuccessfulTransformationResponse result = service.toCase(er);
@@ -132,12 +132,7 @@ public class TransformationInputToCaseTransformerTest {
         );
 
         // and
-        given(addressExtractor.extractFrom(transformationInput.ocrDataFields)).willReturn(address);
-        given(documentMapper.toCaseDoc(transformationInput.scannedDocuments.get(0), transformationInput.id))
-            .willReturn(doc1);
-        given(documentMapper.toCaseDoc(transformationInput.scannedDocuments.get(1), transformationInput.id))
-            .willReturn(doc2);
-        given(caseValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
+        given(transformationInputValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
 
         // when
         InvalidExceptionRecordException exc = catchThrowableOfType(
