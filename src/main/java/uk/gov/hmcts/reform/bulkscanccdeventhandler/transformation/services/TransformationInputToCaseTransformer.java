@@ -47,13 +47,12 @@ public class TransformationInputToCaseTransformer {
     public SuccessfulTransformationResponse toCase(TransformationInput transformationInput) {
         transformationInputValidator.assertIsValid(transformationInput);
 
-        SampleCase caseData = buildCase(transformationInput);
-
-        final List<String> warnings = caseValidator.getWarnings(caseData);
+        final List<String> warnings = transformationInputValidator.getWarnings(transformationInput);
 
         if (transformationInput.isAutomatedProcess && !warnings.isEmpty()) {
             throw new InvalidExceptionRecordException(warnings);
         } else {
+            SampleCase caseData = buildCase(transformationInput);
             return new SuccessfulTransformationResponse(
                 new CaseCreationDetails(
                     CASE_TYPE_ID,

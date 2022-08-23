@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.JourneyClassification;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.model.in.TransformationInput;
@@ -20,6 +21,8 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.L
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.getRequiredFields;
 
 public class TransformationInputValidatorTest {
+
+    // TODO: Add tests
 
     private final TransformationInputValidator validator = new TransformationInputValidator();
 
@@ -47,19 +50,41 @@ public class TransformationInputValidatorTest {
     @Test
     public void should_not_throw_exception_if_exception_record_is_valid() {
         // given
-        TransformationInput transformationInput =
-            transformationInputWithOcr(
-                getRequiredFields()
-                    .stream()
-                    .map(req -> new OcrDataField(req, "value"))
-                    .collect(toList())
-            );
+        TransformationInput transformationInput = transformationInputWithOcr(ocrDataWithRequiredFields());
 
         // when
         Throwable exc = catchThrowable(() -> validator.assertIsValid(transformationInput));
 
         // then
         assertThat(exc).isNull();
+    }
+
+    @Test
+    public void should_return_warning_when_email_is_not_provided() {
+        // given
+        TransformationInput transformationInput = transformationInputWithOcr(ocrDataWithRequiredFields());
+
+        // when
+        assertThat(validator.getWarnings(transformationInput)).containsExactly("invalid email 'null'");
+    }
+
+    @Test
+    public void should_return_warning_when_email_is_empty() {
+        // given
+        List<OcrDataField> ocrData = ocrDataWithRequiredFields();
+        ocrData.add(new OcrDataField("email", ""));
+        TransformationInput transformationInput = transformationInputWithOcr(ocrData);
+
+        // when
+        assertThat(validator.getWarnings(transformationInput)).containsExactly("invalid email ''");
+    }
+
+    @NotNull
+    private List<OcrDataField> ocrDataWithRequiredFields() {
+        return getRequiredFields()
+            .stream()
+            .map(req -> new OcrDataField(req, "value"))
+            .collect(toList());
     }
 
     private TransformationInput transformationInputWithOcr(List<OcrDataField> ocrData) {
