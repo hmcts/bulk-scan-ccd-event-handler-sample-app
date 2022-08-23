@@ -28,19 +28,16 @@ public class TransformationInputToCaseTransformer {
     private final DocumentMapper documentMapper;
     private final AddressExtractor addressExtractor;
     private final TransformationInputValidator transformationInputValidator;
-    private final CaseValidator caseValidator;
 
     // region constructor
     public TransformationInputToCaseTransformer(
         DocumentMapper documentMapper,
         AddressExtractor addressExtractor,
-        TransformationInputValidator transformationInputValidator,
-        CaseValidator caseValidator
+        TransformationInputValidator transformationInputValidator
     ) {
         this.documentMapper = documentMapper;
         this.addressExtractor = addressExtractor;
         this.transformationInputValidator = transformationInputValidator;
-        this.caseValidator = caseValidator;
     }
     // endregion
 
