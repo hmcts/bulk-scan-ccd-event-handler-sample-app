@@ -136,7 +136,7 @@ repositories {
 def versions = [
   junit           : '5.9.1',
   junitPlatform   : '1.9.1',
-  reformLogging   : '5.1.9'
+  reformLogging   : '6.0.1'
 ]
 
 ext["rest-assured.version"] = '4.3.1'
