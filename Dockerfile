@@ -8,7 +8,7 @@ RUN apk update && apk add ca-certificates
 FROM busybox as downloader
 COPY --from=certs /etc/ssl/certs /etc/ssl/certs
 
-RUN wget -P /tmp https://github.com/microsoft/ApplicationInsights-Java/releases/download/2.6.1/applicationinsights-agent-2.6.1.jar
+RUN wget -P /tmp https://github.com/microsoft/ApplicationInsights-Java/releases/download/2.6.1/applicationinsights-agent-2.6.1.jar --no-check-certificate
 
 # Application image
 
