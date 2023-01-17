@@ -2,9 +2,13 @@ ARG APP_INSIGHTS_AGENT_VERSION=2.6.1
 
 # Build image
 
-FROM busybox as downloader
+FROM alpine as certs
+RUN apk update && apk add ca-certificates
 
-RUN wget -P /tmp http://github.com/microsoft/ApplicationInsights-Java/releases/download/2.6.1/applicationinsights-agent-2.6.1.jar
+FROM busybox as downloader
+COPY --from=certs /etc/ssl/certs /etc/ssl/certs
+
+RUN wget -P /tmp https://github.com/microsoft/ApplicationInsights-Java/releases/download/2.6.1/applicationinsights-agent-2.6.1.jar
 
 # Application image
 
