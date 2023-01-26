@@ -153,7 +153,7 @@ dependencyManagement {
       entry 'commons-io'
     }
     // for CompatibilityNotMetException
-    dependencySet(group: 'org.springframework.cloud', version: '3.1.5') {
+    dependencySet(group: 'org.springframework.cloud', version: '4.0.1') {
       entry 'spring-cloud-starter-openfeign'
     }
     dependencySet(group: 'org.apache.logging.log4j', version: '2.19.0') {
