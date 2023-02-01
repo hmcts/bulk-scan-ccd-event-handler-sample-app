@@ -54,7 +54,7 @@ public class OcrValidationController {
             responseCode = "200",
             content = @Content(schema = @Schema(implementation = OcrValidationResponse.class)),
             description = "Validation executed successfully"
-        ),
+            ),
         @ApiResponse(responseCode = "401", description = "Provided S2S token is missing or invalid"),
         @ApiResponse(responseCode = "403", description = "S2S token is not authorized to use the service")
     })
