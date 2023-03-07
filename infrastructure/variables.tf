@@ -8,8 +8,6 @@ variable "location_app" {
 
 variable "env" {}
 
-variable "ilbIp" {}
-
 variable "subscription" {}
 
 variable "capacity" {
@@ -26,8 +24,4 @@ variable "test_s2s_name" {
 
 variable "enable_ase" {
   default = false
-}
-
-variable "deployment_namespace" {
-  default = ""
 }
