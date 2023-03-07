@@ -21,7 +21,3 @@ variable "common_tags" {
 variable "test_s2s_name" {
   default = "bulk_scan_sample_app_tests"
 }
-
-variable "enable_ase" {
-  default = false
-}
