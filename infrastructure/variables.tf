@@ -8,8 +8,6 @@ variable "location_app" {
 
 variable "env" {}
 
-variable "ilbIp" {}
-
 variable "subscription" {}
 
 variable "capacity" {
@@ -22,12 +20,4 @@ variable "common_tags" {
 
 variable "test_s2s_name" {
   default = "bulk_scan_sample_app_tests"
-}
-
-variable "enable_ase" {
-  default = false
-}
-
-variable "deployment_namespace" {
-  default = ""
 }
