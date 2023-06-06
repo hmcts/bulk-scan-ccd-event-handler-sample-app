@@ -146,8 +146,6 @@ def versions = [
   reformLogging   : '6.0.1'
 ]
 
-ext["rest-assured.version"] = '4.3.1'
-
 configurations.all {
   exclude group: 'org.springframework.security', module: 'spring-security-rsa'
   exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
@@ -178,7 +176,7 @@ dependencyManagement {
       entry 'jackson-databind'
     }
     // CVE-2022-25857
-    dependencySet(group: 'org.yaml', version: '1.33') {
+    dependencySet(group: 'org.yaml', version: '2.0') {
       entry 'snakeyaml'
     }
     // CVE-2023-24998
