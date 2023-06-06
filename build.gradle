@@ -4,7 +4,7 @@ plugins {
   id 'pmd'
   id 'jacoco'
   id 'io.spring.dependency-management' version '1.1.0'
-  id 'org.springframework.boot' version '2.7.2'
+  id 'org.springframework.boot' version '2.7.12'
   id 'org.owasp.dependencycheck' version '8.2.1'
   id 'com.github.ben-manes.versions' version '0.46.0'
   id 'org.sonarqube' version '4.2.0.3129'
@@ -146,8 +146,6 @@ def versions = [
   reformLogging   : '6.0.1'
 ]
 
-ext["rest-assured.version"] = '4.3.1'
-
 configurations.all {
   exclude group: 'org.springframework.security', module: 'spring-security-rsa'
   exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
@@ -178,7 +176,7 @@ dependencyManagement {
       entry 'jackson-databind'
     }
     // CVE-2022-25857
-    dependencySet(group: 'org.yaml', version: '1.33') {
+    dependencySet(group: 'org.yaml', version: '2.0') {
       entry 'snakeyaml'
     }
     // CVE-2023-24998
