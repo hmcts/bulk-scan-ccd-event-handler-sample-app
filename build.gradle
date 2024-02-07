@@ -153,15 +153,33 @@ configurations.all {
 
 dependencyManagement {
   dependencies {
+    // avoid CVE-2021-29425
+    dependencySet(group: 'commons-io', version: '2.13.0') {
+      entry 'commons-io'
+    }
+    // for CompatibilityNotMetException
     dependencySet(group: 'org.springframework.cloud', version: '3.1.8') {
       entry 'spring-cloud-starter-openfeign'
     }
-    dependencySet(group: 'com.google.guava', version: '33.0.0-jre') {
-      entry 'guava'
+    dependencySet(group: 'org.apache.logging.log4j', version: '2.20.0') {
+      entry 'log4j-api'
+      entry 'log4j-to-slf4j'
     }
+    //CVE-2022-23181
+    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.78') {
+      entry 'tomcat-embed-core'
+      entry 'tomcat-embed-el'
+      entry 'tomcat-embed-websocket'
+    }
+    // CVE-2020-36518
+    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.14.2') {
+      entry 'jackson-databind'
+    }
+    // CVE-2022-25857
     dependencySet(group: 'org.yaml', version: '2.2') {
       entry 'snakeyaml'
     }
+    // CVE-2023-24998
     dependencySet(group: 'commons-fileupload', version: '1.5') {
       entry 'commons-fileupload'
     }
@@ -184,7 +202,7 @@ dependencies {
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
   implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
   implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.4'
-  implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.2'
+  implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.0.3'
   implementation group: 'commons-validator', name: 'commons-validator', version: '1.7'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
   implementation group: 'com.google.guava', name: 'guava', version: '33.0.0-jre'
