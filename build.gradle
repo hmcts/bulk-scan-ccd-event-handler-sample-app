@@ -153,33 +153,15 @@ configurations.all {
 
 dependencyManagement {
   dependencies {
-    // avoid CVE-2021-29425
-    dependencySet(group: 'commons-io', version: '2.13.0') {
-      entry 'commons-io'
-    }
-    // for CompatibilityNotMetException
     dependencySet(group: 'org.springframework.cloud', version: '3.1.8') {
       entry 'spring-cloud-starter-openfeign'
     }
-    dependencySet(group: 'org.apache.logging.log4j', version: '2.20.0') {
-      entry 'log4j-api'
-      entry 'log4j-to-slf4j'
+    dependencySet(group: 'com.google.guava', version: '33.0.0-jre') {
+      entry 'guava'
     }
-    //CVE-2022-23181
-    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.78') {
-      entry 'tomcat-embed-core'
-      entry 'tomcat-embed-el'
-      entry 'tomcat-embed-websocket'
-    }
-    // CVE-2020-36518
-    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.14.2') {
-      entry 'jackson-databind'
-    }
-    // CVE-2022-25857
     dependencySet(group: 'org.yaml', version: '2.2') {
       entry 'snakeyaml'
     }
-    // CVE-2023-24998
     dependencySet(group: 'commons-fileupload', version: '1.5') {
       entry 'commons-fileupload'
     }
