@@ -15,7 +15,7 @@ version = '0.1.0' // marks java11 migration
 
 java {
   toolchain {
-    languageVersion = JavaLanguageVersion.of(17)
+    languageVersion = JavaLanguageVersion.of(21)
   }
 }
 
@@ -80,16 +80,16 @@ pmd {
   ignoreFailures = true
   incrementalAnalysis = true
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
-  reportsDir = file("$project.buildDir/reports/pmd")
+  reportsDir = layout.buildDirectory.dir("reports/pmd").get().asFile
   ruleSetFiles = files("config/pmd/ruleset.xml")
 }
 
 jacocoTestReport {
   executionData(test, integration)
   reports {
-    xml.enabled = true
-    csv.enabled = false
-    xml.destination = file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+    xml.required.set(true)
+    csv.required.set(false)
+    xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml"))
   }
 }
 
@@ -99,7 +99,7 @@ sonarqube {
   properties {
     property "sonar.projectName", "Reform :: bulk-scan-ccd-event-handler-sample-app"
     property "sonar.projectKey", "uk.gov.hmcts.reform:bulk-scan-ccd-event-handler-sample-app"
-    property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.reports.xml.destination.path
+    property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.reports.xml.outputLocation.get().asFile.absolutePath
     // CaseUpdateDetails mostly duplicates ExceptionRecord.
     // Introducing inheritance to avoid this duplication would make these classes coupled
     // though they are intended for different purposes.
