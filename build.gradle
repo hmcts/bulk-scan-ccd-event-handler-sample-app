@@ -3,10 +3,10 @@ plugins {
   id 'checkstyle'
   id 'pmd'
   id 'jacoco'
-  id 'io.spring.dependency-management' version '1.1.4'
+  id 'io.spring.dependency-management' version '1.1.6'
   id 'org.springframework.boot' version '2.7.18'
-  id 'org.owasp.dependencycheck' version '9.0.9'
-  id 'com.github.ben-manes.versions' version '0.50.0'
+  id 'org.owasp.dependencycheck' version '11.1.0'
+  id 'com.github.ben-manes.versions' version '0.51.0'
   id 'org.sonarqube' version '4.4.1.3373'
 }
 
@@ -15,7 +15,7 @@ version = '0.1.0' // marks java11 migration
 
 java {
   toolchain {
-    languageVersion = JavaLanguageVersion.of(17)
+    languageVersion = JavaLanguageVersion.of(21)
   }
 }
 
@@ -80,16 +80,16 @@ pmd {
   ignoreFailures = true
   incrementalAnalysis = true
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
-  reportsDir = file("$project.buildDir/reports/pmd")
+  reportsDir = layout.buildDirectory.dir("reports/pmd").get().asFile
   ruleSetFiles = files("config/pmd/ruleset.xml")
 }
 
 jacocoTestReport {
   executionData(test, integration)
   reports {
-    xml.enabled = true
-    csv.enabled = false
-    xml.destination = file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+    xml.required.set(true)
+    csv.required.set(false)
+    xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml"))
   }
 }
 
@@ -99,7 +99,7 @@ sonarqube {
   properties {
     property "sonar.projectName", "Reform :: bulk-scan-ccd-event-handler-sample-app"
     property "sonar.projectKey", "uk.gov.hmcts.reform:bulk-scan-ccd-event-handler-sample-app"
-    property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.reports.xml.destination.path
+    property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.reports.xml.outputLocation.get().asFile.absolutePath
     // CaseUpdateDetails mostly duplicates ExceptionRecord.
     // Introducing inheritance to avoid this duplication would make these classes coupled
     // though they are intended for different purposes.
@@ -141,8 +141,8 @@ repositories {
 // it is important to specify logback classic and core packages explicitly as libraries like spring boot
 // enforces it's own (older) version which is not recommended.
 def versions = [
-  junit           : '5.10.2',
-  junitPlatform   : '1.10.2',
+  junit           : '5.11.3',
+  junitPlatform   : '1.11.3',
   reformLogging   : '6.0.1'
 ]
 
@@ -153,8 +153,7 @@ configurations.all {
 
 dependencyManagement {
   dependencies {
-    // avoid CVE-2021-29425
-    dependencySet(group: 'commons-io', version: '2.13.0') {
+    dependencySet(group: 'commons-io', version: '2.17.0') {
       entry 'commons-io'
     }
     // for CompatibilityNotMetException
@@ -197,15 +196,15 @@ dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
-  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.7.0'
+  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.8.0'
 
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
   implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
   implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.4'
   implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.0.3'
-  implementation group: 'commons-validator', name: 'commons-validator', version: '1.8.0'
-  implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
-  implementation group: 'com.google.guava', name: 'guava', version: '33.0.0-jre'
+  implementation group: 'commons-validator', name: 'commons-validator', version: '1.9.0'
+  implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.17.0'
+  implementation group: 'com.google.guava', name: 'guava', version: '33.3.1-jre'
 
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
@@ -214,9 +213,9 @@ dependencies {
   testImplementation group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
   testImplementation group: 'org.apiguardian', name: 'apiguardian-api', version: '1.1.2'
 
-  testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.4.0'
+  testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.14.2'
   testImplementation group: 'com.typesafe', name: 'config', version: '1.4.3'
-  testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.24.2'
+  testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.26.3'
   testImplementation group: 'io.rest-assured', name: 'rest-assured'
 
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
