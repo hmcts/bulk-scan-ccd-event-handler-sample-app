@@ -21,7 +21,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.Valid
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrDataValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrValidationResult;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;

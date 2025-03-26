@@ -10,7 +10,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.Successf
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services.CaseUpdater;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
