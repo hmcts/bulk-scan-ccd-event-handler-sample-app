@@ -2,9 +2,9 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
-import jakarta.validation.constraints.NotEmpty;
 
 public class OcrDataValidationRequest {
 

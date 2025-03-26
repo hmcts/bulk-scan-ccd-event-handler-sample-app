@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.controllers;
 
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,8 +10,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.in.CaseUpdat
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.model.out.SuccessfulUpdateResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.caseupdate.services.CaseUpdater;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
-
-import jakarta.validation.Valid;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
