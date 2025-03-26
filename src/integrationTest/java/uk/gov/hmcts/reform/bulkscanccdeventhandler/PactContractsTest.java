@@ -18,11 +18,10 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @Provider("bulk_scan_sample_app")
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @PactBroker(host = "pact-broker.platform.hmcts.net", port = "443", scheme = "https")
 public class PactContractsTest {
 
