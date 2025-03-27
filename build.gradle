@@ -142,8 +142,8 @@ repositories {
 // enforces it's own (older) version which is not recommended.
 def versions = [
   junit           : '5.11.3',
-  junitPlatform   : '1.11.3',
-  reformLogging   : '6.0.1'
+  junitPlatform   : '1.12.1',
+  reformLogging   : '6.1.8'
 ]
 
 configurations.all {
@@ -200,11 +200,12 @@ dependencies {
 
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
   implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
-  implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.4'
+  implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.0'
   implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.0.3'
   implementation group: 'commons-validator', name: 'commons-validator', version: '1.9.0'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.17.0'
   implementation group: 'com.google.guava', name: 'guava', version: '33.3.1-jre'
+  implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
