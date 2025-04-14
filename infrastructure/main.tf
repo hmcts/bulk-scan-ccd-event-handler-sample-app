@@ -3,12 +3,12 @@ provider "azurerm" {
 }
 
 locals {
-  is_preview          = var.env == "preview" || var.env == "spreview"
-  local_env           = local.is_preview ? "aat" : var.env
-  s2s_rg              = "rpe-service-auth-provider-${local.local_env}"
-  s2s_url             = "http://${local.s2s_rg}.service.core-compute-${local.local_env}.internal"
+  is_preview = var.env == "preview" || var.env == "spreview"
+  local_env  = local.is_preview ? "aat" : var.env
+  s2s_rg     = "rpe-service-auth-provider-${local.local_env}"
+  s2s_url    = "http://${local.s2s_rg}.service.core-compute-${local.local_env}.internal"
 
-  vaultName           = "bulk-scan-${var.env}"
+  vaultName = "bulk-scan-${var.env}"
 }
 
 data "azurerm_key_vault" "bulk_scan_key_vault" {
